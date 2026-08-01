@@ -1,0 +1,1834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>A Multiverse Event // Classified Transmission</title>
+
+<!--
+  ============================================================================
+  HOW TO CUSTOMIZE THIS PAGE — read me first
+  ============================================================================
+  Everything you need to change lives in ONE place: the CONFIG object near the
+  top of the <script> at the bottom of this file. Search for "EDIT ME BELOW".
+
+  You'll set: HER_NAME, YOUR_NAME, SHOW_DATE, CINEMA,
+  PERSONAL_MESSAGE, 10 photo paths, and short text arrays for the new
+  sections (WHY_WATCH, REASONS, MARVEL_MOMENTS, FUN_FACTS, LOVE_NOTES,
+  CHECKLIST). No build tools, no backend — just edit and open in a browser.
+
+  Sound effects (whoosh / heartbeat / cheer / rain) are synthesized live in
+  the browser with the Web Audio API, so there are no audio files to hunt
+  down. There is no background music track or skip button — the intro plays
+  once, then the page unlocks automatically.
+  ============================================================================
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ==========================================================================
+   TOKENS
+   ========================================================================== */
+:root{
+  --black:#040406;
+  --void:#07080d;
+  --navy:#0a0f1c;
+  --navy-2:#0d1526;
+  --navy-3:#121d33;
+  --blue:#2b6cff;
+  --blue-glow:rgba(43,108,255,.35);
+  --crimson:#e0263f;
+  --crimson-2:#ff2e46;
+  --crimson-dim:#7a1420;
+  --crimson-glow:rgba(224,38,63,.55);
+  --white:#f4f1ea;
+  --paper:#efe8d8;
+  --muted:#8992a3;
+  --line: rgba(244,241,234,.12);
+
+  --display: "Anton", "Arial Narrow", sans-serif;
+  --script: "Bebas Neue", "Anton", sans-serif;
+  --body: "Inter", -apple-system, "Segoe UI", sans-serif;
+  --mono: "Space Mono", "Courier New", monospace;
+
+  --ease-out: cubic-bezier(.16,.84,.44,1);
+  --ease-in-out: cubic-bezier(.65,0,.35,1);
+}
+
+*,*::before,*::after{box-sizing:border-box;}
+html{scroll-behavior:smooth; background:var(--black);}
+html,body{margin:0;padding:0;overflow-x:hidden;}
+body{
+  background:var(--black);
+  color:var(--white);
+  font-family:var(--body);
+  min-height:100vh;
+  position:relative;
+  -webkit-font-smoothing:antialiased;
+}
+body.locked{overflow:hidden; height:100vh;}
+body.hide-cursor, body.hide-cursor a, body.hide-cursor button{cursor:none;}
+::selection{background:var(--crimson); color:var(--white);}
+img{max-width:100%; display:block;}
+h1,h2,h3{margin:0; font-weight:400;}
+.eyebrow{
+  font-family:var(--mono); letter-spacing:.35em; text-transform:uppercase;
+  font-size:11px; color:var(--crimson-2); opacity:.85;
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.001ms !important; transition-duration:.001ms !important;}
+}
+
+/* ==========================================================================
+   BACKGROUND / OVERLAY LAYERS
+   ========================================================================== */
+#bg-fx{ position:fixed; inset:0; width:100vw; height:100vh; z-index:0; pointer-events:none; }
+#rain-canvas{ position:fixed; inset:0; width:100vw; height:100vh; z-index:2; pointer-events:none; opacity:.9; }
+#cursor-fx{ position:fixed; inset:0; width:100vw; height:100vh; z-index:9990; pointer-events:none; mix-blend-mode:screen; }
+.cursor-dot{
+  position:fixed; top:0; left:0; width:30px; height:30px; margin:-15px 0 0 -15px;
+  z-index:9999; pointer-events:none; transform:translate(-100px,-100px);
+  filter:drop-shadow(0 0 6px var(--crimson-glow));
+  transition:transform .05s linear;
+}
+@media (hover:none), (pointer:coarse){ .cursor-dot, body.hide-cursor{cursor:auto;} .cursor-dot{display:none;} }
+
+.vignette{ position:fixed; inset:0; z-index:1; pointer-events:none;
+  background:radial-gradient(ellipse at center, rgba(0,0,0,0) 40%, rgba(0,0,0,.55) 100%); }
+.grain{ position:fixed; inset:0; z-index:2; pointer-events:none; opacity:.05; mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+#lightning-flash{ position:fixed; inset:0; z-index:3; pointer-events:none; background:#dfe6ff; opacity:0; mix-blend-mode:screen; }
+#redglow-floor{ position:fixed; left:0; right:0; bottom:0; height:40vh; z-index:1; pointer-events:none;
+  background:linear-gradient(0deg, rgba(224,38,63,.14), transparent); }
+
+/* ==========================================================================
+   TOP-RIGHT CONTROLS
+   ========================================================================== */
+#controls{ position:fixed; top:22px; right:22px; z-index:9998; display:flex; gap:10px; }
+.ctrl-btn{
+  width:52px; height:52px; border-radius:50%;
+  background:rgba(10,15,28,.55); border:1px solid var(--line);
+  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  display:flex; align-items:center; justify-content:center; cursor:pointer;
+  transition:box-shadow .4s var(--ease-out), border-color .4s var(--ease-out);
+}
+.ctrl-btn:hover{ border-color:var(--crimson); box-shadow:0 0 22px var(--crimson-glow); }
+.ctrl-btn svg{ width:20px; height:20px; opacity:.85; }
+body:not(.sfx-on) #sfx-toggle{opacity:.45;}
+
+/* pulse ring for interactive elements (spider-sense hover feedback) */
+.pulse-target{position:relative;}
+.pulse-target::after{
+  content:""; position:absolute; inset:-6px; border-radius:inherit;
+  border:1px solid var(--crimson-2); opacity:0; transform:scale(.9);
+  pointer-events:none; transition:opacity .3s;
+}
+.pulse-target:hover::after{ opacity:.6; animation:pulseRing 1s ease-out infinite; }
+@keyframes pulseRing{ 0%{ transform:scale(.9); opacity:.6;} 100%{ transform:scale(1.25); opacity:0;} }
+
+/* ==========================================================================
+   SECTION SHELL
+   ========================================================================== */
+section{ position:relative; z-index:3; padding:90px 6vw; min-height:auto; display:flex; align-items:center; justify-content:center; flex-direction:column; }
+section.fullscreen{ min-height:100vh; }
+.section-head{ text-align:center; margin-bottom:28px; }
+.section-head .eyebrow{ opacity:0; display:block; margin-bottom:10px; }
+.section-head h2{ font-family:var(--script); text-transform:uppercase; font-size:clamp(26px,4.6vw,50px); opacity:0; }
+
+/* ==========================================================================
+   INTRO OVERLAY
+   ========================================================================== */
+#intro-overlay{ position:fixed; inset:0; z-index:9500; background:var(--black); display:flex; align-items:center; justify-content:center; flex-direction:column; text-align:center; }
+#intro-overlay .line{ font-family:var(--mono); font-size:clamp(14px,2.4vw,22px); letter-spacing:.12em; color:var(--crimson-2); min-height:1.6em; text-shadow:0 0 18px var(--crimson-glow); }
+#intro-overlay .caret{ display:inline-block; width:.5em; margin-left:2px; border-right:2px solid var(--crimson-2); animation:blink 1s step-end infinite; }
+@keyframes blink{50%{border-color:transparent;}}
+
+/* ==========================================================================
+   HERO / SKYLINE
+   ========================================================================== */
+#hero{ flex-direction:column; overflow:hidden; padding:0; }
+#skyline-stage{ position:absolute; inset:0; transform:scale(1.08); opacity:0; }
+#moon{
+  position:absolute; top:12%; left:50%; transform:translateX(-50%);
+  width:min(160px,18vw); height:min(160px,18vw); border-radius:50%; cursor:pointer;
+  background:radial-gradient(circle at 35% 35%, #fff8ea, #d9d2b8 55%, #b9b18f 100%);
+  box-shadow:0 0 60px 18px rgba(244,241,234,.25), 0 0 140px 60px rgba(224,38,63,.08);
+  transition:box-shadow .8s ease, filter .8s ease;
+}
+#moon.bright{ box-shadow:0 0 90px 30px rgba(244,241,234,.5), 0 0 220px 100px rgba(224,38,63,.14); filter:brightness(1.25); }
+.cloud{ position:absolute; height:60px; border-radius:50%; filter:blur(18px); background:rgba(10,15,28,.55); opacity:.55; }
+.searchlight{
+  position:absolute; bottom:0; width:5px; height:120vh; transform-origin:bottom center;
+  background:linear-gradient(0deg, rgba(220,230,255,.16), transparent 70%);
+  filter:blur(2px); mix-blend-mode:screen; opacity:.5;
+}
+.building{ position:absolute; bottom:0; background:linear-gradient(180deg, var(--navy-2), var(--navy)); box-shadow:inset 0 0 40px rgba(0,0,0,.6); transition:filter .8s ease; }
+.building.bright{ filter:brightness(1.4); }
+.building .win{ position:absolute; width:3px; height:5px; background:var(--crimson-dim); opacity:.5; }
+.building .win.on{ background:var(--crimson-2); opacity:.9; box-shadow:0 0 6px var(--crimson-glow); animation:flicker 4s ease-in-out infinite; }
+@keyframes flicker{0%,92%,100%{opacity:.9;}94%{opacity:.2;}96%{opacity:.9;}}
+
+.corner-web{ position:absolute; width:160px; height:160px; opacity:0; pointer-events:none; filter:drop-shadow(0 0 6px var(--crimson-glow)); }
+.corner-web svg{ width:100%; height:100%; }
+.corner-web.tl{ top:-10px; left:-10px; } .corner-web.tr{ top:-10px; right:-10px; transform:scaleX(-1); }
+
+.flying-thing{ position:fixed; z-index:4; pointer-events:none; }
+.leaf{ position:fixed; z-index:4; pointer-events:none; font-size:16px; }
+
+#spider-hero{ position:absolute; top:40%; left:-80px; width:64px; height:64px; z-index:5; opacity:0; }
+#hero-copy{ position:relative; z-index:6; text-align:center; opacity:0; transform:translateY(24px); }
+#hero-copy .eyebrow{ display:block; margin-bottom:14px; }
+#hero-copy h1{ font-family:var(--display); text-transform:uppercase; font-size:clamp(34px,7vw,88px); line-height:.98; letter-spacing:.01em; color:var(--white); text-shadow:0 0 40px var(--crimson-glow); }
+#hero-copy h1 span{ color:var(--crimson-2); }
+#scroll-cue{ position:absolute; bottom:36px; left:50%; transform:translateX(-50%); z-index:6; opacity:0; font-family:var(--mono); font-size:11px; letter-spacing:.3em; color:var(--muted); display:flex; flex-direction:column; align-items:center; gap:10px; }
+#scroll-cue .wire{ width:1px; height:34px; background:linear-gradient(var(--crimson-2), transparent); animation:cue 1.8s ease-in-out infinite; }
+@keyframes cue{0%{transform:scaleY(0); transform-origin:top;}50%{transform:scaleY(1); transform-origin:top;}100%{transform:scaleY(0); transform-origin:bottom;}}
+
+/* ==========================================================================
+   LIVING SPIDERS
+   ========================================================================== */
+.spider{ position:absolute; z-index:4; will-change:transform; }
+.spider-svg{ width:100%; height:100%; overflow:visible; }
+.spider-svg .legs path{
+  stroke:#0a0a0d; stroke-width:4; stroke-linecap:round; fill:none;
+  transform-box:fill-box; transform-origin:50% 0%;
+  animation:legwig 1s ease-in-out infinite;
+}
+.spider-svg .legs path:nth-child(odd){animation-delay:-.32s;}
+.spider-svg .legs path:nth-child(3n){animation-delay:-.6s;}
+@keyframes legwig{0%,100%{transform:rotate(0deg);}50%{transform:rotate(7deg);}}
+.spider-svg .eyes{ animation:sblink 4.2s ease-in-out infinite; transform-box:fill-box; transform-origin:50% 50%; }
+@keyframes sblink{0%,92%,100%{transform:scaleY(1);}95%{transform:scaleY(.1);}}
+.spider-thread{ position:absolute; top:-60px; left:50%; width:1px; height:60px; background:linear-gradient(var(--crimson-2), transparent); transform:translateX(-50%); opacity:.6; }
+.spider.spider-hang{ animation:spiderSway 3.4s ease-in-out infinite; transform-origin:top center; }
+@keyframes spiderSway{0%,100%{transform:rotate(-6deg);}50%{transform:rotate(6deg);}}
+#drop-spider-layer{ position:fixed; inset:0; z-index:9992; pointer-events:none; }
+#drop-spider-layer .spider{ pointer-events:auto; }
+#flee-zone{ position:fixed; top:86px; right:22px; width:130px; height:80px; z-index:9997; pointer-events:none; }
+#flee-zone .spider{ pointer-events:auto; }
+
+/* ==========================================================================
+   MISSION SECTION
+   ========================================================================== */
+#mission{ flex-direction:column; gap:48px; }
+.mission-line{ font-family:var(--script); text-transform:uppercase; font-size:clamp(30px,6vw,64px); text-align:center; letter-spacing:.02em; color:var(--white); opacity:0; transform:translateY(30px); }
+.mission-line em{ font-style:normal; color:var(--crimson-2); }
+.dossier{
+  width:min(560px,92vw); border:1px solid rgba(224,38,63,.35);
+  background:linear-gradient(160deg, rgba(13,21,38,.72), rgba(7,8,13,.85));
+  backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+  border-radius:6px; padding:34px 30px 30px; position:relative;
+  opacity:0; transform:translateY(40px) rotateX(6deg);
+  box-shadow:0 30px 80px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.02) inset;
+}
+.dossier::before{ content:"CLASSIFIED"; position:absolute; top:14px; right:-34px; transform:rotate(30deg); font-family:var(--mono); font-size:10px; letter-spacing:.3em; color:var(--crimson-2); border:1px solid var(--crimson-2); padding:3px 34px; opacity:.55; }
+.dossier-head{ display:flex; justify-content:space-between; align-items:center; font-family:var(--mono); font-size:11px; letter-spacing:.2em; color:var(--muted); border-bottom:1px dashed var(--line); padding-bottom:14px; margin-bottom:18px; text-transform:uppercase; }
+.dossier-row{ display:grid; grid-template-columns:120px 1fr; gap:10px; margin-bottom:14px; align-items:baseline; }
+.dossier-row .k{ font-family:var(--mono); font-size:11px; letter-spacing:.18em; color:var(--crimson-2); text-transform:uppercase; }
+.dossier-row .v{ font-family:var(--body); font-size:16px; color:var(--white); font-weight:500; }
+.dossier-row .v.big{ font-family:var(--display); font-size:26px; letter-spacing:.02em; }
+.progress-wrap{ margin-top:22px; }
+.progress-label{ display:flex; justify-content:space-between; font-family:var(--mono); font-size:11px; letter-spacing:.16em; color:var(--muted); margin-bottom:8px; text-transform:uppercase; }
+.progress-track{ height:10px; border-radius:6px; background:rgba(255,255,255,.06); overflow:hidden; border:1px solid var(--line); }
+.progress-fill{ height:100%; width:0%; border-radius:6px; background:linear-gradient(90deg,var(--crimson-dim),var(--crimson-2)); box-shadow:0 0 16px var(--crimson-glow); }
+#progress-pct{ font-family:var(--mono); color:var(--crimson-2); }
+.btn-yes{ margin-top:24px; width:100%; padding:16px; border-radius:6px; border:1px solid var(--crimson); background:rgba(224,38,63,.12); color:var(--white); font-family:var(--mono); letter-spacing:.2em; text-transform:uppercase; font-size:13px; cursor:pointer; transition:all .35s var(--ease-out); }
+.btn-yes:hover{ background:var(--crimson); box-shadow:0 0 30px var(--crimson-glow); transform:translateY(-2px); }
+.btn-yes:disabled{ opacity:.55; cursor:default; }
+
+/* ==========================================================================
+   STORY / COMIC SECTION
+   ========================================================================== */
+#story{ flex-direction:column; gap:10px; }
+#story-quote{ text-align:center; max-width:820px; margin-bottom:20px; }
+#story-quote .quote-mark{ font-family:var(--display); font-size:clamp(50px,8vw,110px); color:var(--crimson-dim); line-height:.5; opacity:0; }
+#story-quote blockquote{ margin:0; font-family:var(--display); text-transform:uppercase; font-size:clamp(24px,5vw,54px); line-height:1.1; color:var(--white); opacity:0; }
+#story-quote blockquote .accent{ color:var(--crimson-2); }
+.comic-row{ width:100%; max-width:1200px; display:grid; grid-template-columns:repeat(5,1fr); gap:20px; margin-top:30px; }
+@media (max-width:1000px){ .comic-row{ grid-template-columns:repeat(2,1fr); } }
+@media (max-width:520px){ .comic-row{ grid-template-columns:1fr; } }
+.comic-panel{
+  position:relative; aspect-ratio:3/4; border-radius:3px; overflow:visible;
+  background:
+    radial-gradient(circle, rgba(224,38,63,.16) 1px, transparent 1.4px) 0 0/9px 9px,
+    linear-gradient(150deg, var(--navy-2), var(--navy));
+  border:3px solid var(--void); outline:2px solid rgba(244,241,234,.16); outline-offset:-6px;
+  opacity:0; transform:translateY(60px) scale(.9) rotate(-3deg);
+  display:flex; align-items:center; justify-content:center; padding:14px;
+}
+.comic-panel .num{ position:absolute; top:8px; left:8px; font-family:var(--mono); font-size:10px; color:var(--crimson-2); opacity:.7; }
+.bubble{
+  position:relative; background:var(--paper); color:#141018; border-radius:14px;
+  padding:14px 14px; font-family:var(--body); font-weight:600; font-size:clamp(11px,1.6vw,13px);
+  text-align:center; box-shadow:0 10px 24px rgba(0,0,0,.4);
+}
+.bubble::after{ content:""; position:absolute; bottom:-12px; left:50%; transform:translateX(-50%); border-width:12px 8px 0 8px; border-style:solid; border-color:var(--paper) transparent transparent transparent; }
+
+/* ==========================================================================
+   GALLERY / COMIC PANELS
+   ========================================================================== */
+#gallery{ flex-direction:column; gap:10px; position:relative; overflow:hidden; }
+#why-watch{ gap:40px; }
+.panel-grid{ width:100%; max-width:1100px; display:grid; grid-template-columns:repeat(4,1fr); gap:22px; position:relative; z-index:3; margin-top:40px; }
+@media (max-width:900px){ .panel-grid{ grid-template-columns:repeat(2,1fr); } }
+@media (max-width:520px){ .panel-grid{ grid-template-columns:1fr; } }
+.panel{
+  position:relative; aspect-ratio:3/4; border-radius:4px;
+  background:
+    radial-gradient(circle, rgba(224,38,63,.14) 1px, transparent 1.4px) 0 0/10px 10px,
+    linear-gradient(150deg, var(--navy-2), var(--navy));
+  border:3px solid var(--void); outline:2px solid rgba(244,241,234,.18); outline-offset:-6px;
+  opacity:0; transform:translateY(60px) rotate(0deg); cursor:pointer; overflow:hidden;
+  transition:box-shadow .4s var(--ease-out); transform-style:preserve-3d;
+}
+.panel:hover{ box-shadow:0 0 0 1px rgba(224,38,63,.6), 0 20px 50px rgba(224,38,63,.25); }
+.panel img{ width:100%; height:100%; object-fit:cover; filter:grayscale(.15) contrast(1.05); }
+.panel .ph{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:10px; color:var(--muted); font-family:var(--mono); font-size:11px; letter-spacing:.15em; text-align:center; padding:10px; }
+.panel .ph svg{ width:30px; height:30px; opacity:.5; }
+.panel .tag{ position:absolute; bottom:0; left:0; right:0; padding:8px 10px; font-family:var(--mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; background:linear-gradient(0deg, rgba(0,0,0,.75), transparent); color:var(--crimson-2); opacity:0; transition:opacity .3s; }
+.panel:hover .tag{ opacity:1; }
+.panel .shine{ position:absolute; inset:0; background:linear-gradient(115deg, transparent 35%, rgba(255,255,255,.25) 50%, transparent 65%); transform:translateX(-140%); pointer-events:none; }
+.panel:hover .shine{ animation:shineSweep .9s var(--ease-out); }
+@keyframes shineSweep{ to{ transform:translateX(140%); } }
+.comic-fx{ position:absolute; z-index:1; font-family:var(--display); color:rgba(224,38,63,.14); text-transform:uppercase; letter-spacing:.05em; pointer-events:none; }
+
+/* ==========================================================================
+   GENERIC CARD GRID SECTIONS
+   ========================================================================== */
+.card-grid{ width:100%; max-width:1100px; display:grid; gap:20px; margin-top:40px; }
+.card-grid.cols-3{ grid-template-columns:repeat(3,1fr); }
+.card-grid.cols-4{ grid-template-columns:repeat(4,1fr); }
+@media (max-width:900px){ .card-grid.cols-3, .card-grid.cols-4{ grid-template-columns:repeat(2,1fr); } }
+@media (max-width:560px){ .card-grid.cols-3, .card-grid.cols-4{ grid-template-columns:1fr; } }
+.glass-card{
+  border-radius:12px; border:1px solid var(--line);
+  background:linear-gradient(160deg, rgba(13,21,38,.6), rgba(7,8,13,.75));
+  backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+  padding:26px 22px; opacity:0; transform:translateY(40px);
+  transition:border-color .4s, box-shadow .4s, transform .4s;
+}
+.glass-card:hover{
+  border-color:rgba(224,38,63,.5);
+  transform:translateY(-10px) rotateX(5deg) scale(1.04);
+  box-shadow:0 30px 80px rgba(255,0,60,.3);
+}
+.glass-card .icon{ font-size:28px; margin-bottom:12px; display:block; }
+.glass-card h3{ font-family:var(--display); text-transform:uppercase; font-size:19px; letter-spacing:.02em; margin-bottom:8px; }
+.glass-card p{ font-family:var(--body); font-size:14px; color:var(--muted); line-height:1.5; margin:0; }
+
+/* checklist */
+.checklist{ list-style:none; margin:0; padding:0; width:100%; max-width:560px; display:flex; flex-direction:column; gap:12px; }
+.checklist li{
+  display:flex; align-items:center; gap:14px; padding:16px 18px; border-radius:10px;
+  border:1px solid var(--line); background:rgba(13,21,38,.5); cursor:pointer;
+  opacity:0; transform:translateX(-30px); transition:border-color .3s, background .3s;
+}
+.checklist li:hover{ border-color:rgba(224,38,63,.4); }
+.checklist .box{
+  width:24px; height:24px; min-width:24px; border-radius:50%; border:2px solid var(--crimson-2);
+  display:flex; align-items:center; justify-content:center; font-size:13px; color:transparent; transition:all .3s;
+}
+.checklist li.checked .box{ background:var(--crimson-2); color:var(--white); box-shadow:0 0 14px var(--crimson-glow); }
+.checklist li.checked span.label{ text-decoration:line-through; color:var(--muted); }
+.checklist .label{ font-family:var(--body); font-size:15px; font-weight:500; }
+#checklist-progress{ width:100%; max-width:560px; margin-bottom:20px; }
+#checklist-section{ display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; max-width:1100px; margin:0 auto; }
+#checklist-section .section-head{ grid-column:1 / -1; margin-bottom:0; }
+#checklist-section #checklist-progress{ margin-bottom:0; }
+@media (max-width:900px){ #checklist-section{ grid-template-columns:1fr; } }
+
+/* marvel moment flip cards */
+.moment-card{ perspective:900px; aspect-ratio:4/3; opacity:0; transform:translateY(40px); }
+.moment-inner{ position:relative; width:100%; height:100%; transform-style:preserve-3d; transition:transform .7s var(--ease-in-out); }
+.moment-card.flipped .moment-inner{ transform:rotateY(180deg); }
+.moment-face{ position:absolute; inset:0; backface-visibility:hidden; border-radius:12px; border:1px solid var(--line); display:flex; align-items:center; justify-content:center; text-align:center; padding:20px; background:linear-gradient(160deg, rgba(13,21,38,.7), rgba(7,8,13,.85)); }
+.moment-face.back{ transform:rotateY(180deg); background:linear-gradient(160deg, rgba(224,38,63,.16), rgba(7,8,13,.9)); }
+.moment-face h3{ font-family:var(--display); text-transform:uppercase; font-size:17px; }
+.moment-face p{ font-family:var(--body); font-size:13px; color:var(--paper); }
+
+/* fun facts carousel */
+.facts-wrap{ width:100%; max-width:640px; text-align:center; margin-top:20px; }
+.facts-track{ position:relative; height:180px; overflow:hidden; display:flex; align-items:center; justify-content:center; }
+.fact-slide{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; opacity:0; transform:translateX(80px); transition:.6s; font-family:var(--body); font-size:clamp(15px,2.2vw,19px); color:var(--paper); padding:0 10px; }
+.fact-slide.active{ opacity:1; transform:translateX(0); }
+.facts-dots{ display:flex; gap:8px; justify-content:center; margin-top:18px; }
+.facts-dots i{ width:7px; height:7px; border-radius:50%; background:var(--line); display:block; cursor:pointer; }
+.facts-dots i.active{ background:var(--crimson-2); box-shadow:0 0 8px var(--crimson-glow); }
+
+/* reasons list */
+.reasons-list{ width:100%; max-width:640px; display:flex; flex-direction:column; gap:16px; margin-top:20px; }
+.reason-item{ display:flex; gap:16px; align-items:flex-start; opacity:0; transform:translateY(20px); }
+.reason-num{ font-family:var(--display); font-size:26px; color:var(--crimson-dim); min-width:44px; }
+.reason-text{ font-family:var(--body); font-size:15px; color:var(--paper); padding-top:4px; }
+
+/* love notes */
+#love-notes{ position:relative; overflow:hidden; min-height:70vh; }
+.love-note{
+  position:absolute; width:150px; padding:16px; background:var(--paper); color:#141018;
+  font-family:var(--script); font-size:16px; text-align:center; border-radius:2px;
+  box-shadow:0 14px 30px rgba(0,0,0,.4); opacity:0; cursor:pointer;
+}
+.love-note::before{ content:""; position:absolute; top:-8px; left:50%; transform:translateX(-50%); width:16px; height:16px; background:var(--crimson-2); border-radius:50%; box-shadow:0 0 8px var(--crimson-glow); }
+
+/* ==========================================================================
+   SWING / PARALLAX
+   ========================================================================== */
+#swing-wrap{ height:115vh; position:relative; }
+#swing-stage{ position:sticky; top:0; height:100vh; overflow:hidden; display:flex; align-items:center; justify-content:center; }
+.parallax-building{ position:absolute; bottom:0; background:linear-gradient(180deg,var(--navy-3),var(--navy)); }
+#swing-copy{ position:relative; z-index:6; text-align:center; max-width:640px; }
+#swing-copy .eyebrow{ opacity:0; }
+#swing-copy h2{ margin-top:14px; font-family:var(--display); text-transform:uppercase; font-size:clamp(24px,5vw,52px); opacity:0; }
+#swing-spider{ position:absolute; top:20%; left:-100px; width:70px; height:70px; z-index:7; }
+#web-line{ position:absolute; top:0; left:0; width:2px; height:0; background:linear-gradient(var(--crimson-2), transparent); transform-origin:top center; z-index:6; opacity:.7; }
+
+/* ==========================================================================
+   COUNTDOWN
+   ========================================================================== */
+#countdown{ flex-direction:column; gap:40px; }
+.flip-row{ display:flex; gap:18px; flex-wrap:wrap; justify-content:center; }
+.flip-unit{ display:flex; flex-direction:column; align-items:center; gap:10px; opacity:0; }
+.flip-card{ position:relative; width:clamp(64px,12vw,110px); height:clamp(76px,14vw,130px); perspective:300px; font-family:var(--display); font-size:clamp(30px,6vw,58px); }
+.flip-face{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:linear-gradient(160deg, var(--navy-2), var(--void)); border:1px solid var(--line); border-radius:8px; color:var(--white); box-shadow:0 12px 30px rgba(0,0,0,.5), 0 0 20px rgba(224,38,63,.08); }
+.flip-unit .unit-label{ font-family:var(--mono); font-size:10px; letter-spacing:.25em; color:var(--muted); text-transform:uppercase; }
+
+/* ==========================================================================
+   TICKET
+   ========================================================================== */
+#ticket{ flex-direction:column; gap:36px; perspective:1400px; }
+.ticket-stage{ width:min(680px,92vw); opacity:0; transform:translateY(50px); position:relative; }
+.ticket{ position:relative; width:100%; aspect-ratio:16/7.2; transform-style:preserve-3d; transition:transform 1.1s var(--ease-in-out); cursor:pointer; }
+.ticket.flip{ transform:rotateY(180deg); }
+.ticket-face{ position:absolute; inset:0; backface-visibility:hidden; border-radius:14px; background:linear-gradient(135deg, var(--navy-2) 0%, var(--void) 60%); border:1px solid rgba(224,38,63,.4); box-shadow:0 30px 70px rgba(0,0,0,.6); display:flex; overflow:hidden; }
+.ticket-face.back{ transform:rotateY(180deg); }
+.ticket-stub{ width:26%; border-right:2px dashed rgba(244,241,234,.25); display:flex; align-items:center; justify-content:center; writing-mode:vertical-rl; text-orientation:mixed; font-family:var(--display); letter-spacing:.15em; text-transform:uppercase; color:var(--crimson-2); font-size:clamp(14px,2vw,20px); background:repeating-linear-gradient(135deg, rgba(224,38,63,.06) 0 10px, transparent 10px 20px); }
+.ticket-main{ flex:1; padding:22px 26px; display:flex; flex-direction:column; justify-content:space-between; }
+.ticket-top .film{ font-family:var(--display); text-transform:uppercase; font-size:clamp(18px,3.4vw,30px); color:var(--white); }
+.ticket-top .film span{ color:var(--crimson-2); }
+.ticket-meta{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:14px; }
+.ticket-meta .k{ font-family:var(--mono); font-size:9px; letter-spacing:.16em; color:var(--muted); text-transform:uppercase; }
+.ticket-meta .v{ font-family:var(--body); font-size:14px; color:var(--white); font-weight:600; margin-top:3px; }
+.ticket-bottom{ display:flex; justify-content:space-between; align-items:flex-end; margin-top:14px; }
+.ticket-bottom .guests{ font-family:var(--mono); font-size:11px; color:var(--muted); }
+.ticket-bottom .guests b{ color:var(--white); }
+.barcode{ height:32px; width:120px; background:repeating-linear-gradient(90deg, var(--white) 0 2px, transparent 2px 5px); opacity:.85; }
+.holo{ position:absolute; inset:0; pointer-events:none; background:linear-gradient(115deg, transparent 30%, rgba(255,255,255,.35) 48%, rgba(224,38,63,.35) 52%, transparent 70%); transform:translateX(-140%); }
+.ticket.shine .holo{ animation:holoShine 1.1s var(--ease-out); }
+@keyframes holoShine{ to{ transform:translateX(140%); } }
+.ticket-face.back{ align-items:center; justify-content:center; flex-direction:column; text-align:center; padding:26px; gap:12px; }
+.ticket-face.back .msg{ font-family:var(--body); font-style:italic; color:var(--paper); font-size:clamp(13px,2vw,16px); max-width:80%; }
+.ticket-face.back .signed{ font-family:var(--script); color:var(--crimson-2); font-size:22px; letter-spacing:.1em; }
+.ticket-hint{ text-align:center; font-family:var(--mono); font-size:10px; letter-spacing:.2em; color:var(--muted); text-transform:uppercase; }
+.ticket-web{ position:absolute; width:44px; height:44px; opacity:.7; pointer-events:none; z-index:4; }
+.ticket-web.tl{ top:-14px; left:-14px; } .ticket-web.br{ bottom:-14px; right:-14px; transform:rotate(180deg); }
+.ticket-spider{ position:absolute; width:26px; height:26px; top:8px; right:34px; z-index:5; }
+
+/* ==========================================================================
+   FINALE
+   ========================================================================== */
+#finale{ flex-direction:column; gap:30px; min-height:110vh; text-align:center; overflow:hidden; }
+#stars{ position:absolute; inset:0; z-index:1; }
+#finale-spider{ position:absolute; top:-140px; left:50%; transform:translateX(-50%); width:110px; height:110px; z-index:5; opacity:0; }
+.finale-line{ position:relative; z-index:6; font-family:var(--script); text-transform:uppercase; font-size:clamp(26px,5.6vw,58px); color:var(--white); opacity:0; }
+.finale-buttons{ position:relative; z-index:6; display:flex; gap:22px; flex-wrap:wrap; justify-content:center; opacity:0; }
+.btn-final{ padding:18px 34px; border-radius:40px; border:1px solid var(--crimson); background:rgba(224,38,63,.14); color:var(--white); font-family:var(--display); letter-spacing:.04em; text-transform:uppercase; font-size:18px; cursor:pointer; transition:all .35s var(--ease-out); box-shadow:0 0 0 rgba(224,38,63,0); }
+.btn-final:hover{ background:var(--crimson); box-shadow:0 0 40px var(--crimson-glow); transform:translateY(-3px) scale(1.03); }
+#finale-result{ position:relative; z-index:6; display:none; flex-direction:column; gap:14px; }
+#finale-result h2{ font-family:var(--display); text-transform:uppercase; font-size:clamp(34px,7vw,80px); color:var(--white); text-shadow:0 0 40px var(--crimson-glow); }
+#finale-result h2 span{ color:var(--crimson-2); }
+#finale-result p{ font-family:var(--script); font-size:clamp(18px,3vw,28px); color:var(--paper); letter-spacing:.05em; }
+.stamp{ position:fixed; top:50%; left:50%; z-index:9997; transform:translate(-50%,-50%) rotate(-14deg) scale(3); opacity:0; pointer-events:none; font-family:var(--display); text-transform:uppercase; font-size:clamp(24px,5vw,44px); color:var(--crimson-2); border:5px double var(--crimson-2); padding:14px 26px; border-radius:8px; letter-spacing:.06em; }
+#confetti-canvas{ position:fixed; inset:0; z-index:9997; pointer-events:none; }
+.heart{ position:fixed; z-index:9996; pointer-events:none; opacity:0; }
+
+/* ==========================================================================
+   MISC / EASTER EGGS
+   ========================================================================== */
+#spider-badge{ position:fixed; bottom:22px; left:22px; z-index:9998; width:40px; height:40px; opacity:.35; cursor:pointer; transition:opacity .4s, filter .4s; filter:drop-shadow(0 0 0 rgba(224,38,63,0)); }
+#spider-badge:hover{ opacity:1; filter:drop-shadow(0 0 12px var(--crimson-glow)); }
+#spider-badge svg{ width:100%; height:100%; }
+#spider-badge.wave{ animation:waveArm .8s var(--ease-in-out); }
+@keyframes waveArm{0%,100%{transform:rotate(0);}25%{transform:rotate(-18deg);}50%{transform:rotate(14deg);}75%{transform:rotate(-8deg);}}
+#egg-toast{ position:fixed; top:26px; left:50%; transform:translate(-50%,-30px); z-index:9999; font-family:var(--script); letter-spacing:.06em; font-size:20px; color:var(--white); background:rgba(10,15,28,.7); border:1px solid var(--crimson); padding:14px 28px; border-radius:40px; box-shadow:0 0 30px var(--crimson-glow); opacity:0; pointer-events:none; backdrop-filter:blur(10px); text-align:center; max-width:80vw; }
+.web-shot{ position:fixed; z-index:9995; pointer-events:none; height:2px; background:linear-gradient(90deg, var(--crimson-2), transparent); transform-origin:left center; opacity:.85; }
+#secret-panel{ position:fixed; inset:0; z-index:9999; display:none; align-items:center; justify-content:center; background:rgba(4,4,6,.85); backdrop-filter:blur(6px); }
+#secret-panel .comic-panel{ width:min(360px,80vw); opacity:1; transform:none; cursor:pointer; }
+.kiss-pop{ position:fixed; z-index:9996; pointer-events:none; font-size:26px; opacity:0; }
+
+footer{ position:relative; z-index:3; text-align:center; padding:40px 20px 60px; font-family:var(--mono); font-size:10px; letter-spacing:.2em; color:var(--muted); text-transform:uppercase; }
+footer b{ color:var(--crimson-2); }
+#baby-spider{ position:absolute; width:16px; height:16px; opacity:.5; cursor:pointer; }
+</style>
+</head>
+<body class="locked sfx-on">
+
+<!-- background / atmosphere layers -->
+<canvas id="bg-fx"></canvas>
+<canvas id="rain-canvas"></canvas>
+<canvas id="cursor-fx"></canvas>
+<div id="redglow-floor"></div>
+<div id="lightning-flash"></div>
+<div class="vignette"></div>
+<div class="grain"></div>
+<div id="drop-spider-layer"></div>
+<div id="flee-zone"></div>
+
+<!-- custom cursor -->
+<div class="cursor-dot" id="cursorDot">
+  <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M50 58 L18 40 M50 58 L82 40 M50 64 L14 60 M50 64 L86 60 M50 70 L20 88 M50 70 L80 88" stroke="#ff2e46" stroke-width="6" stroke-linecap="round"/>
+    <ellipse cx="50" cy="62" rx="15" ry="12" fill="#ff2e46"/>
+    <circle cx="50" cy="42" r="10" fill="#ff2e46"/>
+    <circle cx="46" cy="40" r="1.8" fill="#040406"/>
+    <circle cx="54" cy="40" r="1.8" fill="#040406"/>
+  </svg>
+</div>
+
+<!-- sfx -->
+<div id="controls">
+  <button class="ctrl-btn" id="sfx-toggle" aria-label="Toggle sound effects">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#f4f1ea" stroke-width="1.6"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M17 8a5 5 0 010 8" opacity=".8"/></svg>
+  </button>
+</div>
+
+<!-- intro overlay -->
+<div id="intro-overlay"><div class="line" id="introLine"></div></div>
+
+<div id="egg-toast">You're Amazing ❤️</div>
+<canvas id="confetti-canvas"></canvas>
+
+<div id="secret-panel">
+  <div class="comic-panel">
+    <div class="num">TOP SECRET</div>
+    <div class="bubble" id="secretPanelText">You found the hidden file. This whole page exists because someone thought you were worth building a universe for.</div>
+  </div>
+</div>
+
+<div id="spider-badge" title="???">
+  <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="50" cy="38" r="14" fill="#ff2e46"/>
+    <path d="M50 52 L50 78" stroke="#ff2e46" stroke-width="4" stroke-linecap="round"/>
+    <path d="M50 58 L22 46 M50 58 L78 46 M50 58 L18 66 M50 58 L82 66 M50 66 L26 84 M50 66 L74 84" stroke="#ff2e46" stroke-width="3" stroke-linecap="round"/>
+    <path d="M43 34 L47 37 M57 34 L53 37" stroke="#040406" stroke-width="3" stroke-linecap="round"/>
+  </svg>
+</div>
+
+<!-- ============================================================== HERO -->
+<section id="hero" class="fullscreen">
+  <div id="skyline-stage">
+    <div id="moon"></div>
+    <div class="corner-web tl"><svg viewBox="0 0 100 100"><g stroke="#ff2e46" stroke-width="1" fill="none" opacity=".8"><path d="M0 0 L60 60 M0 20 L45 65 M0 40 L30 70 M0 0 L100 25 M0 0 L25 100 M0 0 L0 100 M0 0 L100 0"/><path d="M8 8 Q30 20 60 60 M18 18 Q35 30 55 55" /></g></svg></div>
+    <div class="corner-web tr"><svg viewBox="0 0 100 100"><g stroke="#ff2e46" stroke-width="1" fill="none" opacity=".8"><path d="M0 0 L60 60 M0 20 L45 65 M0 40 L30 70 M0 0 L100 25 M0 0 L25 100 M0 0 L0 100 M0 0 L100 0"/><path d="M8 8 Q30 20 60 60 M18 18 Q35 30 55 55" /></g></svg></div>
+  </div>
+
+  <svg id="spider-hero" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="50" cy="34" r="13" fill="#ff2e46"/>
+    <path d="M50 47 L47 82" stroke="#ff2e46" stroke-width="5" stroke-linecap="round"/>
+    <path d="M47 55 L18 40 M47 55 L80 44 M47 62 L14 60 M47 62 L82 70 M47 70 L22 90 M47 70 L70 92" stroke="#ff2e46" stroke-width="4" stroke-linecap="round"/>
+    <path d="M42 30 L47 34 M58 30 L53 34" stroke="#040406" stroke-width="3.4" stroke-linecap="round"/>
+  </svg>
+
+  <div id="hero-copy">
+    <span class="eyebrow">Transmission Received</span>
+    <h1>Found One Special<br><span>Person ❤️</span></h1>
+  </div>
+
+  <div id="scroll-cue"><div class="wire"></div>Scroll</div>
+</section>
+
+<!-- ============================================================== MISSION -->
+<section id="mission">
+  <h2 class="mission-line" id="ml1">Hey Beautiful...</h2>
+  <h2 class="mission-line" id="ml2">I Have <em>A Mission.</em></h2>
+  <div class="dossier" id="dossier">
+    <div class="dossier-head"><span>File // 001-BND</span><span>Level: Red</span></div>
+    <div class="dossier-row"><span class="k">Target</span><span class="v big" id="herNameSlot">Her Name</span></div>
+    <div class="dossier-row"><span class="k">Status</span><span class="v">Cutest Human Alive</span></div>
+    <div class="dossier-row"><span class="k">Mission</span><span class="v">Spend One Amazing Day Together</span></div>
+    <div class="dossier-row"><span class="k">Objective</span><span class="v">Watch <em style="color:#ff2e46; font-style:normal;">Spider-Man: Brand New Day</em></span></div>
+    <div class="progress-wrap">
+      <div class="progress-label"><span>Success Rate</span><span id="progress-pct">0%</span></div>
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+    <button class="btn-yes pulse-target" id="dossierYes">Unless She Says Yes ❤️</button>
+  </div>
+</section>
+
+<!-- ============================================================== STORY -->
+<section id="story">
+  <div id="story-quote">
+    <div class="quote-mark">"</div>
+    <blockquote>Every Spider-Man Needs Someone<br>Worth <span class="accent">Coming Home To.</span></blockquote>
+  </div>
+  <div class="comic-row" id="comicRow"></div>
+</section>
+
+<!-- ============================================================== GALLERY -->
+<section id="gallery">
+  <div class="section-head"><span class="eyebrow">Field Archive</span><h2>Our Story So Far</h2></div>
+  <div class="panel-grid" id="panelGrid"></div>
+</section>
+
+<!-- ============================================================== WHY WATCH -->
+<section id="why-watch">
+  <div class="section-head"><span class="eyebrow">Case File // Motive</span><h2>Why I Want To Watch It With You</h2></div>
+  <div class="card-grid cols-3" id="whyGrid"></div>
+</section>
+
+<!-- ============================================================== SNACKS -->
+<section id="snacks">
+  <div class="section-head"><span class="eyebrow">Supply Run</span><h2>Things We'll Eat</h2></div>
+  <div class="card-grid cols-4" id="snacksGrid"></div>
+</section>
+
+<!-- ============================================================== CHECKLIST -->
+<section id="checklist-section">
+  <div class="section-head"><span class="eyebrow">Mission Readiness</span><h2>Our Movie Checklist</h2></div>
+  <div id="checklist-progress">
+    <div class="progress-label"><span>Checklist</span><span id="checklist-pct">0%</span></div>
+    <div class="progress-track"><div class="progress-fill" id="checklistFill"></div></div>
+  </div>
+  <ul class="checklist" id="checklist"></ul>
+</section>
+
+<!-- ============================================================== MARVEL MOMENTS -->
+<section id="marvel-moments">
+  <div class="section-head"><span class="eyebrow">Flip For Details</span><h2>Favorite Marvel Moments</h2></div>
+  <div class="card-grid cols-4" id="momentsGrid"></div>
+</section>
+
+<!-- ============================================================== FUN FACTS -->
+<section id="fun-facts">
+  <div class="section-head"><span class="eyebrow">Did You Know</span><h2>Fun Spider-Man Facts</h2></div>
+  <div class="facts-wrap">
+    <div class="facts-track" id="factsTrack"></div>
+    <div class="facts-dots" id="factsDots"></div>
+  </div>
+</section>
+
+<!-- ============================================================== SWING -->
+<div id="swing-wrap">
+  <div id="swing-stage">
+    <div id="web-line"></div>
+    <svg id="swing-spider" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="34" r="13" fill="#ff2e46"/>
+      <path d="M50 47 L47 82" stroke="#ff2e46" stroke-width="5" stroke-linecap="round"/>
+      <path d="M47 55 L18 40 M47 55 L80 44 M47 62 L14 60 M47 62 L82 70 M47 70 L22 90 M47 70 L70 92" stroke="#ff2e46" stroke-width="4" stroke-linecap="round"/>
+      <path d="M42 30 L47 34 M58 30 L53 34" stroke="#040406" stroke-width="3.4" stroke-linecap="round"/>
+    </svg>
+    <div id="swing-copy">
+      <span class="eyebrow">Between The Skyline</span>
+      <h2>Some Nights Are Meant For Heroes.<br>This One's Meant For Us.</h2>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================== COUNTDOWN -->
+<section id="countdown" class="fullscreen">
+  <div class="section-head"><span class="eyebrow">Mission Clock</span><h2>Until Spider-Man: Brand New Day</h2></div>
+  <div class="flip-row">
+    <div class="flip-unit"><div class="flip-card"><div class="flip-face" id="cd-days">00</div></div><span class="unit-label">Days</span></div>
+    <div class="flip-unit"><div class="flip-card"><div class="flip-face" id="cd-hours">00</div></div><span class="unit-label">Hours</span></div>
+    <div class="flip-unit"><div class="flip-card"><div class="flip-face" id="cd-mins">00</div></div><span class="unit-label">Minutes</span></div>
+    <div class="flip-unit"><div class="flip-card"><div class="flip-face" id="cd-secs">00</div></div><span class="unit-label">Seconds</span></div>
+  </div>
+</section>
+
+<!-- ============================================================== REASONS -->
+<section id="reasons">
+  <div class="section-head"><span class="eyebrow">Evidence Log</span><h2>Reasons You're My Favorite Person</h2></div>
+  <div class="reasons-list" id="reasonsList"></div>
+</section>
+
+<!-- ============================================================== LOVE NOTES -->
+<section id="love-notes">
+  <div class="section-head"><span class="eyebrow">Scattered Around HQ</span><h2>Floating Love Notes</h2></div>
+</section>
+
+<!-- ============================================================== TICKET -->
+<section id="ticket">
+  <span class="eyebrow">Admit Two</span>
+  <div class="ticket-stage">
+    <div class="ticket-web tl"><svg viewBox="0 0 100 100"><g stroke="#ff2e46" stroke-width="1.4" fill="none" opacity=".9"><path d="M0 0 L60 60 M0 25 L45 65 M0 0 L100 30"/></g></svg></div>
+    <div class="ticket-web br"><svg viewBox="0 0 100 100"><g stroke="#ff2e46" stroke-width="1.4" fill="none" opacity=".9"><path d="M0 0 L60 60 M0 25 L45 65 M0 0 L100 30"/></g></svg></div>
+    <div class="ticket" id="ticket3d">
+      <div class="ticket-face front">
+        <div class="ticket-stub">BND · 001</div>
+        <div class="ticket-main">
+          <div class="ticket-top"><div class="film">Spider-Man: <span>Brand New Day</span></div></div>
+          <div class="ticket-meta">
+            <div><div class="k">Date</div><div class="v" id="ticketDate">Placeholder</div></div>
+            <div><div class="k">Time</div><div class="v" id="ticketTime">Placeholder</div></div>
+            <div><div class="k">Cinema</div><div class="v" id="ticketCinema">Placeholder</div></div>
+          </div>
+          <div class="ticket-bottom">
+            <div class="guests">Guest: <b id="ticketHer">Her Name</b> · Companion: <b id="ticketMe">Me ❤️</b></div>
+            <div class="barcode"></div>
+          </div>
+        </div>
+        <div class="holo"></div>
+      </div>
+      <div class="ticket-face back">
+        <span class="eyebrow">A Note From Your Companion</span>
+        <p class="msg" id="ticketMsg"></p>
+        <div class="signed">— Your Friendly Neighborhood <span id="ticketMeBack">You</span></div>
+      </div>
+    </div>
+  </div>
+  <p class="ticket-hint">Click the ticket</p>
+</section>
+
+<!-- ============================================================== FINALE -->
+<section id="finale" class="fullscreen">
+  <canvas id="stars"></canvas>
+  <svg id="finale-spider" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="50" cy="34" r="13" fill="#ff2e46"/>
+    <path d="M50 47 L47 20" stroke="#ff2e46" stroke-width="5" stroke-linecap="round"/>
+    <path d="M47 55 L18 40 M47 55 L80 44 M47 62 L14 60 M47 62 L82 70" stroke="#ff2e46" stroke-width="4" stroke-linecap="round"/>
+    <path d="M42 30 L47 34 M58 30 L53 34" stroke="#040406" stroke-width="3.4" stroke-linecap="round"/>
+  </svg>
+
+  <div id="finale-text">
+    <h2 class="finale-line" id="fl1">I've Got One Last Question...</h2>
+    <h2 class="finale-line" id="fl2">Will You Go Watch</h2>
+    <h2 class="finale-line" id="fl3">Spider-Man: Brand New Day</h2>
+    <h2 class="finale-line" id="fl4">With Me?</h2>
+  </div>
+
+  <div class="finale-buttons" id="finaleButtons">
+    <button class="btn-final pulse-target" id="btnYes1">YES ❤️</button>
+    <button class="btn-final pulse-target" id="btnYes2">ABSOLUTELY ❤️</button>
+  </div>
+
+  <div id="finale-result">
+    <h2>Mission Accepted <span>❤️</span></h2>
+    <p>See You At The Movies.</p>
+  </div>
+</section>
+
+<footer>
+  Built for <b id="footerHer">Her Name</b> by <b id="footerMe">Your Name</b> · Spider-sense is always on 🕸️
+  <div id="baby-spider" title="???"></div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<script>
+/* ============================================================================
+   CONFIG — EDIT ME BELOW. This is the only block you need to touch.
+   ============================================================================ */
+const CONFIG = {
+  HER_NAME: "Her Name",
+  YOUR_NAME: "Your Name",
+  SHOW_DATE: "2026-12-25T19:30:00",
+  CINEMA: "Placeholder Cinema",
+  PERSONAL_MESSAGE: "Every great story needs the right person sitting next to you for it. That's you.",
+  PHOTOS: ["", "", "", "", "", "", "", "", "", ""],
+
+  WHY_WATCH: [
+    {icon:"🎬", title:"Because Stories Feel Bigger Shared", desc:"The best scenes always hit harder when I get to look over and see your reaction."},
+    {icon:"🍿", title:"Because Movie Nights With You Hit Different", desc:"Dim lights, good popcorn, your head on my shoulder — that's the whole plan."},
+    {icon:"🕸️", title:"Because You're My Favorite Plus-One", desc:"Every hero needs someone in their corner. Turns out that's you, every time."}
+  ],
+  REASONS: [
+    "You laugh at my terrible jokes like they're actually good.",
+    "You make ordinary days feel like something worth remembering.",
+    "You somehow make me a better version of myself.",
+    "Your texts are the best part of my day, every day.",
+    "You care about the little things that most people miss.",
+    "You're just really, really easy to fall for."
+  ],
+  MARVEL_MOMENTS: [
+    {title:"The First Swing", note:"That first rooftop leap that made everyone believe he could fly."},
+    {title:"Unmasking Trust", note:"The moment a hero lets someone see who they really are underneath."},
+    {title:"The Team-Up", note:"Two heroes, one impossible fight, zero chance without each other."},
+    {title:"The Quiet Save", note:"The rescue nobody films — the one done just because it's right."}
+  ],
+  FUN_FACTS: [
+    "Spider-Man was one of the first major superheroes written as an actual teenager dealing with actual teenage problems.",
+    "His secret identity was designed so readers could imagine themselves under the mask.",
+    "The web-shooters were originally conceived as invented gadgets, not a natural power — Spider-Man is part scientist, part hero.",
+    "\"With great power comes great responsibility\" has become one of the most quoted lines in pop culture history.",
+    "Red and blue were chosen for the suit partly because they read as bold and heroic even in early low-resolution comic printing."
+  ],
+  LOVE_NOTES: [
+    "You're the plot twist I didn't see coming.",
+    "Every timeline is better with you in it.",
+    "You + me + popcorn = perfect night.",
+    "Warning: extremely cute human ahead.",
+    "You make ordinary Tuesdays feel cinematic.",
+    "This whole page is basically a love letter with sound effects."
+  ],
+  CHECKLIST: ["Buy Tickets", "Hold Hands", "Selfie", "Laugh Together", "Watch Credits Together"],
+
+  SNACKS: [
+    {icon:"🍿", name:"Popcorn"},
+    {icon:"🥤", name:"Coke"},
+    {icon:"🧀", name:"Nachos"},
+    {icon:"🍦", name:"Ice Cream"}
+  ],
+  COMIC_STORY: [
+    {tag:"01", text:"Our First Chat"},
+    {tag:"02", text:"First Laugh"},
+    {tag:"03", text:"First Selfie"},
+    {tag:"04", text:"Favorite Memory"},
+    {tag:"05", text:"Our Movie Soon ❤️"}
+  ]
+};
+
+/* ============================================================================
+   APPLY CONFIG
+   ============================================================================ */
+document.querySelectorAll('#herNameSlot, #ticketHer, #footerHer').forEach(el => el.textContent = CONFIG.HER_NAME);
+document.querySelectorAll('#ticketMeBack, #footerMe').forEach(el => el.textContent = CONFIG.YOUR_NAME);
+document.getElementById('ticketCinema').textContent = CONFIG.CINEMA;
+document.getElementById('ticketMsg').textContent = CONFIG.PERSONAL_MESSAGE;
+
+(function formatTicketDate(){
+  const d = new Date(CONFIG.SHOW_DATE);
+  if(!isNaN(d)){
+    document.getElementById('ticketDate').textContent = d.toLocaleDateString(undefined,{month:'short', day:'numeric', year:'numeric'});
+    document.getElementById('ticketTime').textContent = d.toLocaleTimeString(undefined,{hour:'2-digit', minute:'2-digit'});
+  }
+})();
+
+/* gallery */
+(function buildGallery(){
+  const grid = document.getElementById('panelGrid');
+  const tags = ["First Hello","Best Day","Us, Always","Little Things","Adventure #1","Golden Hour","Just Us Two","Favorite Memory","Somewhere Nice","To Be Continued"];
+  CONFIG.PHOTOS.forEach((src, i) => {
+    const panel = document.createElement('div');
+    panel.className = 'panel';
+    const inner = src
+      ? `<img src="${src}" alt="Memory ${i+1}">`
+      : `<div class="ph"><svg viewBox="0 0 24 24" fill="none" stroke="#8992a3" stroke-width="1.4"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="M21 17l-5-5-4 4-3-3-6 6"/></svg>[Our Photo ${i+1}]</div>`;
+    panel.innerHTML = inner + `<div class="shine"></div><div class="tag">${tags[i%tags.length]}</div>`;
+    grid.appendChild(panel);
+  });
+  // flying comic FX papers drifting in background
+  const words = ["POW!","ZAP!","BOOM!","WHOOSH"];
+  const gallerySection = document.getElementById('gallery');
+  words.forEach((w,i) => {
+    const fx = document.createElement('div');
+    fx.className = 'comic-fx';
+    fx.textContent = w;
+    fx.style.fontSize = (30+i*10)+'px';
+    fx.style.left = (10+i*22)+'%';
+    fx.style.top = (10+ (i%2)*60)+'%';
+    gallerySection.appendChild(fx);
+    gsap.to(fx, {y:'+=30', rotate:(i%2?8:-8), duration:4+i, repeat:-1, yoyo:true, ease:'sine.inOut'});
+  });
+})();
+
+/* comic story row */
+(function buildComicRow(){
+  const row = document.getElementById('comicRow');
+  CONFIG.COMIC_STORY.forEach(item => {
+    const p = document.createElement('div');
+    p.className = 'comic-panel';
+    p.innerHTML = `<div class="num">${item.tag}</div><div class="bubble">${item.text}</div>`;
+    row.appendChild(p);
+  });
+})();
+
+/* why-watch cards */
+(function buildWhy(){
+  const grid = document.getElementById('whyGrid');
+  CONFIG.WHY_WATCH.forEach(item => {
+    const c = document.createElement('div');
+    c.className = 'glass-card';
+    c.innerHTML = `<span class="icon">${item.icon}</span><h3>${item.title}</h3><p>${item.desc}</p>`;
+    grid.appendChild(c);
+  });
+})();
+
+/* snacks */
+(function buildSnacks(){
+  const grid = document.getElementById('snacksGrid');
+  CONFIG.SNACKS.forEach(item => {
+    const c = document.createElement('div');
+    c.className = 'glass-card';
+    c.style.textAlign = 'center';
+    c.innerHTML = `<span class="icon" style="font-size:38px;">${item.icon}</span><h3>${item.name}</h3>`;
+    grid.appendChild(c);
+  });
+})();
+
+/* checklist */
+(function buildChecklist(){
+  const list = document.getElementById('checklist');
+  CONFIG.CHECKLIST.forEach(item => {
+    const li = document.createElement('li');
+    li.className = 'pulse-target';
+    li.innerHTML = `<span class="box">✓</span><span class="label">${item}</span>`;
+    li.addEventListener('click', () => {
+      li.classList.toggle('checked');
+      updateChecklistProgress();
+      if(window.SFX) SFX.click();
+    });
+    list.appendChild(li);
+  });
+})();
+function updateChecklistProgress(){
+  const items = document.querySelectorAll('#checklist li');
+  const checked = document.querySelectorAll('#checklist li.checked').length;
+  const pct = Math.round((checked/items.length)*100);
+  document.getElementById('checklist-pct').textContent = pct+'%';
+  gsap.to('#checklistFill', {width:pct+'%', duration:.5});
+}
+
+/* marvel moments */
+(function buildMoments(){
+  const grid = document.getElementById('momentsGrid');
+  CONFIG.MARVEL_MOMENTS.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'moment-card';
+    card.innerHTML = `<div class="moment-inner">
+      <div class="moment-face front"><h3>${item.title}</h3></div>
+      <div class="moment-face back"><p>${item.note}</p></div>
+    </div>`;
+    card.addEventListener('click', () => card.classList.toggle('flipped'));
+    grid.appendChild(card);
+  });
+})();
+
+/* fun facts carousel */
+let factIndex = 0, factTimer = null;
+(function buildFacts(){
+  const track = document.getElementById('factsTrack');
+  const dots = document.getElementById('factsDots');
+  CONFIG.FUN_FACTS.forEach((f,i) => {
+    const slide = document.createElement('div');
+    slide.className = 'fact-slide' + (i===0?' active':'');
+    slide.textContent = f;
+    track.appendChild(slide);
+    const dot = document.createElement('i');
+    if(i===0) dot.className='active';
+    dot.addEventListener('click', () => showFact(i));
+    dots.appendChild(dot);
+  });
+  factTimer = setInterval(() => showFact((factIndex+1)%CONFIG.FUN_FACTS.length), 5000);
+})();
+function showFact(i){
+  const slides = document.querySelectorAll('.fact-slide');
+  const dots = document.querySelectorAll('.facts-dots i');
+  slides[factIndex].classList.remove('active');
+  dots[factIndex].classList.remove('active');
+  factIndex = i;
+  slides[factIndex].classList.add('active');
+  dots[factIndex].classList.add('active');
+}
+
+/* reasons */
+(function buildReasons(){
+  const list = document.getElementById('reasonsList');
+  CONFIG.REASONS.forEach((r,i) => {
+    const item = document.createElement('div');
+    item.className = 'reason-item';
+    item.innerHTML = `<span class="reason-num">${String(i+1).padStart(2,'0')}</span><span class="reason-text">${r}</span>`;
+    list.appendChild(item);
+  });
+})();
+
+/* love notes floating */
+(function buildLoveNotes(){
+  const section = document.getElementById('love-notes');
+  CONFIG.LOVE_NOTES.forEach((note,i) => {
+    const el = document.createElement('div');
+    el.className = 'love-note';
+    el.textContent = note;
+    el.style.left = (8 + (i*15)%80) + '%';
+    el.style.top = (30 + ((i%3)*20)) + '%';
+    el.style.transform = `rotate(${(i%2?1:-1)*(4+i)}deg)`;
+    section.appendChild(el);
+    gsap.to(el, {opacity:0, y:0, scrollTrigger:{trigger:section, start:'top 85%'}});
+    gsap.fromTo(el, {opacity:0, y:40}, {opacity:1, y:0, duration:.8, delay:i*.08, scrollTrigger:{trigger:section, start:'top 85%'}});
+    gsap.to(el, {y:'+=14', duration:3+i*.3, repeat:-1, yoyo:true, ease:'sine.inOut', delay:1});
+    el.addEventListener('click', () => gsap.fromTo(el, {rotate:(i%2?1:-1)*(4+i)}, {rotate:(i%2?-1:1)*(4+i), duration:.5, ease:'elastic.out(1,.4)'}));
+  });
+})();
+
+/* hero skyline buildings */
+function buildSkyline(stageId, cls, count, opts){
+  const stage = document.getElementById(stageId);
+  const w = window.innerWidth;
+  for(let i=0;i<count;i++){
+    const b = document.createElement('div');
+    b.className = cls;
+    const bw = w/count + 6;
+    const bh = 120 + Math.random()*(opts.maxH||260);
+    b.style.left = (i * (w/count)) + 'px';
+    b.style.width = bw + 'px';
+    b.style.height = bh + 'px';
+    if(cls === 'building'){
+      const cols = Math.max(2, Math.floor(bw/16));
+      const rows = Math.max(3, Math.floor(bh/20));
+      for(let c=0;c<cols;c++){
+        for(let r=0;r<rows;r++){
+          if(Math.random() > .72){
+            const win = document.createElement('div');
+            win.className = 'win' + (Math.random() > .55 ? ' on' : '');
+            win.style.left = (c*16+6) + 'px';
+            win.style.top = (r*20+10) + 'px';
+            win.style.animationDelay = (Math.random()*4) + 's';
+            b.appendChild(win);
+          }
+        }
+      }
+    } else {
+      b.style.opacity = .5 + (i%3)*.18;
+      b.classList.add('layer-'+(i%3));
+    }
+    stage.appendChild(b);
+  }
+}
+buildSkyline('skyline-stage', 'building', 14, {maxH:280});
+buildSkyline('swing-stage', 'parallax-building', 10, {maxH:320});
+
+/* clouds + searchlights */
+(function buildAtmosphere(){
+  const stage = document.getElementById('skyline-stage');
+  for(let i=0;i<4;i++){
+    const c = document.createElement('div');
+    c.className = 'cloud';
+    c.style.width = (140+Math.random()*160)+'px';
+    c.style.top = (5+Math.random()*18)+'%';
+    c.style.left = (-20+Math.random()*140)+'%';
+    stage.appendChild(c);
+    gsap.to(c, {x:'+=220', duration:40+Math.random()*30, repeat:-1, ease:'none'});
+  }
+  for(let i=0;i<2;i++){
+    const s = document.createElement('div');
+    s.className = 'searchlight';
+    s.style.left = (20+i*50)+'%';
+    stage.appendChild(s);
+    gsap.to(s, {rotate:(i%2?18:-18), duration:6+i, repeat:-1, yoyo:true, ease:'sine.inOut', transformOrigin:'bottom center'});
+    gsap.to(s, {x:'+=140', duration:22, repeat:-1, yoyo:true, ease:'sine.inOut'});
+  }
+})();
+
+/* ============================================================================
+   LIVING SPIDERS
+   ============================================================================ */
+const SPIDER_SVG = `<svg class="spider-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <g class="legs">
+    <path d="M46 58 L18 44"/><path d="M46 62 L14 62"/><path d="M46 66 L18 82"/><path d="M46 70 L28 92"/>
+    <path d="M54 58 L82 44"/><path d="M54 62 L86 62"/><path d="M54 66 L82 82"/><path d="M54 70 L72 92"/>
+  </g>
+  <ellipse cx="50" cy="60" rx="16" ry="13" fill="#d81f37"/>
+  <circle cx="50" cy="40" r="11" fill="#d81f37"/>
+  <g class="eyes">
+    <circle cx="45" cy="38" r="3.4" fill="#fff"/><circle cx="55" cy="38" r="3.4" fill="#fff"/>
+    <circle cx="45" cy="38" r="1.6" fill="#0a0a0d"/><circle cx="55" cy="38" r="1.6" fill="#0a0a0d"/>
+  </g>
+</svg>`;
+
+class LivingSpider{
+  constructor({container, mode='crawl', bounds, x=0, y=0, scale=1, hang=false, onClick}){
+    this.container = container;
+    this.mode = mode;
+    this.bounds = bounds || {x:[0,120], y:[0,60]};
+    this.x = x; this.y = y;
+    this.el = document.createElement('div');
+    this.el.className = 'spider' + (hang ? ' spider-hang' : '');
+    this.el.style.width = (26*scale)+'px';
+    this.el.style.height = (26*scale)+'px';
+    this.el.innerHTML = SPIDER_SVG + (hang ? '<div class="spider-thread"></div>' : '');
+    this.el.style.cursor = 'pointer';
+    container.appendChild(this.el);
+    gsap.set(this.el, {x:this.x, y:this.y});
+    this.el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      showEggToast('Hey there! 🕷️');
+      if(window.SFX) SFX.click();
+      if(onClick) onClick(this);
+      this.skitter();
+    });
+    this.start();
+  }
+  start(){
+    if(this.mode==='crawl' || this.mode==='flee') this.goto();
+    if(this.mode==='flee') window.addEventListener('mousemove', this.onMouseMove.bind(this));
+    if(this.mode==='drop') this.dropLoop();
+  }
+  goto(){
+    const tx = this.bounds.x[0] + Math.random()*(this.bounds.x[1]-this.bounds.x[0]);
+    const ty = this.bounds.y[0] + Math.random()*(this.bounds.y[1]-this.bounds.y[0]);
+    const ang = Math.atan2(ty-this.y, tx-this.x)*180/Math.PI;
+    gsap.to(this.el, {
+      x:tx, y:ty, rotate:ang+90, duration:2.5+Math.random()*3, ease:'sine.inOut', delay:Math.random()*1.2,
+      onComplete: () => { this.x=tx; this.y=ty; this.goto(); }
+    });
+  }
+  onMouseMove(e){
+    const r = this.el.getBoundingClientRect();
+    const cx = r.left+r.width/2, cy = r.top+r.height/2;
+    const dist = Math.hypot(e.clientX-cx, e.clientY-cy);
+    if(dist < 110){
+      gsap.killTweensOf(this.el);
+      let fx = this.x + (cx-e.clientX)*1.4;
+      let fy = this.y + (cy-e.clientY)*1.4;
+      fx = Math.min(Math.max(fx, this.bounds.x[0]), this.bounds.x[1]);
+      fy = Math.min(Math.max(fy, this.bounds.y[0]), this.bounds.y[1]);
+      const ang = Math.atan2(fy-this.y, fx-this.x)*180/Math.PI;
+      gsap.to(this.el, {x:fx, y:fy, rotate:ang+90, duration:.5, ease:'power2.out', onComplete:() => { this.x=fx; this.y=fy; this.goto(); }});
+    }
+  }
+  dropLoop(){
+    const drop = () => {
+      const startX = this.bounds.x[0] + Math.random()*(this.bounds.x[1]-this.bounds.x[0]);
+      gsap.set(this.el, {x:startX, y:-40});
+      this.x = startX; this.y = -40;
+      gsap.to(this.el, {
+        y: this.bounds.y[1], duration:1.1, ease:'bounce.out', delay:4+Math.random()*7,
+        onComplete: () => { gsap.to(this.el, {y:-40, duration:.7, delay:2, ease:'power1.in', onComplete: drop}); }
+      });
+    };
+    drop();
+  }
+  skitter(){
+    gsap.killTweensOf(this.el);
+    const tx = this.bounds.x[0] + Math.random()*(this.bounds.x[1]-this.bounds.x[0]);
+    const ty = this.bounds.y[0] + Math.random()*(this.bounds.y[1]-this.bounds.y[0]);
+    gsap.to(this.el, {x:tx, y:ty, duration:.5, ease:'power2.out', onComplete:() => { this.x=tx; this.y=ty; if(this.mode!=='drop') this.goto(); }});
+  }
+}
+
+function initLivingSpiders(){
+  // 3 crawling on hero buildings
+  const heroStage = document.getElementById('skyline-stage');
+  for(let i=0;i<3;i++){
+    new LivingSpider({container:heroStage, mode:'crawl', scale:.9,
+      bounds:{x:[40, window.innerWidth-40], y:[window.innerHeight*.35, window.innerHeight*.8]},
+      x:80+i*180, y:window.innerHeight*.5});
+  }
+  // flee spider near controls
+  const fleeZone = document.getElementById('flee-zone');
+  new LivingSpider({container:fleeZone, mode:'flee', scale:.8, bounds:{x:[0,90], y:[0,50]}, x:20, y:20});
+  // hanging spider on first comic panel
+  requestAnimationFrame(() => {
+    const firstPanel = document.querySelector('.comic-panel');
+    if(firstPanel){
+      firstPanel.style.overflow = 'visible';
+      new LivingSpider({container:firstPanel, mode:'crawl', hang:true, scale:.7, bounds:{x:[20,60], y:[0,20]}, x:30, y:0});
+    }
+    // crawler behind gallery cards
+    const galleryGrid = document.getElementById('panelGrid');
+    if(galleryGrid){
+      const gs = new LivingSpider({container:galleryGrid, mode:'crawl', scale:.7, bounds:{x:[0, galleryGrid.clientWidth||400], y:[-10,10]}, x:0, y:0});
+      gs.el.style.zIndex = 1;
+    }
+    // ticket spider
+    const ticketStage = document.querySelector('.ticket-stage');
+    if(ticketStage){
+      new LivingSpider({container:ticketStage, mode:'crawl', scale:.55, bounds:{x:[10,40], y:[4,20]}, x:20, y:8});
+    }
+    // walking across finale buttons
+    const finaleButtons = document.getElementById('finaleButtons');
+    if(finaleButtons){
+      const bs = new LivingSpider({container:finaleButtons, mode:'crawl', scale:.6, bounds:{x:[0, 260], y:[-24,-10]}, x:0, y:-16});
+      bs.el.style.zIndex = 1;
+    }
+    // hidden baby spider in footer
+    const baby = document.getElementById('baby-spider');
+    if(baby){
+      baby.innerHTML = SPIDER_SVG;
+      baby.addEventListener('click', () => showEggToast('A tiny hero-in-training 🕷️👶'));
+    }
+  });
+  // drop spiders, page-wide
+  const dropLayer = document.getElementById('drop-spider-layer');
+  for(let i=0;i<2;i++){
+    new LivingSpider({container:dropLayer, mode:'drop', scale:.85, bounds:{x:[40, window.innerWidth-40], y:[window.innerHeight*.15, window.innerHeight*.45]}, x:window.innerWidth*.3, y:-40});
+  }
+}
+
+/* ============================================================================
+   SFX ENGINE (Web Audio API — synthesized, no external files)
+   ============================================================================ */
+const SFX = {
+  ctx: null, enabled: true, rainNode: null,
+  ensure(){ if(!this.ctx) this.ctx = new (window.AudioContext||window.webkitAudioContext)(); if(this.ctx.state==='suspended') this.ctx.resume(); return this.ctx; },
+  whoosh(){ if(!this.enabled) return; const ctx=this.ensure(); const bufferSize=ctx.sampleRate*0.3;
+    const buffer=ctx.createBuffer(1,bufferSize,ctx.sampleRate); const data=buffer.getChannelData(0);
+    for(let i=0;i<bufferSize;i++){ data[i]=(Math.random()*2-1)*(1-i/bufferSize); }
+    const src=ctx.createBufferSource(); src.buffer=buffer;
+    const filter=ctx.createBiquadFilter(); filter.type='bandpass';
+    filter.frequency.setValueAtTime(1200,ctx.currentTime); filter.frequency.exponentialRampToValueAtTime(300, ctx.currentTime+0.3);
+    const gain=ctx.createGain(); gain.gain.setValueAtTime(.22, ctx.currentTime);
+    src.connect(filter).connect(gain).connect(ctx.destination); src.start();
+  },
+  click(){ if(!this.enabled) return; const ctx=this.ensure();
+    const osc=ctx.createOscillator(); const gain=ctx.createGain(); osc.type='sine';
+    osc.frequency.setValueAtTime(700,ctx.currentTime);
+    gain.gain.setValueAtTime(.13, ctx.currentTime); gain.gain.exponentialRampToValueAtTime(.001, ctx.currentTime+.08);
+    osc.connect(gain).connect(ctx.destination); osc.start(); osc.stop(ctx.currentTime+.09);
+  },
+  heartbeat(){ if(!this.enabled) return; const ctx=this.ensure();
+    [0,.32].forEach(t => {
+      const osc=ctx.createOscillator(); const gain=ctx.createGain(); osc.type='sine';
+      osc.frequency.setValueAtTime(58,ctx.currentTime+t);
+      gain.gain.setValueAtTime(0,ctx.currentTime+t);
+      gain.gain.linearRampToValueAtTime(.4, ctx.currentTime+t+.03);
+      gain.gain.exponentialRampToValueAtTime(.001, ctx.currentTime+t+.25);
+      osc.connect(gain).connect(ctx.destination); osc.start(ctx.currentTime+t); osc.stop(ctx.currentTime+t+.3);
+    });
+  },
+  cheer(){ if(!this.enabled) return; const ctx=this.ensure(); const bufferSize=ctx.sampleRate*1.3;
+    const buffer=ctx.createBuffer(1,bufferSize,ctx.sampleRate); const data=buffer.getChannelData(0);
+    for(let i=0;i<bufferSize;i++){ data[i]=(Math.random()*2-1)*Math.sin((i/bufferSize)*Math.PI); }
+    const src=ctx.createBufferSource(); src.buffer=buffer;
+    const filter=ctx.createBiquadFilter(); filter.type='bandpass'; filter.frequency.setValueAtTime(1700,ctx.currentTime);
+    const gain=ctx.createGain(); gain.gain.setValueAtTime(.001,ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(.28, ctx.currentTime+.3); gain.gain.linearRampToValueAtTime(.001, ctx.currentTime+1.3);
+    src.connect(filter).connect(gain).connect(ctx.destination); src.start();
+  },
+  startRain(){ if(!this.enabled || this.rainNode) return; const ctx=this.ensure(); const bufferSize=2*ctx.sampleRate;
+    const buffer=ctx.createBuffer(1,bufferSize,ctx.sampleRate); const data=buffer.getChannelData(0);
+    for(let i=0;i<bufferSize;i++){ data[i]=Math.random()*2-1; }
+    const src=ctx.createBufferSource(); src.buffer=buffer; src.loop=true;
+    const filter=ctx.createBiquadFilter(); filter.type='highpass'; filter.frequency.value=1400;
+    const gain=ctx.createGain(); gain.gain.value=.05;
+    src.connect(filter).connect(gain).connect(ctx.destination); src.start();
+    this.rainNode = {src, gain};
+  },
+  stopRain(fade=1.6){ if(!this.rainNode || !this.ctx) return; const g=this.rainNode.gain;
+    g.gain.linearRampToValueAtTime(0.0001, this.ctx.currentTime+fade);
+    const src=this.rainNode.src; setTimeout(() => { try{ src.stop(); }catch(e){} }, fade*1000+100);
+    this.rainNode = null;
+  }
+};
+window.SFX = SFX;
+
+document.getElementById('sfx-toggle').addEventListener('click', () => {
+  SFX.enabled = !SFX.enabled;
+  document.body.classList.toggle('sfx-on', SFX.enabled);
+  if(SFX.enabled){ SFX.ensure(); if(rainActive) SFX.startRain(); }
+  else { SFX.stopRain(.3); }
+});
+
+/* ============================================================================
+   CURSOR + SPIDER-SENSE FX
+   ============================================================================ */
+const isCoarse = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+if(!isCoarse){
+  document.body.classList.add('hide-cursor');
+  const dot = document.getElementById('cursorDot');
+  let mx=-100,my=-100, dx=-100, dy=-100;
+  window.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; });
+  gsap.ticker.add(() => { dx += (mx-dx)*.25; dy += (my-dy)*.25; dot.style.transform = `translate(${dx}px, ${dy}px)`; });
+}
+
+const cFx = document.getElementById('cursor-fx');
+const cCtx = cFx.getContext('2d');
+function sizeCanvas(c){ c.width = window.innerWidth; c.height = window.innerHeight; }
+sizeCanvas(cFx);
+
+let trail = [];
+window.addEventListener('mousemove', e => {
+  if(isCoarse) return;
+  trail.push({x:e.clientX, y:e.clientY, life:1});
+  if(trail.length > 45) trail.shift();
+});
+
+let ripples = [];
+window.addEventListener('click', e => {
+  ripples.push({x:e.clientX, y:e.clientY, r:2, life:1, strands: 10});
+});
+
+function drawCursorFx(){
+  cCtx.clearRect(0,0,cFx.width,cFx.height);
+  // trailing web thread connecting consecutive points
+  cCtx.beginPath();
+  trail.forEach((p,i) => {
+    p.life -= .03;
+    if(i===0) cCtx.moveTo(p.x,p.y); else cCtx.lineTo(p.x,p.y);
+  });
+  cCtx.strokeStyle = 'rgba(255,46,70,.35)';
+  cCtx.lineWidth = 1;
+  cCtx.stroke();
+  trail.forEach(p => {
+    cCtx.beginPath(); cCtx.arc(p.x,p.y, 2.2*Math.max(p.life,0), 0, Math.PI*2);
+    cCtx.fillStyle = `rgba(255,46,70,${Math.max(p.life,0)*.7})`; cCtx.fill();
+  });
+  trail = trail.filter(p => p.life > 0);
+
+  ripples.forEach(r => {
+    r.r += 3.4; r.life -= .017;
+    for(let a=0;a<Math.PI*2;a+=Math.PI*2/r.strands){
+      const x1 = r.x + Math.cos(a)*r.r, y1 = r.y + Math.sin(a)*r.r;
+      const x2 = r.x + Math.cos(a)*(r.r*.55), y2 = r.y + Math.sin(a)*(r.r*.55);
+      cCtx.beginPath(); cCtx.moveTo(x1,y1); cCtx.lineTo(x2,y2);
+      cCtx.strokeStyle = `rgba(255,46,70,${Math.max(r.life,0)*.55})`; cCtx.lineWidth = 1; cCtx.stroke();
+    }
+    cCtx.beginPath(); cCtx.arc(r.x,r.y,r.r,0,Math.PI*2);
+    cCtx.strokeStyle = `rgba(255,46,70,${Math.max(r.life,0)*.35})`; cCtx.stroke();
+    cCtx.beginPath(); cCtx.arc(r.x,r.y,r.r*.55,0,Math.PI*2);
+    cCtx.strokeStyle = `rgba(255,46,70,${Math.max(r.life,0)*.25})`; cCtx.stroke();
+  });
+  ripples = ripples.filter(r => r.life > 0);
+  requestAnimationFrame(drawCursorFx);
+}
+drawCursorFx();
+
+/* button hover -> spider pulse handled via .pulse-target CSS; add click sfx globally */
+document.addEventListener('click', e => {
+  if(e.target.closest('button, .checklist li, .moment-card, .love-note')) SFX.click();
+});
+
+/* ============================================================================
+   AMBIENT BACKGROUND: fog + dust + stars
+   ============================================================================ */
+const bgFx = document.getElementById('bg-fx');
+const bgCtx = bgFx.getContext('2d');
+sizeCanvas(bgFx);
+
+const dust = Array.from({length: reduceMotion? 20:70}, () => ({
+  x: Math.random()*bgFx.width, y: Math.random()*bgFx.height, r: Math.random()*1.6+.4, sp: Math.random()*.4+.1, sway: Math.random()*1
+}));
+const fogBlobs = Array.from({length:5}, (_,i) => ({
+  x: Math.random()*bgFx.width, y: bgFx.height*(.3+Math.random()*.6), r: 280+Math.random()*220, sp: (Math.random()*.15+.05)*(i%2?1:-1)
+}));
+
+let starOpacity = 0;
+window.__setStarOpacity = v => starOpacity = v;
+
+function drawBg(t){
+  bgCtx.clearRect(0,0,bgFx.width,bgFx.height);
+  fogBlobs.forEach(f => {
+    f.x += f.sp;
+    if(f.x < -f.r) f.x = bgFx.width+f.r;
+    if(f.x > bgFx.width+f.r) f.x = -f.r;
+    const g = bgCtx.createRadialGradient(f.x,f.y,0,f.x,f.y,f.r);
+    g.addColorStop(0,'rgba(20,28,48,.28)'); g.addColorStop(1,'rgba(20,28,48,0)');
+    bgCtx.fillStyle = g; bgCtx.beginPath(); bgCtx.arc(f.x,f.y,f.r,0,Math.PI*2); bgCtx.fill();
+  });
+  if(starOpacity > 0.01){
+    bgCtx.save(); bgCtx.globalAlpha = starOpacity;
+    for(let i=0;i<120;i++){
+      const sx = (i*97) % bgFx.width, sy = (i*53) % bgFx.height;
+      const tw = (Math.sin(t/600 + i) + 1)/2;
+      bgCtx.fillStyle = `rgba(244,241,234,${.3+tw*.7})`; bgCtx.fillRect(sx, sy, 1.4, 1.4);
+    }
+    bgCtx.restore();
+  }
+  dust.forEach(d => {
+    d.y -= d.sp; d.x += Math.sin((t/1400)+d.sway)*.15;
+    if(d.y < -10) d.y = bgFx.height+10;
+    bgCtx.beginPath(); bgCtx.arc(d.x,d.y,d.r,0,Math.PI*2);
+    bgCtx.fillStyle = 'rgba(224,38,63,.35)'; bgCtx.fill();
+  });
+  requestAnimationFrame(drawBg);
+}
+requestAnimationFrame(drawBg);
+
+/* ============================================================================
+   RAIN
+   ============================================================================ */
+const rainCanvas = document.getElementById('rain-canvas');
+const rainCtx = rainCanvas.getContext('2d');
+sizeCanvas(rainCanvas);
+let rainActive = true;
+let rainOpacity = 1;
+const drops = Array.from({length: reduceMotion? 60:220}, () => ({
+  x: Math.random()*rainCanvas.width, y: Math.random()*rainCanvas.height, len: 10+Math.random()*16, sp: 8+Math.random()*8
+}));
+function drawRain(){
+  rainCtx.clearRect(0,0,rainCanvas.width, rainCanvas.height);
+  if(rainOpacity > 0.01){
+    rainCtx.save();
+    rainCtx.globalAlpha = rainOpacity;
+    rainCtx.strokeStyle = 'rgba(180,200,230,.4)';
+    rainCtx.lineWidth = 1;
+    drops.forEach(d => {
+      rainCtx.beginPath(); rainCtx.moveTo(d.x, d.y); rainCtx.lineTo(d.x-3, d.y+d.len); rainCtx.stroke();
+      d.y += d.sp; d.x -= 1.1;
+      if(d.y > rainCanvas.height){ d.y = -20; d.x = Math.random()*rainCanvas.width; }
+    });
+    rainCtx.restore();
+  }
+  requestAnimationFrame(drawRain);
+}
+requestAnimationFrame(drawRain);
+
+function stopRainVisual(){
+  rainActive = false;
+  gsap.to({v:rainOpacity}, {v:0, duration:2.2, onUpdate:function(){ rainOpacity = this.targets()[0].v; }});
+  SFX.stopRain(2);
+}
+
+/* lightning flashes while raining */
+function lightningLoop(){
+  if(reduceMotion) return;
+  const delay = 7000+Math.random()*9000;
+  setTimeout(() => {
+    if(rainActive){
+      const flash = document.getElementById('lightning-flash');
+      gsap.timeline().to(flash,{opacity:.5, duration:.06}).to(flash,{opacity:0, duration:.12}).to(flash,{opacity:.3, duration:.05}).to(flash,{opacity:0, duration:.3});
+    }
+    lightningLoop();
+  }, delay);
+}
+lightningLoop();
+
+window.addEventListener('resize', () => { sizeCanvas(bgFx); sizeCanvas(cFx); sizeCanvas(rainCanvas); sizeCanvas(confettiCanvas); });
+
+/* ============================================================================
+   BIRDS + LEAVES (only while hero is in view, for performance)
+   ============================================================================ */
+let atmosphereTimers = [];
+function spawnBird(){
+  const b = document.createElement('div');
+  b.className = 'flying-thing';
+  b.innerHTML = `<svg width="26" height="14" viewBox="0 0 26 14"><path d="M0 8 Q6 0 13 8 Q20 0 26 8" stroke="#1a2033" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`;
+  const fromLeft = Math.random() > .5;
+  b.style.top = (10+Math.random()*30)+'vh';
+  b.style.left = fromLeft ? '-40px' : '110vw';
+  document.body.appendChild(b);
+  gsap.to(b, {x: fromLeft ? '120vw' : '-120vw', duration:9+Math.random()*4, ease:'sine.inOut', onComplete:() => b.remove()});
+}
+function spawnLeaf(){
+  const l = document.createElement('div');
+  l.className = 'leaf'; l.textContent = '🍂';
+  l.style.left = Math.random()*100+'vw'; l.style.top = '-20px';
+  document.body.appendChild(l);
+  gsap.to(l, {y:'110vh', x:'+=' + (Math.random()>.5?80:-80), rotate:360*(Math.random()>.5?1:-1), duration:8+Math.random()*4, ease:'sine.inOut', onComplete:() => l.remove()});
+}
+const heroObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting && !reduceMotion){
+      atmosphereTimers.push(setInterval(spawnBird, 6000));
+      atmosphereTimers.push(setInterval(spawnLeaf, 3500));
+    } else {
+      atmosphereTimers.forEach(clearInterval); atmosphereTimers = [];
+    }
+  });
+}, {threshold:.15});
+heroObserver.observe(document.getElementById('hero'));
+
+/* ============================================================================
+   INTRO SEQUENCE
+   ============================================================================ */
+gsap.registerPlugin(ScrollTrigger);
+
+function typeLine(el, text, speed=45){
+  return new Promise(resolve => {
+    el.textContent = '';
+    let i = 0;
+    const caret = document.createElement('span'); caret.className = 'caret';
+    const timer = setInterval(() => {
+      el.textContent = text.slice(0, i+1); el.appendChild(caret); i++;
+      if(i >= text.length){ clearInterval(timer); resolve(); }
+    }, speed);
+  });
+}
+function wait(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+async function runIntro(){
+  const line = document.getElementById('introLine');
+  const overlay = document.getElementById('intro-overlay');
+  if(reduceMotion){ finishIntro(); return; }
+  await typeLine(line, 'A Multiverse Event Has Been Detected...', 40);
+  await wait(700);
+  await typeLine(line, 'Searching...', 60);
+  await wait(600);
+  await typeLine(line, 'Found One Special Person ❤️', 45);
+  await wait(900);
+  gsap.to(overlay, { opacity:0, duration:1.1, ease:'power2.inOut',
+    onComplete:() => { overlay.style.pointerEvents = 'none'; finishIntro(); } });
+}
+
+function finishIntro(){
+  document.body.classList.remove('locked');
+  initLivingSpiders();
+  if(SFX.enabled){ SFX.ensure(); SFX.startRain(); }
+
+  const tl = gsap.timeline({defaults:{ease:'power3.out'}});
+  tl.to('#skyline-stage', {opacity:1, scale:1, duration:2.2}, 0)
+    .to('.corner-web', {opacity:.65, duration:1.2, stagger:.2}, .3)
+    .to('#spider-hero', {opacity:1, duration:.3}, .8)
+    .to('#spider-hero', {left:'110vw', top:'20%', rotate:20, duration:2.2, ease:'power1.inOut'}, .9)
+    .to('#spider-hero', {opacity:0, duration:.3}, 2.9)
+    .to('#hero-copy', {opacity:1, y:0, duration:1.2}, 1.6)
+    .to('#scroll-cue', {opacity:1, duration:.8}, 2.6)
+    .fromTo('#skyline-stage', {scale:1.08}, {scale:1, duration:3, ease:'power2.out'}, 0);
+
+  // repeated spider-hero swing every ~14s for continuous motion, as requested
+  if(!reduceMotion){
+    setInterval(() => {
+      gsap.timeline()
+        .set('#spider-hero', {left:'-80px', top:(30+Math.random()*20)+'%', opacity:1})
+        .to('#spider-hero', {left:'110vw', rotate:20, duration:2.4, ease:'power1.inOut'})
+        .to('#spider-hero', {opacity:0, duration:.3}, '-=.3');
+    }, 14000);
+  }
+
+  // slow continuous ken-burns zoom on hero
+  if(!reduceMotion){
+    gsap.to('#skyline-stage', {scale:1.05, duration:18, repeat:-1, yoyo:true, ease:'sine.inOut', delay:3});
+  }
+}
+
+runIntro();
+
+/* ============================================================================
+   SCROLLTRIGGER REVEALS — shared helpers
+   ============================================================================ */
+function revealSection(selector, opts={}){
+  gsap.utils.toArray(selector).forEach(el => {
+    gsap.fromTo(el, {opacity:0, y: opts.y ?? 30}, {opacity:1, y:0, duration: opts.duration ?? .9, ease:'power3.out',
+      scrollTrigger:{trigger: el, start: opts.start ?? 'top 85%'}});
+  });
+}
+revealSection('.section-head .eyebrow', {y:0, duration:.7});
+revealSection('.section-head h2');
+
+/* mission */
+gsap.to('#ml1', {opacity:1, y:0, duration:1, scrollTrigger:{trigger:'#ml1', start:'top 80%'}});
+gsap.to('#ml2', {opacity:1, y:0, duration:1, delay:.15, scrollTrigger:{trigger:'#ml2', start:'top 85%'}});
+gsap.to('#dossier', {opacity:1, y:0, rotateX:0, duration:1.1, ease:'power3.out', scrollTrigger:{trigger:'#dossier', start:'top 85%'}});
+
+document.getElementById('dossierYes').addEventListener('click', function(){
+  this.disabled = true; this.textContent = 'Analyzing...';
+  SFX.click();
+  const fill = document.getElementById('progressFill'); const pct = document.getElementById('progress-pct');
+  const obj = {v:0};
+  gsap.to(obj, { v:100, duration:1.8, ease:'power2.out',
+    onUpdate:() => { fill.style.width = obj.v+'%'; pct.textContent = Math.round(obj.v)+'%'; },
+    onComplete:() => { this.textContent = 'Mission Confirmed ❤️'; burstConfetti(this.getBoundingClientRect(), 40); } });
+});
+
+/* story */
+gsap.to('#story-quote .quote-mark', {opacity:1, duration:.8, scrollTrigger:{trigger:'#story', start:'top 75%'}});
+gsap.fromTo('#story-quote blockquote', {y:40, opacity:0}, {y:0, opacity:1, duration:1.2, delay:.15, scrollTrigger:{trigger:'#story', start:'top 75%'}});
+gsap.utils.toArray('.comic-panel').forEach((p,i) => {
+  const fromX = i%2===0 ? -50 : 50;
+  gsap.fromTo(p, {opacity:0, x:fromX, y:40, rotate:(i%2===0?-6:6), scale:.85},
+    {opacity:1, x:0, y:0, rotate:(i%2===0?-2:2), scale:1, duration:.85, delay:i*.08, ease:'back.out(1.4)',
+     scrollTrigger:{trigger:'.comic-row', start:'top 88%'}});
+});
+
+/* gallery */
+gsap.utils.toArray('.panel').forEach((p,i) => {
+  const fromX = i%2===0 ? -60 : 60;
+  gsap.fromTo(p, {opacity:0, x:fromX, y:50, rotate:(i%2===0?-4:4)},
+    {opacity:1, x:0, y:0, rotate:(i%2===0?-2:2), duration:.9, delay:(i%4)*.08, ease:'power3.out',
+     scrollTrigger:{trigger:p, start:'top 88%'}});
+  p.addEventListener('mousemove', e => {
+    const r = p.getBoundingClientRect();
+    const rx = ((e.clientY-r.top)/r.height - .5) * -10;
+    const ry = ((e.clientX-r.left)/r.width - .5) * 10;
+    gsap.to(p, {rotateX:rx, rotateY:ry, duration:.4, ease:'power2.out', transformPerspective:600});
+  });
+  p.addEventListener('mouseleave', () => gsap.to(p, {rotateX:0, rotateY:0, duration:.6}));
+});
+
+/* generic glass cards, checklist, moment cards, reasons */
+gsap.utils.toArray('.glass-card').forEach((c,i) => gsap.to(c, {opacity:1, y:0, duration:.8, delay:(i%4)*.08, scrollTrigger:{trigger:c, start:'top 90%'}}));
+gsap.utils.toArray('.checklist li').forEach((li,i) => gsap.to(li, {opacity:1, x:0, duration:.6, delay:i*.08, scrollTrigger:{trigger:li, start:'top 92%'}}));
+gsap.utils.toArray('.moment-card').forEach((m,i) => gsap.to(m, {opacity:1, y:0, duration:.8, delay:(i%4)*.08, scrollTrigger:{trigger:m, start:'top 90%'}}));
+gsap.utils.toArray('.reason-item').forEach((r,i) => gsap.to(r, {opacity:1, y:0, duration:.7, delay:i*.06, scrollTrigger:{trigger:r, start:'top 92%'}}));
+gsap.to('.facts-wrap', {opacity:1, y:0, duration:.9, scrollTrigger:{trigger:'.facts-wrap', start:'top 85%'}});
+gsap.set('.facts-wrap', {opacity:0, y:20});
+
+/* ============================================================================
+   SWING / PARALLAX PIN
+   ============================================================================ */
+if(!reduceMotion){
+  gsap.from('.parallax-building', {
+    y:500, stagger:.06, ease:'power3.out',
+    scrollTrigger:{ trigger:'#swing-wrap', start:'top 80%', end:'top 20%', scrub:1 }
+  });
+
+  const swingTl = gsap.timeline({ scrollTrigger:{trigger:'#swing-wrap', start:'top top', end:'bottom bottom', scrub:1} });
+  swingTl.to('#swing-spider', {left:'115vw', top:'55%', rotate:35, ease:'none'}, 0);
+  swingTl.to('.parallax-building.layer-0', {x:-80, ease:'none'}, 0);
+  swingTl.to('.parallax-building.layer-1', {x:-160, ease:'none'}, 0);
+  swingTl.to('.parallax-building.layer-2', {x:-260, ease:'none'}, 0);
+  swingTl.fromTo('#swing-copy .eyebrow', {opacity:0}, {opacity:1, ease:'none'}, .1);
+  swingTl.fromTo('#swing-copy h2', {opacity:0, y:30}, {opacity:1, y:0, ease:'none'}, .25);
+
+  gsap.ticker.add(() => {
+    const spider = document.getElementById('swing-spider');
+    const web = document.getElementById('web-line');
+    const stage = document.getElementById('swing-stage');
+    if(!stage) return;
+    const sRect = spider.getBoundingClientRect();
+    const stRect = stage.getBoundingClientRect();
+    const anchorX = stRect.width * .5;
+    const spiderX = sRect.left - stRect.left + sRect.width/2;
+    const spiderY = sRect.top - stRect.top + 6;
+    const dx = spiderX - anchorX, dy = spiderY - 0;
+    const len = Math.sqrt(dx*dx+dy*dy);
+    const ang = Math.atan2(dy,dx)*180/Math.PI - 90;
+    web.style.left = anchorX+'px'; web.style.height = len+'px'; web.style.transform = `rotate(${ang}deg)`;
+    web.style.opacity = (spiderX > -50 && spiderX < stRect.width+50) ? .7 : 0;
+  });
+} else {
+  gsap.set('#swing-copy .eyebrow, #swing-copy h2', {opacity:1});
+}
+
+/* ============================================================================
+   COUNTDOWN
+   ============================================================================ */
+function updateCountdown(){
+  const target = new Date(CONFIG.SHOW_DATE).getTime();
+  const now = Date.now();
+  let diff = Math.max(0, target-now);
+  const d = Math.floor(diff/86400000); diff -= d*86400000;
+  const h = Math.floor(diff/3600000); diff -= h*3600000;
+  const m = Math.floor(diff/60000); diff -= m*60000;
+  const s = Math.floor(diff/1000);
+  setFlip('cd-days', d); setFlip('cd-hours', h); setFlip('cd-mins', m); setFlip('cd-secs', s);
+}
+const flipCache = {};
+function setFlip(id, val){
+  const str = String(val).padStart(2,'0');
+  if(flipCache[id] === str) return;
+  flipCache[id] = str;
+  const el = document.getElementById(id);
+  gsap.fromTo(el, {rotateX:-90, opacity:.4}, {rotateX:0, opacity:1, duration:.5, ease:'power2.out', onStart:()=>{el.textContent=str;}});
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+gsap.utils.toArray('.flip-unit').forEach((u,i) => gsap.to(u, {opacity:1, duration:.7, delay:i*.08, scrollTrigger:{trigger:'#countdown', start:'top 78%'}}));
+
+/* ============================================================================
+   TICKET
+   ============================================================================ */
+gsap.to('.ticket-stage', {opacity:1, y:0, duration:1.1, ease:'power3.out', scrollTrigger:{trigger:'#ticket', start:'top 78%'}});
+const ticket3d = document.getElementById('ticket3d');
+ticket3d.addEventListener('click', () => {
+  ticket3d.classList.toggle('flip');
+  ticket3d.classList.remove('shine'); void ticket3d.offsetWidth; ticket3d.classList.add('shine');
+  SFX.click();
+});
+ticket3d.addEventListener('mousemove', e => {
+  const r = ticket3d.getBoundingClientRect();
+  const rx = ((e.clientY-r.top)/r.height - .5) * -8;
+  const ry = ((e.clientX-r.left)/r.width - .5) * 8;
+  if(!ticket3d.classList.contains('flip')) gsap.to(ticket3d, {rotateX:rx, rotateY:ry, duration:.4});
+  else gsap.to(ticket3d, {rotateX:rx, rotateY:180+ry, duration:.4});
+});
+ticket3d.addEventListener('mouseleave', () => {
+  gsap.to(ticket3d, {rotateX:0, rotateY: ticket3d.classList.contains('flip')?180:0, duration:.6});
+});
+
+/* ============================================================================
+   FINALE
+   ============================================================================ */
+gsap.to({}, { scrollTrigger:{ trigger:'#finale', start:'top 60%', end:'top 10%', scrub:1,
+  onUpdate: self => window.__setStarOpacity(self.progress) } });
+
+ScrollTrigger.create({
+  trigger:'#finale', start:'top 65%', once:true,
+  onEnter:() => {
+    stopRainVisual();
+    document.getElementById('moon').classList.add('bright');
+    document.querySelectorAll('.building').forEach(b => b.classList.add('bright'));
+    gsap.to('#skyline-stage', {scale:1.14, duration:2.4, ease:'power2.out'});
+    SFX.heartbeat();
+  }
+});
+
+const finaleTl = gsap.timeline({ scrollTrigger:{trigger:'#finale', start:'top 55%'} });
+gsap.set('.finale-line, .finale-buttons', {y:20});
+finaleTl.to('#finale-spider', {top:'8%', opacity:1, duration:1.4, ease:'power2.out'})
+  .to('#fl1', {opacity:1, y:0, duration:.8}, '-=.3')
+  .to('#fl1', {opacity:0, y:-10, duration:.6}, '+=1')
+  .to('#fl2', {opacity:1, y:0, duration:.8})
+  .to('#fl2', {opacity:0, y:-10, duration:.6}, '+=1')
+  .to('#fl3', {opacity:1, y:0, duration:.8})
+  .to('#fl3', {opacity:0, y:-10, duration:.6}, '+=1.2')
+  .to('#fl4', {opacity:1, y:0, duration:.8})
+  .to('#finaleButtons', {opacity:1, y:0, duration:1}, '+=.3');
+
+function handleYes(){
+  document.getElementById('finaleButtons').style.display = 'none';
+  document.getElementById('finale-text').style.opacity = 0;
+  const result = document.getElementById('finale-result');
+  result.style.display = 'flex';
+  gsap.fromTo(result, {opacity:0, y:20}, {opacity:1, y:0, duration:1, ease:'power3.out'});
+
+  SFX.cheer();
+  burstConfetti({left:window.innerWidth/2, top:window.innerHeight/2, width:0, height:0}, 170);
+  spawnHearts(30);
+  showStamp();
+
+  const flySpider = document.getElementById('spider-hero').cloneNode(true);
+  flySpider.style.position='fixed'; flySpider.style.top='30%'; flySpider.style.left='-100px';
+  flySpider.style.opacity=1; flySpider.style.zIndex=9998; flySpider.style.width='90px'; flySpider.style.height='90px';
+  document.body.appendChild(flySpider);
+  gsap.to(flySpider, {left:'110vw', rotate:360, duration:2.2, ease:'power1.inOut', onComplete:() => flySpider.remove()});
+
+  gsap.to('#bg-fx', {filter:'brightness(1.4) saturate(1.2)', duration:1.4});
+  document.querySelectorAll('.building .win').forEach(w => w.classList.add('on'));
+}
+document.getElementById('btnYes1').addEventListener('click', handleYes);
+document.getElementById('btnYes2').addEventListener('click', handleYes);
+
+function showStamp(){
+  const stamp = document.createElement('div');
+  stamp.className = 'stamp';
+  stamp.textContent = 'MISSION COMPLETE';
+  document.body.appendChild(stamp);
+  gsap.timeline()
+    .to(stamp, {opacity:1, scale:1, duration:.4, ease:'back.out(3)'})
+    .to(stamp, {opacity:0, duration:.6, delay:1.4, onComplete:() => stamp.remove()});
+}
+
+/* ============================================================================
+   CONFETTI / FIREWORKS / HEARTS+ROSES
+   ============================================================================ */
+const confettiCanvas = document.getElementById('confetti-canvas');
+const confettiCtx = confettiCanvas.getContext('2d');
+sizeCanvas(confettiCanvas);
+let confettiParticles = [];
+const confettiColors = ['#e0263f','#ff2e46','#f4f1ea','#ffd166','#ff6b81','#2b6cff'];
+
+function burstConfetti(rect, count){
+  const originX = rect.left + (rect.width||0)/2;
+  const originY = rect.top + (rect.height||0)/2;
+  for(let i=0;i<count;i++){
+    const angle = Math.random()*Math.PI*2;
+    const speed = Math.random()*7+3;
+    confettiParticles.push({
+      x:originX, y:originY, vx:Math.cos(angle)*speed, vy:Math.sin(angle)*speed - 3,
+      g:.18+Math.random()*.08, size:Math.random()*6+3, color:confettiColors[Math.floor(Math.random()*confettiColors.length)],
+      rot:Math.random()*360, vr:(Math.random()-.5)*12, life:1, decay:.006+Math.random()*.006
+    });
+  }
+}
+function tickConfetti(){
+  confettiCtx.clearRect(0,0,confettiCanvas.width, confettiCanvas.height);
+  confettiParticles.forEach(p => {
+    p.vy += p.g; p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.life -= p.decay;
+    confettiCtx.save(); confettiCtx.translate(p.x,p.y); confettiCtx.rotate(p.rot*Math.PI/180);
+    confettiCtx.globalAlpha = Math.max(p.life,0); confettiCtx.fillStyle = p.color;
+    confettiCtx.fillRect(-p.size/2,-p.size/2,p.size,p.size*.6); confettiCtx.restore();
+  });
+  confettiParticles = confettiParticles.filter(p => p.life > 0 && p.y < confettiCanvas.height+40);
+  requestAnimationFrame(tickConfetti);
+}
+tickConfetti();
+
+function spawnHearts(count){
+  const emojis = ['❤️','🌹','💖'];
+  for(let i=0;i<count;i++){
+    setTimeout(() => {
+      const h = document.createElement('div');
+      h.className = 'heart';
+      h.textContent = emojis[i % emojis.length];
+      h.style.left = (Math.random()*100)+'vw'; h.style.top = '105vh';
+      h.style.fontSize = (14+Math.random()*22)+'px';
+      document.body.appendChild(h);
+      gsap.fromTo(h, {opacity:0, y:0}, { opacity:1, y:-window.innerHeight-100, x:(Math.random()-.5)*160,
+        duration:4+Math.random()*2, ease:'power1.out', onComplete:() => h.remove() });
+      gsap.to(h, {opacity:0, duration:1, delay:3.2+Math.random()});
+    }, i*70);
+  }
+}
+
+/* ============================================================================
+   EASTER EGGS
+   ============================================================================ */
+const konami = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+let konamiPos = 0;
+const quotePool = [
+  "With great power comes great responsibility.",
+  "Sometimes the best a hero can do is show up.",
+  "Every great story needs someone worth swinging home to.",
+  "The city sleeps easier knowing someone's watching over it."
+];
+window.addEventListener('keydown', e => {
+  konamiPos = (e.key === konami[konamiPos]) ? konamiPos+1 : 0;
+  if(konamiPos === konami.length){ konamiPos = 0; showEggToast("You're Amazing ❤️"); }
+  if(e.code === 'Space' && document.activeElement.tagName !== 'BUTTON'){ e.preventDefault(); shootWebs(); }
+  if(e.key === 's' || e.key === 'S'){
+    const layer = document.getElementById('drop-spider-layer');
+    new LivingSpider({container:layer, mode:'drop', scale:.9, bounds:{x:[40, window.innerWidth-40], y:[window.innerHeight*.2, window.innerHeight*.5]}, x:Math.random()*window.innerWidth, y:-40});
+  }
+  if(e.key === 'q' || e.key === 'Q'){ showEggToast(quotePool[Math.floor(Math.random()*quotePool.length)]); }
+});
+function showEggToast(msg){
+  const toast = document.getElementById('egg-toast');
+  toast.textContent = msg;
+  gsap.fromTo(toast, {opacity:0, y:-20}, {opacity:1, y:0, duration:.5, ease:'power3.out'});
+  gsap.to(toast, {opacity:0, y:-20, duration:.5, delay:2.4});
+}
+
+const badge = document.getElementById('spider-badge');
+let badgeClicks = 0, badgeClickTimer = null;
+badge.addEventListener('dblclick', () => {
+  badge.classList.remove('wave'); void badge.offsetWidth; badge.classList.add('wave');
+  showEggToast('👋');
+});
+badge.addEventListener('click', () => {
+  badgeClicks++;
+  clearTimeout(badgeClickTimer);
+  badgeClickTimer = setTimeout(() => { badgeClicks = 0; }, 700);
+  if(badgeClicks >= 3){
+    badgeClicks = 0;
+    document.getElementById('secret-panel').style.display = 'flex';
+  }
+});
+document.getElementById('secret-panel').addEventListener('click', function(){ this.style.display = 'none'; });
+
+document.getElementById('moon').addEventListener('dblclick', () => {
+  showEggToast(quotePool[0]);
+  gsap.fromTo('#moon', {scale:1}, {scale:1.12, duration:.3, yoyo:true, repeat:1, ease:'power2.inOut'});
+});
+
+function shootWebs(){
+  SFX.whoosh();
+  const count = 3;
+  for(let i=0;i<count;i++){
+    const w = document.createElement('div');
+    w.className = 'web-shot';
+    const fromBottom = i%2===0;
+    const startX = fromBottom ? 20 : window.innerWidth-20;
+    const startY = window.innerHeight-20;
+    w.style.left = startX+'px'; w.style.top = startY+'px'; w.style.width = '0px';
+    document.body.appendChild(w);
+    const tx = window.innerWidth*(fromBottom?0.5+Math.random()*.4:0.1+Math.random()*.4);
+    const ty = window.innerHeight*(0.1+Math.random()*.3);
+    const dx = tx-startX, dy = ty-startY;
+    const len = Math.sqrt(dx*dx+dy*dy);
+    const ang = Math.atan2(dy,dx)*180/Math.PI;
+    w.style.transform = `rotate(${ang}deg)`;
+    gsap.to(w, {width:len, duration:.35, ease:'power2.out'});
+    gsap.to(w, {opacity:0, duration:.5, delay:.4, onComplete:()=>w.remove()});
+  }
+}
+
+/* hidden kiss animation: double-click the "Cutest Human Alive" row value in dossier */
+document.querySelectorAll('.dossier-row .v').forEach(el => {
+  if(el.textContent.includes('Cutest Human Alive')){
+    el.style.cursor = 'pointer';
+    el.addEventListener('dblclick', () => {
+      const kiss = document.createElement('div');
+      kiss.className = 'kiss-pop'; kiss.textContent = '💋';
+      const r = el.getBoundingClientRect();
+      kiss.style.left = r.left+'px'; kiss.style.top = r.top+'px';
+      document.body.appendChild(kiss);
+      gsap.fromTo(kiss, {opacity:0, scale:.3, y:0}, {opacity:1, scale:1.4, y:-40, duration:.8, ease:'back.out(2)', onComplete:() => {
+        gsap.to(kiss, {opacity:0, duration:.4, onComplete:() => kiss.remove()});
+      }});
+    });
+  }
+});
+
+/* ============================================================================
+   RESIZE HANDLING
+   ============================================================================ */
+let resizeT;
+window.addEventListener('resize', () => { clearTimeout(resizeT); resizeT = setTimeout(() => ScrollTrigger.refresh(), 300); });
+</script>
+</body>
+</html>

@@ -21,6 +21,11 @@
   the browser with the Web Audio API, so there are no audio files to hunt
   down. There is no background music track or skip button — the intro plays
   once, then the page unlocks automatically.
+
+  PHOTOS: to add your own pictures, replace the empty "" strings in
+  CONFIG.PHOTOS with any image URL (e.g. "https://i.imgur.com/yourphoto.jpg").
+  Leave a slot as "" if you don't have a photo yet — it will show a nice
+  placeholder frame instead. Search for "PHOTOS:" below.
   ============================================================================
 -->
 
@@ -319,6 +324,30 @@ section.fullscreen{ min-height:100vh; }
 .glass-card h3{ font-family:var(--display); text-transform:uppercase; font-size:19px; letter-spacing:.02em; margin-bottom:8px; }
 .glass-card p{ font-family:var(--body); font-size:14px; color:var(--muted); line-height:1.5; margin:0; }
 
+/* movie info */
+#movie-info{ gap:40px; }
+.movie-poster-wrap{ width:100%; max-width:1100px; display:grid; grid-template-columns:280px 1fr; gap:40px; align-items:flex-start; margin-top:10px; }
+@media (max-width:800px){ .movie-poster-wrap{ grid-template-columns:1fr; } }
+.movie-poster{
+  position:relative; width:100%; aspect-ratio:2/3; border-radius:10px; overflow:hidden;
+  border:3px solid var(--void); outline:2px solid rgba(244,241,234,.18); outline-offset:-6px;
+  background:
+    radial-gradient(circle, rgba(224,38,63,.14) 1px, transparent 1.4px) 0 0/10px 10px,
+    linear-gradient(150deg, var(--navy-2), var(--navy));
+  opacity:0; transform:translateY(40px);
+}
+.movie-poster img{ width:100%; height:100%; object-fit:cover; }
+.movie-poster .ph{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:10px; color:var(--muted); font-family:var(--mono); font-size:11px; letter-spacing:.15em; text-align:center; padding:14px; }
+.movie-poster .ph svg{ width:34px; height:34px; opacity:.5; }
+.movie-details{ opacity:0; transform:translateY(30px); }
+.movie-details h3{ font-family:var(--display); text-transform:uppercase; font-size:clamp(22px,3.2vw,32px); color:var(--white); margin-bottom:10px; }
+.movie-details h3 span{ color:var(--crimson-2); }
+.movie-details p.tagline{ font-family:var(--script); letter-spacing:.05em; font-size:19px; color:var(--crimson-2); margin:0 0 16px; }
+.movie-details p.synopsis{ font-family:var(--body); font-size:15px; line-height:1.7; color:var(--paper); margin:0 0 22px; }
+.movie-meta-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:14px 24px; }
+.movie-meta-grid .m-row .k{ font-family:var(--mono); font-size:10px; letter-spacing:.18em; color:var(--crimson-2); text-transform:uppercase; display:block; margin-bottom:4px; }
+.movie-meta-grid .m-row .v{ font-family:var(--body); font-size:14px; color:var(--white); font-weight:500; line-height:1.5; }
+
 /* checklist */
 .checklist{ list-style:none; margin:0; padding:0; width:100%; max-width:560px; display:flex; flex-direction:column; gap:12px; }
 .checklist li{
@@ -566,6 +595,15 @@ footer b{ color:var(--crimson-2); }
   <div class="comic-row" id="comicRow"></div>
 </section>
 
+<!-- ============================================================== MOVIE INFO -->
+<section id="movie-info">
+  <div class="section-head"><span class="eyebrow">Mission Briefing</span><h2>About The Movie</h2></div>
+  <div class="movie-poster-wrap">
+    <div class="movie-poster" id="moviePoster"></div>
+    <div class="movie-details" id="movieDetails"></div>
+  </div>
+</section>
+
 <!-- ============================================================== GALLERY -->
 <section id="gallery">
   <div class="section-head"><span class="eyebrow">Field Archive</span><h2>Our Story So Far</h2></div>
@@ -724,10 +762,26 @@ footer b{ color:var(--crimson-2); }
 const CONFIG = {
   HER_NAME: "Her Name",
   YOUR_NAME: "Your Name",
-  SHOW_DATE: "2026-12-25T19:30:00",
+  SHOW_DATE: "2026-08-08T19:30:00",
   CINEMA: "Placeholder Cinema",
   PERSONAL_MESSAGE: "Every great story needs the right person sitting next to you for it. That's you.",
-  PHOTOS: ["", "", "", "", "", "", "", "", "", ""],
+
+  // PHOTOS: paste any image URL into the quotes below (e.g. "https://i.imgur.com/yourphoto.jpg").
+  // Leave "" for slots you don't have a photo for yet — a placeholder frame shows instead.
+  PHOTOS: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5GOY7OUvuSacvFhS8obHO5ivxHdFsUHrwXmOUXe4TrQ&s=10", "https://i.pinimg.com/236x/3d/8e/73/3d8e73d2df634e116fccb39ecc815145.jpg", "https://i.pinimg.com/736x/7e/c1/c9/7ec1c9b9639fe56f44ff20df22e4844e.jpg", "https://i.pinimg.com/736x/02/73/e1/0273e1a7c2052e089ba061f31e7fe421.jpg", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJ_C-8LSWV3iVWfUjX76cISMa_6dEkSwIV0U21yol0tQ&s=10", "https://i.pinimg.com/originals/57/b6/cd/57b6cd8045217976976ff1e4d87f0189.jpg", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqImcawlClOPGNn2uRFd3eKPWPfFJ90Qj5JHFqJSF-7TsrgvNLtAWZHA8&s=10", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmsmj5bGPj99Tm-c_irhSXVTA6MwDvxNwV5GQHqzw-7GquqUm7UjyGj7g&s=10", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzh2uivf4vv6MK2HnzaTfryczamklX_Ix0miDho9t7A1ayjkp9t0N3tgw&s=10", "https://pics.craiyon.com/2024-06-21/rq0rauwqQPKcyGFWf51SxQ.webp"],
+
+  // MOVIE_POSTER: paste a poster/banner image URL here, or leave "" for a placeholder frame.
+  MOVIE_POSTER: "https://m.media-amazon.com/images/M/MV5BOWNjYWM3NWItOGE0ZS00MWRjLThiZWEtYjc4ZmNmMmU5ZTVmXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
+
+  MOVIE_INFO: {
+    title: "Spider-Man: Brand New Day",
+    tagline: "It's A Brand New Day For Peter Parker.",
+    synopsis: "Years after erasing himself from everyone's memory, Peter Parker is fighting crime full-time as Spider-Man in a New York that doesn't remember him — and watching his old friends move on without him. That isolation sparks a change in Peter he may not be able to control, which might be the only thing that can stop a powerful new threat that almost no one can even see.",
+    director: "Destin Daniel Cretton",
+    cast: "Tom Holland, Zendaya, Sadie Sink, Jacob Batalon, Jon Bernthal, Mark Ruffalo",
+    studio: "Sony Pictures / Marvel Studios",
+    genre: "Action, Adventure, Sci-Fi"
+  },
 
   WHY_WATCH: [
     {icon:"🎬", title:"Because Stories Feel Bigger Shared", desc:"The best scenes always hit harder when I get to look over and see your reaction."},
@@ -743,17 +797,17 @@ const CONFIG = {
     "You're just really, really easy to fall for."
   ],
   MARVEL_MOMENTS: [
-    {title:"The First Swing", note:"That first rooftop leap that made everyone believe he could fly."},
-    {title:"Unmasking Trust", note:"The moment a hero lets someone see who they really are underneath."},
-    {title:"The Team-Up", note:"Two heroes, one impossible fight, zero chance without each other."},
-    {title:"The Quiet Save", note:"The rescue nobody films — the one done just because it's right."}
+    {title:"A World That Forgot Him", note:"Peter chose to erase himself from everyone's memory — now he carries that weight alone."},
+    {title:"Watching From A Distance", note:"Seeing MJ, Ned, and his old life move on without him is the quiet heartbreak of this chapter."},
+    {title:"An Unseen Threat", note:"A powerful new villain no one can even see forces Peter to change in ways he can't fully control."},
+    {title:"The Punisher Enters", note:"Jon Bernthal's Frank Castle crosses paths with Spidey, bringing a grittier edge to New York's streets."}
   ],
   FUN_FACTS: [
-    "Spider-Man was one of the first major superheroes written as an actual teenager dealing with actual teenage problems.",
-    "His secret identity was designed so readers could imagine themselves under the mask.",
-    "The web-shooters were originally conceived as invented gadgets, not a natural power — Spider-Man is part scientist, part hero.",
-    "\"With great power comes great responsibility\" has become one of the most quoted lines in pop culture history.",
-    "Red and blue were chosen for the suit partly because they read as bold and heroic even in early low-resolution comic printing."
+    "This film is directed by Destin Daniel Cretton, known for Shang-Chi and the Legend of the Ten Rings.",
+    "It's the fourth solo outing for Tom Holland as Peter Parker, following Homecoming, Far From Home, and No Way Home.",
+    "Sadie Sink, Jon Bernthal, and Mark Ruffalo all join the MCU's Spider-Man corner of the universe for the first time here.",
+    "Principal photography took place in Glasgow, Scotland, with city streets dressed up to double as New York.",
+    "\"With great power comes great responsibility\" remains one of the most quoted lines to ever come out of a comic book."
   ],
   LOVE_NOTES: [
     "You're the plot twist I didn't see coming.",
@@ -794,6 +848,27 @@ document.getElementById('ticketMsg').textContent = CONFIG.PERSONAL_MESSAGE;
     document.getElementById('ticketDate').textContent = d.toLocaleDateString(undefined,{month:'short', day:'numeric', year:'numeric'});
     document.getElementById('ticketTime').textContent = d.toLocaleTimeString(undefined,{hour:'2-digit', minute:'2-digit'});
   }
+})();
+
+/* movie info */
+(function buildMovieInfo(){
+  const poster = document.getElementById('moviePoster');
+  poster.innerHTML = CONFIG.MOVIE_POSTER
+    ? `<img src="${CONFIG.MOVIE_POSTER}" alt="${CONFIG.MOVIE_INFO.title} poster">`
+    : `<div class="ph"><svg viewBox="0 0 24 24" fill="none" stroke="#8992a3" stroke-width="1.4"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="M21 17l-5-5-4 4-3-3-6 6"/></svg>[Movie Poster]</div>`;
+
+  const info = CONFIG.MOVIE_INFO;
+  const details = document.getElementById('movieDetails');
+  details.innerHTML = `
+    <h3>${info.title}</h3>
+    <p class="tagline">${info.tagline}</p>
+    <p class="synopsis">${info.synopsis}</p>
+    <div class="movie-meta-grid">
+      <div class="m-row"><span class="k">Director</span><span class="v">${info.director}</span></div>
+      <div class="m-row"><span class="k">Studio</span><span class="v">${info.studio}</span></div>
+      <div class="m-row"><span class="k">Genre</span><span class="v">${info.genre}</span></div>
+      <div class="m-row"><span class="k">Starring</span><span class="v">${info.cast}</span></div>
+    </div>`;
 })();
 
 /* gallery */
@@ -1513,6 +1588,10 @@ gsap.utils.toArray('.comic-panel').forEach((p,i) => {
     {opacity:1, x:0, y:0, rotate:(i%2===0?-2:2), scale:1, duration:.85, delay:i*.08, ease:'back.out(1.4)',
      scrollTrigger:{trigger:'.comic-row', start:'top 88%'}});
 });
+
+/* movie info */
+gsap.to('.movie-poster', {opacity:1, y:0, duration:1, scrollTrigger:{trigger:'#movie-info', start:'top 78%'}});
+gsap.to('.movie-details', {opacity:1, y:0, duration:1, delay:.15, scrollTrigger:{trigger:'#movie-info', start:'top 78%'}});
 
 /* gallery */
 gsap.utils.toArray('.panel').forEach((p,i) => {

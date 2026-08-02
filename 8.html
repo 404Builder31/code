@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>When you date an IT guy 💻❤️</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Quicksand:wght@500;600;700&family=Caveat:wght@600;700&display=swap');
+
+  /* =========================================
+     ROOT / THEME
+  ========================================= */
+  :root{
+    --pink-1:#ffe1ec;
+    --pink-2:#ffb3d1;
+    --pink-3:#ff7fae;
+    --purple-1:#efe0ff;
+    --purple-2:#c9a3ff;
+    --purple-3:#a06bff;
+    --gold:#ffd9a0;
+    --deep:#5a2a5c;
+    --text:#5f3a5c;
+    --glass:rgba(255,255,255,0.32);
+    --glass-strong:rgba(255,255,255,0.55);
+    --glass-border:rgba(255,255,255,0.6);
+    --shadow:0 25px 70px rgba(160,80,180,0.28);
+  }
+
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+
+  html,body{
+    height:100%;
+    margin:0;
+    padding:0;
+    overflow:hidden;
+    font-family:'Quicksand', 'Segoe UI', sans-serif;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(255,180,210,0.55), transparent 55%),
+      radial-gradient(circle at 80% 15%, rgba(190,150,255,0.5), transparent 50%),
+      radial-gradient(circle at 50% 90%, rgba(255,210,170,0.4), transparent 55%),
+      linear-gradient(135deg,var(--pink-1),var(--purple-1) 50%,var(--pink-2));
+    background-size:200% 200%, 200% 200%, 200% 200%, 300% 300%;
+    animation:auroraShift 22s ease-in-out infinite;
+    color:var(--text);
+    -webkit-font-smoothing:antialiased;
+  }
+
+  @keyframes auroraShift{
+    0%,100%{background-position:0% 0%, 100% 0%, 50% 100%, 0% 50%;}
+    50%{background-position:30% 40%, 70% 30%, 60% 70%, 100% 50%;}
+  }
+
+  #app{ position:relative; width:100vw; height:100vh; height:100dvh; overflow:hidden; }
+
+  h1,h2,h3{ font-family:'Playfair Display', Georgia, serif; margin:0; color:var(--deep); }
+  p{ margin:0; }
+
+  /* =========================================
+     AMBIENT BACKGROUND LAYERS (parallax, blobs, stars)
+  ========================================= */
+  #bgLayers{ position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none; }
+
+  .blob{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(50px);
+    opacity:0.55;
+    transition:transform 0.25s ease-out;
+  }
+  .blob1{ width:340px; height:340px; background:radial-gradient(circle, var(--pink-2), transparent 70%); top:-60px; left:-60px; }
+  .blob2{ width:300px; height:300px; background:radial-gradient(circle, var(--purple-2), transparent 70%); bottom:-40px; right:-40px; }
+  .blob3{ width:220px; height:220px; background:radial-gradient(circle, var(--gold), transparent 70%); top:40%; left:60%; }
+
+  .bubble{
+    position:absolute;
+    border-radius:50%;
+    background:rgba(255,255,255,0.35);
+    border:1px solid rgba(255,255,255,0.5);
+    animation:bubbleFloat linear infinite;
+  }
+  @keyframes bubbleFloat{
+    0%{ transform:translateY(10vh) scale(0.8); opacity:0; }
+    15%{ opacity:0.7; }
+    85%{ opacity:0.5; }
+    100%{ transform:translateY(-110vh) scale(1.1); opacity:0; }
+  }
+
+  .star{
+    position:absolute;
+    color:#fff;
+    text-shadow:0 0 8px rgba(255,255,255,0.9);
+    animation:starTwinkle ease-in-out infinite;
+  }
+  @keyframes starTwinkle{
+    0%,100%{ opacity:0.2; transform:scale(0.8); }
+    50%{ opacity:1; transform:scale(1.2); }
+  }
+
+  #floatingHearts{ position:fixed; inset:0; pointer-events:none; z-index:1; overflow:hidden; }
+  .floaty{
+    position:absolute; bottom:-10%; font-size:20px; opacity:0.8;
+    animation:floatUp linear infinite;
+    filter:drop-shadow(0 0 6px rgba(255,150,190,0.6));
+  }
+  @keyframes floatUp{
+    0%{ transform:translateY(0) translateX(0) rotate(0deg); opacity:0; }
+    10%{ opacity:0.85; }
+    90%{ opacity:0.55; }
+    100%{ transform:translateY(-115vh) translateX(var(--drift,20px)) rotate(360deg); opacity:0; }
+  }
+
+  #cursorHeart{
+    position:fixed; pointer-events:none; z-index:9999; font-size:16px;
+    animation:cursorPop 0.9s ease-out forwards;
+  }
+  @keyframes cursorPop{
+    0%{ transform:translate(-50%,-50%) scale(0.6); opacity:1; }
+    100%{ transform:translate(-50%,-150%) scale(1.3); opacity:0; }
+  }
+
+  /* =========================================
+     STEP PROGRESS DOTS
+  ========================================= */
+  #stepper{
+    position:fixed; top:16px; left:50%; transform:translateX(-50%);
+    display:flex; gap:10px; z-index:20; opacity:0; pointer-events:none;
+    transition:opacity 0.4s ease;
+    background:rgba(255,255,255,0.4);
+    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    padding:8px 16px; border-radius:30px; border:1px solid var(--glass-border);
+    box-shadow:0 8px 20px rgba(180,100,170,0.2);
+  }
+  #stepper.show{ opacity:1; }
+  .stepDot{
+    width:9px; height:9px; border-radius:50%;
+    background:rgba(160,80,150,0.28);
+    transition:all 0.35s cubic-bezier(.34,1.56,.64,1);
+  }
+  .stepDot.done{ background:linear-gradient(135deg,var(--pink-3),var(--purple-3)); width:9px; }
+  .stepDot.active{
+    background:linear-gradient(135deg,var(--pink-3),var(--purple-3));
+    width:26px; border-radius:6px;
+    box-shadow:0 0 0 3px rgba(255,140,190,0.25);
+  }
+
+  /* =========================================
+     SCREENS / TRANSITIONS
+  ========================================= */
+  .screen{
+    position:absolute; inset:0; display:none; flex-direction:column;
+    align-items:center; justify-content:center; padding:18px 16px;
+    z-index:5; text-align:center;
+  }
+  .screen.active{ display:flex; animation:screenIn 0.85s cubic-bezier(.22,1,.36,1); }
+  @keyframes screenIn{
+    0%{ opacity:0; transform:translateY(40px) scale(0.92); filter:blur(8px); }
+    60%{ filter:blur(0px); }
+    100%{ opacity:1; transform:translateY(0) scale(1); filter:blur(0); }
+  }
+  .screen.leaving{ animation:screenOut 0.5s ease forwards; }
+  @keyframes screenOut{
+    0%{ opacity:1; transform:translateY(0) scale(1) rotate(0deg); filter:blur(0); }
+    100%{ opacity:0; transform:translateY(-30px) scale(0.9) rotate(-2deg); filter:blur(10px); }
+  }
+
+  .card{
+    position:relative; width:100%; max-width:440px; max-height:94vh; overflow-y:auto;
+    background:var(--glass);
+    border:1px solid var(--glass-border);
+    backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+    border-radius:34px; box-shadow:var(--shadow);
+    padding:22px 20px 26px; display:flex; flex-direction:column;
+    align-items:center; gap:14px; scrollbar-width:thin;
+  }
+  .card::-webkit-scrollbar{ width:5px; }
+  .card::-webkit-scrollbar-thumb{ background:var(--pink-3); border-radius:10px; }
+
+  .eyebrow{
+    font-size:11px; letter-spacing:2.5px; text-transform:uppercase;
+    color:var(--purple-3); font-weight:700; opacity:0.85;
+  }
+  .title{ font-size:25px; line-height:1.28; font-weight:800; }
+  .subtitle{ font-size:14px; opacity:0.85; max-width:320px; }
+
+  /* =========================================
+     PREMIUM GIF FRAMES — unified circular style
+  ========================================= */
+  .gifFrame{
+    position:relative;
+    display:flex; align-items:center; justify-content:center;
+    animation:frameFloat 4.5s ease-in-out infinite;
+    width:172px; height:172px; border-radius:50%; padding:6px;
+  }
+  @keyframes frameFloat{
+    0%,100%{ transform:translateY(0) rotate(0deg); }
+    50%{ transform:translateY(-8px) rotate(1deg); }
+  }
+  .gifFrame::before{
+    content:'';
+    position:absolute; inset:-6px;
+    border-radius:50%;
+    background:conic-gradient(from 0deg, var(--pink-3), var(--purple-3), var(--gold), var(--pink-3));
+    animation:rotateBorder 5s linear infinite;
+    filter:blur(2px);
+    z-index:0;
+  }
+  @keyframes rotateBorder{ to{ transform:rotate(360deg); } }
+  .gifFrame::after{
+    content:'';
+    position:absolute; inset:-2px;
+    border-radius:50%;
+    box-shadow:0 0 30px 6px rgba(255,140,190,0.55);
+    z-index:0;
+    pointer-events:none;
+  }
+  .gifFrame img{
+    position:relative; z-index:1;
+    width:100%; height:100%; border-radius:50%;
+    object-fit:cover; display:block;
+    background:linear-gradient(135deg,var(--pink-2),var(--purple-2));
+  }
+  .gifFrame .sparkleRing{
+    position:absolute; inset:-16px; z-index:0; pointer-events:none;
+  }
+  .gifFrame .sparkleRing span{
+    position:absolute; font-size:12px; animation:ringTwinkle 2.4s ease-in-out infinite;
+  }
+  @keyframes ringTwinkle{
+    0%,100%{ opacity:0.25; transform:scale(0.8); }
+    50%{ opacity:1; transform:scale(1.15); }
+  }
+  .gifFrame .shine{
+    position:absolute; inset:0; z-index:2; border-radius:50%; overflow:hidden; pointer-events:none;
+  }
+  .gifFrame .shine::before{
+    content:''; position:absolute; top:-50%; left:-150%; width:60%; height:200%;
+    background:linear-gradient(115deg, transparent, rgba(255,255,255,0.65), transparent);
+    animation:shineSweep 3.2s ease-in-out infinite;
+  }
+  @keyframes shineSweep{
+    0%{ left:-150%; } 45%{ left:150%; } 100%{ left:150%; }
+  }
+
+  /* =========================================
+     BUTTONS — premium magnetic / glow / heartbeat
+  ========================================= */
+  .btn{
+    position:relative; overflow:hidden; border:none; outline:none; cursor:pointer;
+    font-family:'Quicksand', sans-serif; font-weight:700; font-size:16px;
+    padding:15px 32px; border-radius:50px; color:#fff;
+    background:linear-gradient(120deg,var(--pink-3),var(--purple-3),var(--pink-3));
+    background-size:220% 220%;
+    animation:gradientShift 4s ease infinite;
+    box-shadow:0 12px 26px rgba(200,90,170,0.42), inset 0 1px 0 rgba(255,255,255,0.4);
+    transition:transform 0.18s ease, box-shadow 0.18s ease;
+    will-change:transform;
+  }
+  @keyframes gradientShift{
+    0%,100%{ background-position:0% 50%; } 50%{ background-position:100% 50%; }
+  }
+  .btn:hover{ box-shadow:0 18px 34px rgba(200,90,170,0.55), inset 0 1px 0 rgba(255,255,255,0.5); }
+  .btn:active{ transform:scale(0.95) !important; }
+
+  .btn .ripple{
+    position:absolute; border-radius:50%; background:rgba(255,255,255,0.65);
+    transform:scale(0); animation:rippleAnim 0.6s ease-out forwards; pointer-events:none;
+  }
+  @keyframes rippleAnim{ to{ transform:scale(3.2); opacity:0; } }
+
+  .btn-outline{
+    background:rgba(255,255,255,0.55); color:var(--text);
+    box-shadow:0 6px 16px rgba(200,90,170,0.18); border:1px solid var(--glass-border);
+    animation:none;
+  }
+
+  .heartbeat{ animation:heartbeatPulse 1s ease-in-out infinite, gradientShift 4s ease infinite; }
+  @keyframes heartbeatPulse{
+    0%,100%{ filter:brightness(1); } 25%{ filter:brightness(1.15); } 50%{ filter:brightness(1); } 75%{ filter:brightness(1.2); }
+  }
+
+  .btn.shakeErr{ animation:shakeErr 0.5s ease; }
+  @keyframes shakeErr{
+    0%,100%{ transform:translateX(0); }
+    20%{ transform:translateX(-9px); }
+    40%{ transform:translateX(8px); }
+    60%{ transform:translateX(-6px); }
+    80%{ transform:translateX(4px); }
+  }
+
+  .validationHint{
+    font-size:12.5px; font-weight:700; color:#d84f8a;
+    min-height:16px; opacity:0; transform:translateY(-4px);
+    transition:all 0.3s ease;
+  }
+  .validationHint.show{ opacity:1; transform:translateY(0); animation:hintPop 0.4s ease; }
+  @keyframes hintPop{
+    0%{ transform:scale(0.85) translateY(-4px); } 60%{ transform:scale(1.05) translateY(0); } 100%{ transform:scale(1) translateY(0); }
+  }
+
+  /* =========================================
+     PROPOSAL PAGE
+  ========================================= */
+  .choiceRow{
+    position:relative; display:flex; gap:16px; align-items:center; justify-content:center;
+    width:100%; min-height:100px; flex-wrap:wrap;
+  }
+  #yesBtn{
+    transition:transform 0.4s cubic-bezier(.34,1.56,.64,1), box-shadow 0.3s ease, filter 0.3s ease;
+    z-index:3;
+  }
+  #noBtn{
+    position:relative;
+    transition:transform 0.3s ease, left 0.35s cubic-bezier(.34,1.56,.64,1), top 0.35s cubic-bezier(.34,1.56,.64,1);
+  }
+  #noBtn.roaming{ position:fixed; z-index:60; }
+
+  .popupMsg{
+    position:fixed;
+    z-index:70;
+    font-weight:800;
+    font-size:13px;
+    color:#fff;
+    background:linear-gradient(120deg,var(--purple-3),var(--pink-3));
+    padding:8px 16px;
+    border-radius:20px;
+    box-shadow:0 10px 22px rgba(160,80,180,0.4);
+    pointer-events:none;
+    animation:popupFloat 1.1s ease-out forwards;
+    white-space:nowrap;
+  }
+  @keyframes popupFloat{
+    0%{ opacity:0; transform:translateY(10px) scale(0.7); }
+    20%{ opacity:1; transform:translateY(0) scale(1.05); }
+    35%{ transform:scale(1); }
+    100%{ opacity:0; transform:translateY(-40px) scale(0.9); }
+  }
+
+  #screenFlash{
+    position:fixed; inset:0; background:radial-gradient(circle, rgba(255,255,255,0.9), rgba(255,190,220,0.4));
+    z-index:9997; opacity:0; pointer-events:none;
+  }
+  #screenFlash.flash{ animation:flashAnim 0.5s ease-out; }
+  @keyframes flashAnim{
+    0%{ opacity:0; } 15%{ opacity:1; } 100%{ opacity:0; }
+  }
+
+  /* =========================================
+     HEART EXPLOSION / CONFETTI
+  ========================================= */
+  #burstLayer{ position:fixed; inset:0; pointer-events:none; z-index:9998; overflow:hidden; }
+  .burstHeart{ position:absolute; font-size:26px; animation:burstFly 1.2s ease-out forwards; }
+  @keyframes burstFly{
+    0%{ transform:translate(0,0) scale(0.4) rotate(0deg); opacity:1; }
+    100%{ transform:translate(var(--bx),var(--by)) scale(1.5) rotate(var(--br)); opacity:0; }
+  }
+  .miniSpark{ position:absolute; font-size:14px; animation:miniSparkFly 0.7s ease-out forwards; }
+  @keyframes miniSparkFly{
+    0%{ transform:translate(0,0) scale(0.3); opacity:1; }
+    100%{ transform:translate(var(--bx),var(--by)) scale(1.1); opacity:0; }
+  }
+  .confetti{
+    position:absolute; width:8px; height:14px; top:-5%; opacity:0.95;
+    animation:confettiFall linear forwards;
+  }
+  @keyframes confettiFall{
+    0%{ transform:translateY(0) rotate(0deg); opacity:1; }
+    100%{ transform:translateY(110vh) rotate(720deg); opacity:0; }
+  }
+
+  /* =========================================
+     FOOD PAGE — flip cards
+  ========================================= */
+  .foodGrid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; width:100%; perspective:800px; }
+  .foodCard{
+    position:relative; height:92px; border-radius:18px; cursor:pointer;
+    transform-style:preserve-3d; transition:transform 0.6s cubic-bezier(.4,.2,.2,1);
+  }
+  .foodCard.flipped{ transform:rotateY(180deg); }
+  .foodFace{
+    position:absolute; inset:0; border-radius:18px; backface-visibility:hidden;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px;
+    background:rgba(255,255,255,0.55); border:1px solid var(--glass-border);
+    transition:transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .foodCard:not(.flipped):hover .foodFace.front{
+    transform:translateY(-4px) rotateX(6deg); box-shadow:0 14px 26px rgba(190,90,160,0.3);
+  }
+  .foodFace .emoji{ font-size:26px; }
+  .foodFace span.label{ font-size:10.5px; font-weight:700; }
+  .foodFace.back{
+    transform:rotateY(180deg);
+    background:linear-gradient(135deg,var(--pink-3),var(--purple-3));
+    color:#fff; font-weight:800; font-size:12px; padding:6px;
+  }
+  .foodCard.bounceSelect{ animation:selectBounce 0.5s ease; }
+  @keyframes selectBounce{
+    0%{ transform:scale(1) rotateY(180deg); } 50%{ transform:scale(1.15) rotateY(180deg); } 100%{ transform:scale(1) rotateY(180deg); }
+  }
+
+  /* =========================================
+     DATE PAGE — calendar
+  ========================================= */
+  .calWrap{ width:100%; background:rgba(255,255,255,0.5); border-radius:22px; padding:16px; }
+  .calHeader{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; font-weight:700; color:var(--deep); }
+  .calHeader button{
+    background:rgba(255,255,255,0.6); border:none; font-size:16px; cursor:pointer; color:var(--purple-3);
+    padding:4px 12px; border-radius:12px; transition:transform 0.2s ease;
+  }
+  .calHeader button:hover{ transform:scale(1.15); }
+  .calGrid{ display:grid; grid-template-columns:repeat(7,1fr); gap:5px; font-size:11px; }
+  .calDow{ text-align:center; font-weight:700; opacity:0.6; padding:2px 0; }
+  .calDay{
+    aspect-ratio:1; display:flex; align-items:center; justify-content:center;
+    border-radius:12px; cursor:pointer; transition:all 0.25s ease; font-weight:700;
+    position:relative;
+  }
+  .calDay.disabled{ opacity:0.22; cursor:not-allowed; }
+  .calDay.empty{ visibility:hidden; }
+  .calDay:not(.disabled):not(.empty):hover{ background:rgba(255,255,255,0.75); transform:scale(1.12); }
+  .calDay.selected{
+    background:linear-gradient(135deg,var(--pink-3),var(--purple-3)); color:#fff;
+    transform:scale(1.15); box-shadow:0 0 0 4px rgba(255,140,190,0.35), 0 8px 18px rgba(200,90,170,0.4);
+    animation:daySelectPop 0.4s ease;
+  }
+  @keyframes daySelectPop{ 0%{ transform:scale(0.7); } 60%{ transform:scale(1.25); } 100%{ transform:scale(1.15); } }
+
+  /* =========================================
+     TIME PAGE — expanding cards
+  ========================================= */
+  .timeGrid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; width:100%; }
+  .timeCard{
+    background:rgba(255,255,255,0.55); border-radius:18px; padding:14px 8px;
+    cursor:pointer; transition:all 0.35s cubic-bezier(.34,1.56,.64,1);
+    font-weight:700; font-size:14px; overflow:hidden;
+  }
+  .timeCard .tEmoji{ font-size:22px; display:block; margin-bottom:4px; transition:transform 0.3s ease; }
+  .timeCard .tSub{ font-size:0px; opacity:0; max-height:0; transition:all 0.3s ease; font-weight:600; }
+  .timeCard:hover{ transform:translateY(-3px); }
+  .timeCard.selected{
+    background:linear-gradient(135deg,var(--pink-3),var(--purple-3)); color:#fff;
+    box-shadow:0 14px 26px rgba(200,90,170,0.45); transform:scale(1.05);
+  }
+  .timeCard.selected .tEmoji{ transform:scale(1.25) rotate(-6deg); }
+  .timeCard.selected .tSub{ font-size:11px; opacity:0.95; max-height:20px; margin-top:2px; }
+
+  .customTimeWrap{ width:100%; display:flex; align-items:center; gap:8px; justify-content:center; margin-top:6px; }
+  input[type="time"]{
+    font-family:inherit; font-size:14px; padding:9px 12px; border-radius:14px;
+    border:1px solid var(--glass-border); background:rgba(255,255,255,0.6); color:var(--text);
+  }
+
+  /* =========================================
+     INVITATION PAGE — luxury card
+  ========================================= */
+  .invitation{
+    width:100%; position:relative;
+    background:linear-gradient(160deg,rgba(255,255,255,0.7),rgba(255,220,235,0.5));
+    border:1.5px solid rgba(255,255,255,0.7);
+    border-radius:24px; padding:20px 18px; text-align:left; font-size:14px;
+    box-shadow:0 0 0 1px rgba(255,180,210,0.3) inset, 0 20px 40px rgba(160,80,180,0.25);
+  }
+  .invitation::before{
+    content:''; position:absolute; inset:6px; border:1.5px dashed rgba(200,110,170,0.45); border-radius:18px; pointer-events:none;
+  }
+  .invTitle{ text-align:center; font-family:'Playfair Display',serif; font-size:20px; font-weight:800; color:var(--deep); margin-bottom:10px; }
+  .invRow{ display:flex; justify-content:space-between; align-items:center; padding:8px 2px; border-bottom:1px dashed rgba(155,80,150,0.25); }
+  .invRow:last-child{ border-bottom:none; }
+  .invLabel{ opacity:0.7; font-weight:600; font-size:12.5px; }
+  .invValue{ font-weight:800; color:var(--deep); font-size:13px; text-align:right; }
+  .statusBadge{
+    display:inline-block; background:linear-gradient(135deg,#8ee6a8,#5fd88a); color:#fff;
+    font-size:11px; font-weight:800; padding:3px 10px; border-radius:20px;
+  }
+
+  /* =========================================
+     FINAL PAGE
+  ========================================= */
+  .bigHeart{
+    font-size:74px; animation:heartBeatBig 1.3s ease-in-out infinite;
+    filter:drop-shadow(0 0 24px rgba(255,120,170,0.65));
+  }
+  @keyframes heartBeatBig{
+    0%,100%{ transform:scale(1); } 15%{ transform:scale(1.22); } 30%{ transform:scale(1); }
+    45%{ transform:scale(1.16); } 60%{ transform:scale(1); }
+  }
+  #typewriter{
+    min-height:120px; font-size:18px; line-height:1.75; color:var(--text);
+    font-family:'Caveat', cursive; font-weight:700;
+  }
+  #typewriter .tline{ display:block; opacity:0; }
+  #typewriter .tline.show{ opacity:1; }
+  .caret{ display:inline-block; width:2px; background:var(--purple-3); margin-left:2px; animation:blink 0.8s step-end infinite; }
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  .teddy{ font-size:42px; animation:teddySway 2.4s ease-in-out infinite; }
+  @keyframes teddySway{ 0%,100%{ transform:rotate(-6deg); } 50%{ transform:rotate(6deg); } }
+
+  .finalBadge{
+    margin-top:2px; font-size:12px; font-weight:800; letter-spacing:2px; text-transform:uppercase;
+    color:#fff; background:linear-gradient(120deg,var(--pink-3),var(--purple-3));
+    padding:7px 18px; border-radius:20px; opacity:0; transform:translateY(8px) scale(0.9);
+    animation:badgeIn 0.7s ease forwards 2.4s;
+    box-shadow:0 10px 22px rgba(200,90,170,0.4);
+  }
+  @keyframes badgeIn{ to{ opacity:1; transform:translateY(0) scale(1); } }
+
+  .finalDecor{ position:fixed; inset:0; z-index:1; pointer-events:none; overflow:hidden; opacity:0; transition:opacity 1s ease; }
+  .finalDecor.show{ opacity:1; }
+  .petal, .butterfly, .cloud{ position:absolute; }
+  .petal{ font-size:16px; animation:petalFall linear infinite; opacity:0.85; }
+  @keyframes petalFall{
+    0%{ transform:translateY(-10vh) translateX(0) rotate(0deg); opacity:0; }
+    10%{ opacity:0.9; }
+    100%{ transform:translateY(110vh) translateX(var(--pdrift,30px)) rotate(300deg); opacity:0; }
+  }
+  .butterfly{ font-size:20px; animation:butterflyFlit ease-in-out infinite; }
+  @keyframes butterflyFlit{
+    0%,100%{ transform:translate(0,0) rotate(0deg); }
+    25%{ transform:translate(30px,-20px) rotate(10deg); }
+    50%{ transform:translate(-10px,-40px) rotate(-8deg); }
+    75%{ transform:translate(20px,-15px) rotate(6deg); }
+  }
+  .cloud{ font-size:34px; opacity:0.55; animation:cloudDrift linear infinite; }
+  @keyframes cloudDrift{ from{ transform:translateX(-10vw); } to{ transform:translateX(110vw); } }
+
+  /* =========================================
+     MISC
+  ========================================= */
+  .hint{ font-size:12px; opacity:0.65; margin-top:-4px; min-height:16px; }
+
+  @media (max-width:380px){
+    .title{ font-size:21px; }
+    .gifFrame{ width:142px; height:142px; }
+    .foodFace .emoji{ font-size:22px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- =========================================
+     BACKGROUND MUSIC — replace MUSIC_URL below in script
+========================================= -->
+<audio id="bgMusic" loop></audio>
+
+<div id="screenFlash"></div>
+<div id="stepper">
+  <div class="stepDot" data-step="0"></div>
+  <div class="stepDot" data-step="1"></div>
+  <div class="stepDot" data-step="2"></div>
+  <div class="stepDot" data-step="3"></div>
+</div>
+
+<div id="app">
+
+  <div id="bgLayers">
+    <div class="blob blob1" id="pBlob1"></div>
+    <div class="blob blob2" id="pBlob2"></div>
+    <div class="blob blob3" id="pBlob3"></div>
+  </div>
+  <div id="floatingHearts"></div>
+  <div id="burstLayer"></div>
+  <div class="finalDecor" id="finalDecor"></div>
+
+  <!-- ============ PAGE: PROPOSAL (opens directly) ============ -->
+  <section class="screen active" id="pageProposal">
+    <div class="card">
+      <!-- PAGE 1 GIF -->
+      <div class="gifFrame">
+        <div class="sparkleRing" id="ring1"></div>
+        <div class="shine"></div>
+        <img id="gifPage1" alt="cute gif" onerror="this.style.opacity=0">
+      </div>
+      <div class="eyebrow">a tiny question from your IT guy</div>
+      <h1 class="title">Will you go out with me? 🥹❤️</h1>
+      <p class="subtitle" id="noHint">choose wisely...</p>
+      <div class="choiceRow">
+        <button class="btn" id="yesBtn" onclick="rippleFx(event); sayYes()">YES ❤️</button>
+        <button class="btn btn-outline" id="noBtn" onclick="sayNo(event)">NO 🙈</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PAGE: FOOD ============ -->
+  <section class="screen" id="pageFood">
+    <div class="card">
+      <!-- PAGE 2 GIF -->
+      <div class="gifFrame">
+        <div class="sparkleRing" id="ring2"></div>
+        <div class="shine"></div>
+        <img id="gifPage2" alt="cute gif" onerror="this.style.opacity=0">
+      </div>
+      <h2 class="title">What should we eat? 🍽️</h2>
+      <div class="foodGrid" id="foodGrid"></div>
+      <div class="validationHint" id="foodHint">please pick something yummy first 🥺</div>
+      <button class="btn" id="foodContinueBtn" onclick="rippleFx(event); confirmFood()">Continue ➜</button>
+    </div>
+  </section>
+
+  <!-- ============ PAGE: DATE ============ -->
+  <section class="screen" id="pageDate">
+    <div class="card">
+      <!-- PAGE 3 GIF -->
+      <div class="gifFrame">
+        <div class="sparkleRing" id="ring3"></div>
+        <div class="shine"></div>
+        <img id="gifPage3" alt="cute gif" onerror="this.style.opacity=0">
+      </div>
+      <h2 class="title">When should we go? 📅</h2>
+      <div class="calWrap">
+        <div class="calHeader">
+          <button onclick="changeMonth(-1)">‹</button>
+          <span id="calMonthLabel"></span>
+          <button onclick="changeMonth(1)">›</button>
+        </div>
+        <div class="calGrid" id="calGrid"></div>
+      </div>
+      <div class="validationHint" id="dateHint">please pick a date on the calendar 🥺</div>
+      <button class="btn" id="dateContinueBtn" onclick="rippleFx(event); confirmDate()">Continue ➜</button>
+    </div>
+  </section>
+
+  <!-- ============ PAGE: TIME ============ -->
+  <section class="screen" id="pageTime">
+    <div class="card">
+      <!-- PAGE 4 GIF -->
+      <div class="gifFrame">
+        <div class="sparkleRing" id="ring4"></div>
+        <div class="shine"></div>
+        <img id="gifPage4" alt="cute gif" onerror="this.style.opacity=0">
+      </div>
+      <h2 class="title">What time works for you? ⏰</h2>
+      <div class="timeGrid">
+        <div class="timeCard" data-time="Morning · 9:00 AM">
+          <span class="tEmoji">🌅</span>Morning<span class="tSub">9:00 AM</span>
+        </div>
+        <div class="timeCard" data-time="Afternoon · 1:00 PM">
+          <span class="tEmoji">🌞</span>Afternoon<span class="tSub">1:00 PM</span>
+        </div>
+        <div class="timeCard" data-time="Evening · 7:00 PM">
+          <span class="tEmoji">🌇</span>Evening<span class="tSub">7:00 PM</span>
+        </div>
+        <div class="timeCard" data-time="Night · 9:30 PM">
+          <span class="tEmoji">🌙</span>Night<span class="tSub">9:30 PM</span>
+        </div>
+      </div>
+      <div class="customTimeWrap">
+        <span style="font-size:12.5px; font-weight:700;">custom time:</span>
+        <input type="time" id="customTime">
+      </div>
+      <div class="validationHint" id="timeHint">please choose a time first 🥺</div>
+      <button class="btn" id="timeContinueBtn" onclick="rippleFx(event); confirmTime()">Continue ➜</button>
+    </div>
+  </section>
+
+  <!-- ============ PAGE: INVITATION ============ -->
+  <section class="screen" id="pageInvite">
+    <div class="card">
+      <!-- PAGE 5 GIF -->
+      <div class="gifFrame">
+        <div class="sparkleRing" id="ring5"></div>
+        <div class="shine"></div>
+        <img id="gifPage5" alt="cute gif" onerror="this.style.opacity=0">
+      </div>
+      <h2 class="title">💌 Date Invitation</h2>
+      <div class="invitation">
+        <div class="invTitle">❤️ You're Invited ❤️</div>
+        <div class="invRow"><span class="invLabel">Invite Status</span><span class="statusBadge">Accepted ✅</span></div>
+        <div class="invRow"><span class="invLabel">With</span><span class="invValue">My Beautiful Girl ❤️</span></div>
+        <div class="invRow"><span class="invLabel">Food</span><span class="invValue" id="invFood">—</span></div>
+        <div class="invRow"><span class="invLabel">Date</span><span class="invValue" id="invDate">—</span></div>
+        <div class="invRow"><span class="invLabel">Time</span><span class="invValue" id="invTime">—</span></div>
+        <div class="invRow"><span class="invLabel">Location</span><span class="invValue">Anywhere With You ❤️</span></div>
+        <div class="invRow"><span class="invLabel">Dress Code</span><span class="invValue">Cute Smile 😊</span></div>
+        <div class="invRow"><span class="invLabel">Mission</span><span class="invValue">Create Beautiful Memories</span></div>
+      </div>
+      <button class="btn heartbeat" onclick="rippleFx(event); confirmFinal()">Confirm Date ❤️</button>
+    </div>
+  </section>
+
+  <!-- ============ PAGE: FINAL ============ -->
+  <section class="screen" id="pageFinal">
+    <div class="card">
+      <!-- FINAL PAGE GIF -->
+      <div class="gifFrame">
+        <div class="sparkleRing" id="ringFinal"></div>
+        <div class="shine"></div>
+        <img id="gifFinal" alt="cute gif" onerror="this.style.opacity=0">
+      </div>
+      <div class="bigHeart">❤️</div>
+      <div id="typewriter"></div>
+      <div class="teddy">🧸</div>
+      <div class="finalBadge">our story begins ❤️</div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* =========================================
+   GIF PLACEHOLDERS — swap these for quick edits
+========================================= */
+const PAGE1_GIF = "https://media1.tenor.com/m/lzos_b4X7vwAAAAC/%EB%AA%A8%EC%B0%8C%EB%83%A5.gif";   // Proposal page
+const PAGE2_GIF = "https://media1.tenor.com/m/hTuhQFJOjHQAAAAC/cute-cat-pizza.gif";   // Food page
+const PAGE3_GIF = "https://media1.tenor.com/m/iChRH14u_HIAAAAC/milk-and-mocha-bear-cute.gif";   // Date page
+const PAGE4_GIF = "https://media1.tenor.com/m/0LHdVPPzIJMAAAAC/milk-and-mocha-milk-mocha-bear.gif";   // Time page
+const PAGE5_GIF = "https://media.tenor.com/pUQGNMgYn1cAAAAi/tkthao219-bubududu.gif";   // Invitation page
+const FINAL_GIF = "https://media.tenor.com/5XOehZUJ1MAAAAAi/cute-cat-couple.gif";   // Final page
+
+/* This actually applies the links above to the <img> tags. Edit the
+   constants, not this block. */
+(function wireUpGifs(){
+  const gifMap = {
+    gifPage1: PAGE1_GIF,
+    gifPage2: PAGE2_GIF,
+    gifPage3: PAGE3_GIF,
+    gifPage4: PAGE4_GIF,
+    gifPage5: PAGE5_GIF,
+    gifFinal: FINAL_GIF
+  };
+  function apply(){
+    Object.keys(gifMap).forEach(id=>{
+      const el = document.getElementById(id);
+      const url = gifMap[id];
+      if(el && url && url !== "YOUR_GIF_LINK_HERE"){
+        el.style.opacity = 1;
+        el.src = url;
+      }
+    });
+  }
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', apply);
+  } else {
+    apply();
+  }
+})();
+
+/* =========================================
+   BACKGROUND MUSIC — replace with your song link
+========================================= */
+const MUSIC_URL = "YOUR_AUDIO_LINK";
+
+(function initMusic(){
+  const audio = document.getElementById('bgMusic');
+  if(MUSIC_URL && MUSIC_URL !== "YOUR_AUDIO_LINK"){
+    audio.src = MUSIC_URL;
+  }
+  audio.volume = 0.35;
+  let started = false;
+  function tryPlay(){
+    if(started) return;
+    started = true;
+    audio.play().catch(()=>{ started = false; });
+    document.removeEventListener('click', tryPlay);
+    document.removeEventListener('touchstart', tryPlay);
+  }
+  document.addEventListener('click', tryPlay, {once:false});
+  document.addEventListener('touchstart', tryPlay, {once:false});
+})();
+
+/* =========================================
+   SPARKLE RINGS around each gif frame
+========================================= */
+(function buildSparkleRings(){
+  const syms = ['✨','💫','⭐'];
+  document.querySelectorAll('.sparkleRing').forEach(ring=>{
+    for(let i=0;i<6;i++){
+      const s = document.createElement('span');
+      s.textContent = syms[i % syms.length];
+      const angle = (i / 6) * Math.PI * 2;
+      const r = 46;
+      const x = 50 + Math.cos(angle)*r;
+      const y = 50 + Math.sin(angle)*r;
+      s.style.left = x + '%';
+      s.style.top = y + '%';
+      s.style.animationDelay = (i * 0.35) + 's';
+      ring.appendChild(s);
+    }
+  });
+})();
+
+/* =========================================
+   STATE
+========================================= */
+const state = { food:null, date:null, dateLabel:null, time:null, noClicks:0 };
+let calViewYear, calViewMonth;
+const today = new Date();
+
+/* Order of steps that require validated progress */
+const stepOrder = ['pageFood','pageDate','pageTime','pageInvite'];
+
+/* =========================================
+   NAVIGATION / TRANSITIONS
+========================================= */
+function goTo(id){
+  if(id === 'pageInvite') fillInviteNow();
+  const current = document.querySelector('.screen.active');
+  const next = document.getElementById(id);
+  if(current && current.id === id) return;
+
+  if(current){
+    current.classList.add('leaving');
+    setTimeout(()=>{
+      current.classList.remove('active','leaving');
+      next.classList.add('active');
+      afterShow(id);
+    }, 460);
+  } else {
+    next.classList.add('active');
+    afterShow(id);
+  }
+  updateStepper(id);
+}
+
+function updateStepper(id){
+  const stepper = document.getElementById('stepper');
+  const idx = stepOrder.indexOf(id);
+  if(idx === -1){
+    stepper.classList.remove('show');
+    return;
+  }
+  stepper.classList.add('show');
+  document.querySelectorAll('.stepDot').forEach((dot,i)=>{
+    dot.classList.remove('active','done');
+    if(i < idx) dot.classList.add('done');
+    if(i === idx) dot.classList.add('active');
+  });
+}
+
+function afterShow(id){
+  if(id === 'pageDate') initCalendar();
+  if(id === 'pageFinal') { startTypewriter(); showFinalDecor(); }
+}
+
+/* =========================================
+   VALIDATION HELPERS — block progress without a selection
+========================================= */
+function blockContinue(btnId, hintId){
+  const btn = document.getElementById(btnId);
+  const hint = document.getElementById(hintId);
+  btn.classList.remove('shakeErr');
+  void btn.offsetWidth; // restart animation
+  btn.classList.add('shakeErr');
+  hint.classList.add('show');
+  setTimeout(()=>hint.classList.remove('show'), 2200);
+}
+
+/* =========================================
+   RIPPLE EFFECT (magnetic-feel buttons)
+========================================= */
+function rippleFx(e){
+  const btn = e.currentTarget;
+  const circle = document.createElement('span');
+  const rect = btn.getBoundingClientRect();
+  const size = Math.max(rect.width, rect.height);
+  circle.className = 'ripple';
+  circle.style.width = circle.style.height = size + 'px';
+  circle.style.left = (e.clientX - rect.left - size/2) + 'px';
+  circle.style.top = (e.clientY - rect.top - size/2) + 'px';
+  btn.appendChild(circle);
+  setTimeout(()=>circle.remove(), 650);
+}
+
+/* magnetic hover for all buttons */
+document.addEventListener('mousemove', (e)=>{
+  document.querySelectorAll('.btn').forEach(btn=>{
+    if(btn.id === 'noBtn') return; // NO button has its own chaos
+    const rect = btn.getBoundingClientRect();
+    const dx = e.clientX - (rect.left + rect.width/2);
+    const dy = e.clientY - (rect.top + rect.height/2);
+    const dist = Math.hypot(dx,dy);
+    if(dist < 120){
+      const pull = (1 - dist/120) * 10;
+      btn.style.transform = `translate(${dx/120*pull}px, ${dy/120*pull}px)`;
+    } else {
+      btn.style.transform = '';
+    }
+  });
+});
+
+/* mini sparkle burst used on every successful selection (food/date/time) */
+function miniSparkle(x, y){
+  const layer = document.getElementById('burstLayer');
+  const emojis = ['✨','💖','💕'];
+  for(let i=0;i<7;i++){
+    const s = document.createElement('div');
+    s.className = 'miniSpark';
+    s.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    const angle = Math.random()*Math.PI*2;
+    const dist = 30 + Math.random()*45;
+    s.style.setProperty('--bx', Math.cos(angle)*dist + 'px');
+    s.style.setProperty('--by', Math.sin(angle)*dist + 'px');
+    s.style.left = x + 'px'; s.style.top = y + 'px';
+    layer.appendChild(s);
+    setTimeout(()=>s.remove(), 750);
+  }
+}
+
+/* =========================================
+   PROPOSAL PAGE — impossible NO button
+========================================= */
+const noHints = [
+  "choose wisely...",
+  "are you sure? 🥺",
+  "the YES button is getting excited...",
+  "it's getting harder to say no huh 😏",
+  "just click YES already 😭❤️",
+  "the system is judging you 👀"
+];
+const popupMessages = ["Nope 😌","Wrong answer 😂","System Error","Access Denied","Try Again","Nice Try","404 No Escape","Permission Rejected"];
+
+function spawnPopup(x, y){
+  const msg = document.createElement('div');
+  msg.className = 'popupMsg';
+  msg.textContent = popupMessages[Math.floor(Math.random()*popupMessages.length)];
+  msg.style.left = x + 'px';
+  msg.style.top = y + 'px';
+  document.body.appendChild(msg);
+  setTimeout(()=>msg.remove(), 1200);
+}
+
+function sayNo(e){
+  state.noClicks++;
+  const yesBtn = document.getElementById('yesBtn');
+  const noBtn = document.getElementById('noBtn');
+  const rect = noBtn.getBoundingClientRect();
+
+  const scale = Math.min(1 + state.noClicks * 0.34, 3.4);
+  yesBtn.style.transform = `scale(${scale})`;
+  yesBtn.style.fontSize = Math.min(16 + state.noClicks*2.2, 28) + 'px';
+  yesBtn.style.boxShadow = `0 ${14+state.noClicks*3}px ${30+state.noClicks*4}px rgba(255,110,170,${Math.min(0.35+state.noClicks*0.08,0.85)})`;
+  if(state.noClicks >= 2) yesBtn.classList.add('heartbeat');
+
+  const shrink = Math.max(1 - state.noClicks * 0.13, 0.3);
+  noBtn.style.transform = `scale(${shrink})`;
+
+  document.getElementById('noHint').textContent = noHints[Math.min(state.noClicks-1, noHints.length-1)];
+  spawnPopup(rect.left + rect.width/2, rect.top);
+
+  if(state.noClicks >= 2){
+    noBtn.classList.add('roaming');
+    const margin = 70;
+    const maxX = window.innerWidth - margin*2;
+    const maxY = window.innerHeight - margin*2;
+    const newX = margin + Math.random()*maxX;
+    const newY = margin + Math.random()*maxY;
+    noBtn.style.left = newX + 'px';
+    noBtn.style.top = newY + 'px';
+  }
+}
+
+function sayYes(){
+  document.getElementById('screenFlash').classList.add('flash');
+  heartExplosion();
+  confettiBurst();
+  spawnFloatingEmojiBurst();
+  setTimeout(()=>document.getElementById('screenFlash').classList.remove('flash'), 550);
+  setTimeout(()=>goTo('pageFood'), 950);
+}
+
+/* =========================================
+   HEART EXPLOSION + CONFETTI + EMOJI BURST
+========================================= */
+function heartExplosion(){
+  const layer = document.getElementById('burstLayer');
+  const cx = window.innerWidth/2, cy = window.innerHeight/2;
+  const emojis = ['❤️','💖','💕','💗','💓','✨'];
+  for(let i=0;i<32;i++){
+    const h = document.createElement('div');
+    h.className = 'burstHeart';
+    h.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    const angle = Math.random()*Math.PI*2;
+    const dist = 130 + Math.random()*240;
+    h.style.setProperty('--bx', Math.cos(angle)*dist + 'px');
+    h.style.setProperty('--by', Math.sin(angle)*dist + 'px');
+    h.style.setProperty('--br', (Math.random()*360)+'deg');
+    h.style.left = cx + 'px'; h.style.top = cy + 'px';
+    layer.appendChild(h);
+    setTimeout(()=>h.remove(), 1300);
+  }
+}
+function confettiBurst(){
+  const layer = document.getElementById('burstLayer');
+  const colors = ['#ff8fb3','#c9a6ff','#ffd6e6','#9b6bff','#ffffff','#ffd9a0'];
+  for(let i=0;i<44;i++){
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.left = Math.random()*100 + 'vw';
+    c.style.background = colors[Math.floor(Math.random()*colors.length)];
+    c.style.animationDuration = (1.8 + Math.random()*1.6) + 's';
+    c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    layer.appendChild(c);
+    setTimeout(()=>c.remove(), 3600);
+  }
+}
+function spawnFloatingEmojiBurst(){
+  const layer = document.getElementById('burstLayer');
+  const emojis = ['💻','❤️','✨','💕'];
+  for(let i=0;i<14;i++){
+    const e = document.createElement('div');
+    e.className = 'burstHeart';
+    e.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    e.style.left = (Math.random()*100)+'vw';
+    e.style.top = '100vh';
+    e.style.setProperty('--bx', (Math.random()*100-50)+'px');
+    e.style.setProperty('--by', (-window.innerHeight*0.8)+'px');
+    e.style.setProperty('--br', (Math.random()*180)+'deg');
+    layer.appendChild(e);
+    setTimeout(()=>e.remove(), 1400);
+  }
+}
+
+/* =========================================
+   FOOD PAGE — flip select
+========================================= */
+const foodOptions = [
+  {emoji:'🍔', label:'Burgers'},{emoji:'🍕', label:'Pizza'},{emoji:'🍣', label:'Sushi'},
+  {emoji:'🍜', label:'Noodles'},{emoji:'🍟', label:'Fries'},{emoji:'🍩', label:'Donuts'},
+  {emoji:'🥞', label:'Pancakes'},{emoji:'🍦', label:'Ice Cream'},{emoji:'☕', label:'Coffee'}
+];
+
+function renderFoodGrid(){
+  const grid = document.getElementById('foodGrid');
+  grid.innerHTML = '';
+  foodOptions.forEach(opt=>{
+    const card = document.createElement('div');
+    card.className = 'foodCard';
+    card.innerHTML = `
+      <div class="foodFace front"><span class="emoji">${opt.emoji}</span><span class="label">${opt.label}</span></div>
+      <div class="foodFace back">Perfect<br>Choice ❤️</div>`;
+    card.onclick = (e)=>{
+      document.querySelectorAll('.foodCard').forEach(c=>{ c.classList.remove('flipped','bounceSelect'); });
+      card.classList.add('flipped');
+      requestAnimationFrame(()=>card.classList.add('bounceSelect'));
+      state.food = `${opt.emoji} ${opt.label}`;
+      document.getElementById('foodHint').classList.remove('show');
+      const rect = card.getBoundingClientRect();
+      miniSparkle(rect.left + rect.width/2, rect.top + rect.height/2);
+    };
+    grid.appendChild(card);
+  });
+}
+
+function confirmFood(){
+  if(!state.food){
+    blockContinue('foodContinueBtn','foodHint');
+    return;
+  }
+  goTo('pageDate');
+}
+
+/* =========================================
+   DATE PAGE — calendar
+========================================= */
+function initCalendar(){
+  calViewYear = today.getFullYear();
+  calViewMonth = today.getMonth();
+  renderCalendar();
+}
+const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+function renderCalendar(){
+  const grid = document.getElementById('calGrid');
+  document.getElementById('calMonthLabel').textContent = `${monthNames[calViewMonth]} ${calViewYear}`;
+  grid.innerHTML = '';
+  ['S','M','T','W','T','F','S'].forEach(d=>{
+    const dow = document.createElement('div');
+    dow.className = 'calDow'; dow.textContent = d; grid.appendChild(dow);
+  });
+  const firstDay = new Date(calViewYear, calViewMonth, 1).getDay();
+  const daysInMonth = new Date(calViewYear, calViewMonth+1, 0).getDate();
+  for(let i=0;i<firstDay;i++){
+    const empty = document.createElement('div'); empty.className = 'calDay empty'; grid.appendChild(empty);
+  }
+  const todayMid = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  for(let d=1; d<=daysInMonth; d++){
+    const cell = document.createElement('div');
+    cell.className = 'calDay'; cell.textContent = d;
+    const thisDate = new Date(calViewYear, calViewMonth, d);
+    if(thisDate < todayMid){
+      cell.classList.add('disabled');
+    } else {
+      cell.onclick = (e)=>{
+        document.querySelectorAll('.calDay.selected').forEach(c=>c.classList.remove('selected'));
+        cell.classList.add('selected');
+        state.date = thisDate;
+        state.dateLabel = `${d} ${monthNames[calViewMonth]} ${calViewYear}`;
+        document.getElementById('dateHint').classList.remove('show');
+        const rect = cell.getBoundingClientRect();
+        miniSparkle(rect.left + rect.width/2, rect.top + rect.height/2);
+      };
+      if(state.date && thisDate.getTime() === new Date(state.date.getFullYear(), state.date.getMonth(), state.date.getDate()).getTime()){
+        cell.classList.add('selected');
+      }
+    }
+    grid.appendChild(cell);
+  }
+}
+function changeMonth(delta){
+  calViewMonth += delta;
+  if(calViewMonth < 0){ calViewMonth = 11; calViewYear--; }
+  if(calViewMonth > 11){ calViewMonth = 0; calViewYear++; }
+  const minMonth = today.getMonth(), minYear = today.getFullYear();
+  if(calViewYear < minYear || (calViewYear === minYear && calViewMonth < minMonth)){
+    calViewMonth = minMonth; calViewYear = minYear;
+  }
+  renderCalendar();
+}
+function confirmDate(){
+  if(!state.dateLabel){
+    blockContinue('dateContinueBtn','dateHint');
+    return;
+  }
+  goTo('pageTime');
+}
+
+/* =========================================
+   TIME PAGE
+========================================= */
+document.addEventListener('DOMContentLoaded', ()=>{
+  document.querySelectorAll('.timeCard').forEach(card=>{
+    card.addEventListener('click', (e)=>{
+      document.querySelectorAll('.timeCard').forEach(c=>c.classList.remove('selected'));
+      card.classList.add('selected');
+      state.time = card.dataset.time;
+      document.getElementById('customTime').value = '';
+      document.getElementById('timeHint').classList.remove('show');
+      const rect = card.getBoundingClientRect();
+      miniSparkle(rect.left + rect.width/2, rect.top + rect.height/2);
+    });
+  });
+  document.getElementById('customTime').addEventListener('change', (e)=>{
+    document.querySelectorAll('.timeCard').forEach(c=>c.classList.remove('selected'));
+    if(e.target.value){
+      state.time = 'Custom · ' + e.target.value;
+      document.getElementById('timeHint').classList.remove('show');
+      const rect = e.target.getBoundingClientRect();
+      miniSparkle(rect.left + rect.width/2, rect.top + rect.height/2);
+    } else {
+      state.time = null;
+    }
+  });
+
+  renderFoodGrid();
+  spawnBackgroundDecor();
+  for(let i=0;i<6;i++) setTimeout(spawnFloatingHeart, i*250);
+  setInterval(spawnFloatingHeart, 700);
+});
+
+function confirmTime(){
+  if(!state.time){
+    blockContinue('timeContinueBtn','timeHint');
+    return;
+  }
+  goTo('pageInvite');
+}
+
+/* =========================================
+   INVITATION PAGE — auto-fill
+========================================= */
+function confirmFinal(){
+  fillInviteNow();
+  goTo('pageFinal');
+}
+function fillInviteNow(){
+  document.getElementById('invFood').textContent = state.food || '—';
+  document.getElementById('invDate').textContent = state.dateLabel || '—';
+  document.getElementById('invTime').textContent = state.time || '—';
+}
+
+/* =========================================
+   FINAL PAGE — typewriter + decor
+========================================= */
+const loveLines = [
+  "I can't wait to see you ❤️",
+  "Thank you for saying yes.",
+  "I promise it'll be a beautiful date.",
+  "I love you more than every line of code I've ever written.",
+  "See you soon beautiful ❤️"
+];
+let typewriterRunning = false;
+
+function startTypewriter(){
+  if(typewriterRunning) return;
+  typewriterRunning = true;
+  const container = document.getElementById('typewriter');
+  container.innerHTML = '';
+  let lineIndex = 0;
+  function typeLine(){
+    if(lineIndex >= loveLines.length){ typewriterRunning = false; return; }
+    const lineEl = document.createElement('span');
+    lineEl.className = 'tline show';
+    const caret = document.createElement('span');
+    caret.className = 'caret';
+    lineEl.appendChild(document.createTextNode(''));
+    container.appendChild(lineEl);
+    lineEl.appendChild(caret);
+    const text = loveLines[lineIndex];
+    let charIndex = 0;
+    const typeInterval = setInterval(()=>{
+      lineEl.childNodes[0].textContent += text[charIndex];
+      charIndex++;
+      if(charIndex >= text.length){
+        clearInterval(typeInterval);
+        caret.remove();
+        lineIndex++;
+        setTimeout(typeLine, 350);
+      }
+    }, 36);
+  }
+  typeLine();
+}
+
+function showFinalDecor(){
+  const decor = document.getElementById('finalDecor');
+  decor.classList.add('show');
+  if(decor.dataset.built) return;
+  decor.dataset.built = '1';
+
+  const petals = ['🌸','🌷','💮','🏵️'];
+  for(let i=0;i<18;i++){
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.textContent = petals[Math.floor(Math.random()*petals.length)];
+    p.style.left = Math.random()*100+'vw';
+    p.style.setProperty('--pdrift', (Math.random()*60-30)+'px');
+    p.style.animationDuration = (7+Math.random()*8)+'s';
+    p.style.animationDelay = (Math.random()*6)+'s';
+    decor.appendChild(p);
+  }
+  for(let i=0;i<5;i++){
+    const b = document.createElement('div');
+    b.className = 'butterfly';
+    b.textContent = '🦋';
+    b.style.left = (10+Math.random()*80)+'vw';
+    b.style.top = (15+Math.random()*60)+'vh';
+    b.style.animationDuration = (3+Math.random()*2)+'s';
+    decor.appendChild(b);
+  }
+  for(let i=0;i<3;i++){
+    const c = document.createElement('div');
+    c.className = 'cloud';
+    c.textContent = '☁️';
+    c.style.top = (5+Math.random()*20)+'vh';
+    c.style.animationDuration = (30+Math.random()*20)+'s';
+    c.style.animationDelay = (Math.random()*10)+'s';
+    decor.appendChild(c);
+  }
+}
+
+/* =========================================
+   AMBIENT BACKGROUND: bubbles + stars + parallax
+========================================= */
+function spawnBackgroundDecor(){
+  const layer = document.getElementById('bgLayers');
+  for(let i=0;i<10;i++){
+    const b = document.createElement('div');
+    b.className = 'bubble';
+    const size = 14 + Math.random()*30;
+    b.style.width = size+'px'; b.style.height = size+'px';
+    b.style.left = Math.random()*100+'vw';
+    b.style.animationDuration = (10+Math.random()*12)+'s';
+    b.style.animationDelay = (Math.random()*10)+'s';
+    layer.appendChild(b);
+  }
+  const starsSym = ['✨','⭐','・'];
+  for(let i=0;i<16;i++){
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.textContent = starsSym[Math.floor(Math.random()*starsSym.length)];
+    s.style.left = Math.random()*100+'vw';
+    s.style.top = Math.random()*100+'vh';
+    s.style.fontSize = (8+Math.random()*10)+'px';
+    s.style.animationDuration = (2+Math.random()*3)+'s';
+    s.style.animationDelay = (Math.random()*3)+'s';
+    layer.appendChild(s);
+  }
+}
+
+/* mouse parallax on blobs */
+document.addEventListener('mousemove', (e)=>{
+  const nx = (e.clientX/window.innerWidth - 0.5);
+  const ny = (e.clientY/window.innerHeight - 0.5);
+  const b1 = document.getElementById('pBlob1');
+  const b2 = document.getElementById('pBlob2');
+  const b3 = document.getElementById('pBlob3');
+  if(b1) b1.style.transform = `translate(${nx*30}px, ${ny*30}px)`;
+  if(b2) b2.style.transform = `translate(${-nx*35}px, ${-ny*35}px)`;
+  if(b3) b3.style.transform = `translate(${nx*20}px, ${-ny*20}px)`;
+});
+
+/* floating hearts */
+function spawnFloatingHeart(){
+  const container = document.getElementById('floatingHearts');
+  const heart = document.createElement('div');
+  heart.className = 'floaty';
+  const symbols = ['❤️','💕','💖','✨','💗'];
+  heart.textContent = symbols[Math.floor(Math.random()*symbols.length)];
+  heart.style.left = Math.random()*100 + 'vw';
+  heart.style.setProperty('--drift', (Math.random()*80-40)+'px');
+  heart.style.fontSize = (14 + Math.random()*18) + 'px';
+  const duration = 8 + Math.random()*7;
+  heart.style.animationDuration = duration + 's';
+  container.appendChild(heart);
+  setTimeout(()=>heart.remove(), duration*1000 + 500);
+}
+
+/* cursor hearts */
+let lastCursorHeart = 0;
+document.addEventListener('mousemove', (e)=>{
+  const now = Date.now();
+  if(now - lastCursorHeart < 120) return;
+  lastCursorHeart = now;
+  const h = document.createElement('div');
+  h.id = 'cursorHeart';
+  h.textContent = ['❤️','💕','✨'][Math.floor(Math.random()*3)];
+  h.style.left = e.clientX + 'px'; h.style.top = e.clientY + 'px';
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(), 900);
+});
+document.addEventListener('touchstart', (e)=>{
+  if(!e.touches || !e.touches[0]) return;
+  const h = document.createElement('div');
+  h.id = 'cursorHeart';
+  h.textContent = '💕';
+  h.style.left = e.touches[0].clientX + 'px'; h.style.top = e.touches[0].clientY + 'px';
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(), 900);
+}, {passive:true});
+</script>
+
+</body>
+</html>

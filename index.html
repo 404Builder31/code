@@ -3,1178 +3,1960 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+
 <title>Student ERP</title>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 
 :root{
-  --coral:#ff7f73;
-  --peach:#ffad79;
-  --yellow:#ffd36f;
-  --dark:#303030;
-  --text:#454545;
-  --muted:#777;
-  --cream:#fffaf0;
-  --white:#fff;
-  --bg:#f8f8f8;
-  --shadow:0 5px 14px rgba(0,0,0,.13);
-  --gradient:linear-gradient(90deg,#ff7f73,#ffad79,#ffd36f);
+    --coral:#ff7f73;
+    --orange:#ff9d77;
+    --peach:#ffb879;
+    --yellow:#ffd36f;
+    --dark:#303030;
+    --text:#555;
+    --black:#222;
+    --muted:#777;
+    --cream:#fffaf0;
+    --page:#fafafa;
+
+    --gradient:
+        linear-gradient(
+            100deg,
+            #ff7f73 0%,
+            #ffad79 48%,
+            #ffd36f 100%
+        );
+
+    --shadow:
+        0 3px 9px rgba(0,0,0,.11);
 }
 
 *{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    -webkit-tap-highlight-color:transparent;
 }
 
-html,body{
-  margin:0;
-  padding:0;
-  width:100%;
-  min-height:100%;
-  font-family:Poppins,Arial,sans-serif;
-  color:var(--text);
-  background:var(--bg);
+html{
+    width:100%;
+    min-height:100%;
+    overflow-x:hidden;
 }
 
 body{
-  overflow-x:hidden;
+    width:100%;
+    min-height:100vh;
+    overflow-x:hidden;
+    background:var(--page);
+    color:var(--text);
+    font-family:Poppins,Arial,sans-serif;
+    font-weight:400;
+    -webkit-font-smoothing:antialiased;
 }
 
-button,input,textarea,select{
-  font-family:inherit;
+button,
+input,
+textarea,
+select{
+    font-family:inherit;
 }
 
 button{
-  cursor:pointer;
+    cursor:pointer;
+}
+
+button,
+input,
+textarea,
+select{
+    outline:none;
+}
+
+img{
+    max-width:100%;
 }
 
 .hidden{
-  display:none!important;
+    display:none!important;
 }
+
+/* =====================================================
+   APP
+===================================================== */
 
 #app{
-  min-height:100vh;
-}
-
-/* =========================
-   COMMON
-========================= */
-
-.gradient{
-  background:var(--gradient);
-}
-
-.icon{
-  width:25px;
-  height:25px;
-  stroke:currentColor;
-  fill:none;
-  stroke-width:1.8;
-  stroke-linecap:round;
-  stroke-linejoin:round;
-}
-
-.topbar{
-  height:72px;
-  background:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 24px;
-  box-shadow:0 2px 8px rgba(0,0,0,.12);
-  position:sticky;
-  top:0;
-  z-index:50;
-}
-
-.topbar-title{
-  font-size:27px;
-  font-weight:500;
-  color:#222;
-}
-
-.topbar-btn{
-  border:0;
-  background:transparent;
-  width:46px;
-  height:46px;
-  display:grid;
-  place-items:center;
-  position:relative;
-  color:#333;
-}
-
-.notification-badge{
-  position:absolute;
-  right:0;
-  top:2px;
-  min-width:28px;
-  height:28px;
-  padding:0 6px;
-  display:grid;
-  place-items:center;
-  background:var(--gradient);
-  border-radius:9px;
-  font-size:13px;
-  color:#222;
-  font-weight:600;
+    width:100%;
+    min-height:100vh;
+    overflow-x:hidden;
 }
 
 .page{
-  min-height:100vh;
-  padding-bottom:90px;
+    width:100%;
+    min-height:100vh;
+    padding-bottom:82px;
+    overflow-x:hidden;
 }
 
+/* =====================================================
+   TOP BAR
+===================================================== */
+
+.topbar{
+    height:64px;
+    width:100%;
+    background:#fff;
+
+    display:grid;
+    grid-template-columns:50px minmax(0,1fr) 50px;
+    align-items:center;
+
+    padding:0 10px;
+
+    position:sticky;
+    top:0;
+    z-index:50;
+
+    box-shadow:0 2px 7px rgba(0,0,0,.13);
+}
+
+.topbar-title{
+    min-width:0;
+    text-align:center;
+
+    color:#222;
+    font-size:23px;
+    font-weight:400;
+
+    white-space:nowrap;
+}
+
+.topbar-btn{
+    width:44px;
+    height:44px;
+
+    border:0;
+    background:transparent;
+
+    display:grid;
+    place-items:center;
+
+    color:#444;
+
+    position:relative;
+}
+
+.icon{
+    width:25px;
+    height:25px;
+
+    stroke:currentColor;
+    fill:none;
+    stroke-width:1.7;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
+
+.notification-badge{
+    position:absolute;
+
+    right:0;
+    top:1px;
+
+    min-width:27px;
+    height:27px;
+
+    padding:0 5px;
+
+    border-radius:9px;
+
+    background:var(--gradient);
+
+    display:grid;
+    place-items:center;
+
+    color:#222;
+    font-size:12px;
+    font-weight:400;
+}
+
+/* =====================================================
+   PAGE CONTENT
+===================================================== */
+
 .page-content{
-  max-width:1100px;
-  margin:auto;
-  padding:24px 28px;
+    width:100%;
+    max-width:1000px;
+
+    margin:0 auto;
+
+    padding:25px 24px 30px;
+
+    overflow-x:hidden;
 }
 
 .section-title{
-  font-size:27px;
-  color:#111;
-  font-weight:400;
-  margin:0 0 18px;
+    margin:0 0 17px;
+
+    color:#111;
+
+    font-size:25px;
+    line-height:1.25;
+    font-weight:400;
 }
 
-.card{
-  background:white;
-  border-radius:12px;
-  box-shadow:var(--shadow);
+/* =====================================================
+   TIMETABLE
+===================================================== */
+
+.timetable-section{
+    width:100%;
+    margin-bottom:35px;
 }
 
-.gradient-card{
-  background:var(--gradient);
-  border-radius:12px;
+.timetable-scroll{
+    width:100%;
+
+    display:flex;
+    gap:16px;
+
+    overflow-x:auto;
+    overflow-y:hidden;
+
+    padding:3px 2px 12px;
+
+    scrollbar-width:none;
+}
+
+.timetable-scroll::-webkit-scrollbar{
+    display:none;
+}
+
+.timetable-card{
+    flex:0 0 min(305px,82vw);
+
+    height:212px;
+
+    position:relative;
+
+    overflow:hidden;
+
+    border-radius:11px;
+
+    background:var(--gradient);
+
+    box-shadow:var(--shadow);
+
+    padding:25px 23px;
+}
+
+.course-code{
+    color:#222;
+
+    font-size:24px;
+    font-weight:600;
+    line-height:1.2;
+}
+
+.room{
+    margin-top:7px;
+
+    color:#333;
+
+    font-size:15px;
+    font-weight:400;
+}
+
+.status-pill{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+
+    margin-top:17px;
+
+    padding:6px 12px;
+
+    border-radius:18px;
+
+    background:#ffd078;
+
+    color:#444;
+
+    font-size:13px;
+}
+
+.status-dot{
+    width:7px;
+    height:7px;
+
+    border-radius:50%;
+
+    background:#ed7e20;
+}
+
+.time-strip{
+    position:absolute;
+
+    left:0;
+    right:0;
+    bottom:0;
+
+    height:45px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:#303030;
+
+    color:#fff;
+
+    font-size:17px;
+    font-weight:500;
+}
+
+/* decorative book-like lines */
+.timetable-card::after{
+    content:"";
+
+    position:absolute;
+
+    width:110px;
+    height:70px;
+
+    right:-15px;
+    bottom:37px;
+
+    border:3px solid rgba(255,255,255,.23);
+    border-radius:50%;
+
+    transform:rotate(-15deg);
+}
+
+/* =====================================================
+   TILES HEADER
+===================================================== */
+
+.tiles-heading{
+    margin-bottom:19px;
+}
+
+.tiles-heading h2{
+    color:#111;
+
+    font-size:24px;
+    line-height:1.3;
+    font-weight:400;
+}
+
+.tiles-heading p{
+    margin-top:6px;
+
+    color:#222;
+
+    font-size:13px;
+    line-height:1.4;
+    font-weight:400;
+}
+
+/* =====================================================
+   TILE GRID
+===================================================== */
+
+.tile-grid{
+    width:100%;
+
+    display:grid;
+
+    /*
+       VERY IMPORTANT:
+       minmax(0,1fr) prevents the cards from
+       pushing the third column outside viewport.
+    */
+    grid-template-columns:
+        repeat(3,minmax(0,1fr));
+
+    gap:17px 13px;
+
+    overflow:visible;
+}
+
+.tile{
+    min-width:0;
+    width:100%;
+
+    min-height:218px;
+
+    position:relative;
+
+    background:var(--cream);
+
+    border:1px solid #e8e0d1;
+    border-radius:12px;
+
+    box-shadow:
+        0 3px 7px rgba(0,0,0,.08);
+
+    padding:28px 7px 13px;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    overflow:visible;
+}
+
+.tile-icon{
+    width:58px;
+    height:58px;
+
+    flex:0 0 auto;
+
+    margin-bottom:16px;
+
+    color:#333;
+
+    display:grid;
+    place-items:center;
+}
+
+.tile-icon .icon{
+    width:100%;
+    height:100%;
+
+    stroke-width:1.55;
+}
+
+.tile-label{
+    width:100%;
+    min-width:0;
+    max-width:100%;
+
+    border:0;
+
+    background:#ffbd7b;
+
+    border-radius:8px;
+
+    padding:7px 4px;
+
+    color:#222;
+
+    font-size:12px;
+    line-height:1.25;
+    font-weight:400;
+
+    text-align:center;
+
+    white-space:normal;
+    overflow-wrap:anywhere;
+    word-break:normal;
+}
+
+.tile-badge,
+.tile-remove{
+    position:absolute;
+
+    right:-1px;
+    top:-15px;
+
+    min-width:39px;
+    height:39px;
+
+    padding:0 6px;
+
+    border-radius:9px;
+
+    background:var(--gradient);
+
+    display:grid;
+    place-items:center;
+
+    color:#222;
+
+    font-size:12px;
+    font-weight:400;
+
+    z-index:3;
+}
+
+.tile-remove{
+    border:0;
+
+    font-size:19px;
+}
+
+.add-tiles{
+    margin-bottom:20px;
+}
+
+.add-tile-menu{
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:8px;
+
+    margin-top:12px;
+}
+
+.add-chip{
+    border:1px solid #ddd;
+
+    background:#fff;
+
+    border-radius:20px;
+
+    padding:7px 11px;
+
+    color:#555;
+
+    font-size:12px;
+}
+
+/* =====================================================
+   BOTTOM NAV
+===================================================== */
+
+.bottom-nav{
+    position:fixed;
+
+    left:0;
+    right:0;
+    bottom:0;
+
+    width:100%;
+
+    height:74px;
+
+    background:#fff;
+
+    border-top:1px solid #e7e7e7;
+
+    box-shadow:
+        0 -2px 8px rgba(0,0,0,.07);
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,minmax(0,1fr));
+
+    z-index:90;
+
+    padding-bottom:env(safe-area-inset-bottom);
+}
+
+.nav-item{
+    min-width:0;
+
+    border:0;
+
+    background:transparent;
+
+    color:#777;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    gap:3px;
+
+    font-size:12px;
+    font-weight:400;
+
+    overflow:hidden;
+}
+
+.nav-item .icon{
+    width:27px;
+    height:27px;
+}
+
+.nav-item span{
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+    max-width:100%;
+}
+
+.nav-item.active{
+    color:#df9849;
+}
+
+/* =====================================================
+   DRAWER
+===================================================== */
+
+.overlay{
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.34);
+
+    z-index:100;
+
+    opacity:0;
+
+    pointer-events:none;
+
+    transition:opacity .25s ease;
+}
+
+.overlay.open{
+    opacity:1;
+
+    pointer-events:auto;
+}
+
+.drawer{
+    position:fixed;
+
+    left:0;
+    top:0;
+    bottom:0;
+
+    width:min(560px,80vw);
+
+    background:#fff;
+
+    z-index:110;
+
+    transform:translateX(-105%);
+
+    transition:transform .28s ease;
+
+    box-shadow:5px 0 20px rgba(0,0,0,.2);
+
+    overflow-x:hidden;
+    overflow-y:auto;
+}
+
+.drawer.open{
+    transform:translateX(0);
+}
+
+.drawer-profile{
+    width:100%;
+
+    min-height:323px;
+
+    padding:34px 20px 25px;
+
+    border:0;
+
+    background:var(--gradient);
+
+    text-align:center;
+
+    display:block;
+
+    overflow:hidden;
+}
+
+.drawer-photo{
+    display:block;
+
+    width:126px;
+    height:126px;
+
+    margin:0 auto;
+
+    object-fit:cover;
+
+    border-radius:50%;
+
+    border:4px solid #fff;
+
+    box-shadow:0 3px 11px rgba(0,0,0,.22);
+}
+
+.drawer-profile h2{
+    margin-top:12px;
+
+    color:#111;
+
+    font-size:24px;
+    line-height:1.25;
+
+    font-weight:500;
+}
+
+.drawer-profile .reg{
+    margin-top:5px;
+
+    color:#222;
+
+    font-size:18px;
+    font-weight:400;
+}
+
+.drawer-profile .program{
+    margin:9px auto 0;
+
+    max-width:340px;
+
+    color:#222;
+
+    font-size:15px;
+    line-height:1.45;
+
+    font-weight:400;
+}
+
+.drawer-search{
+    padding:16px 18px 9px;
+
+    background:#fff;
+}
+
+.search-box{
+    width:100%;
+
+    height:50px;
+
+    display:flex;
+    align-items:center;
+
+    gap:9px;
+
+    padding:0 13px;
+
+    border-radius:15px;
+
+    background:#eeeeee;
+}
+
+.search-box .icon{
+    width:24px;
+    height:24px;
+
+    color:#555;
+}
+
+.search-box input{
+    min-width:0;
+    width:100%;
+
+    border:0;
+    background:transparent;
+
+    color:#444;
+
+    font-size:17px;
+    font-weight:400;
+}
+
+.search-box input::placeholder{
+    color:#777;
+}
+
+.drawer-list{
+    width:100%;
+}
+
+.drawer-item{
+    width:100%;
+    min-height:68px;
+
+    border:0;
+    border-bottom:1px solid #ececec;
+
+    background:#fff;
+
+    display:flex;
+    align-items:center;
+
+    gap:22px;
+
+    padding:10px 19px;
+
+    color:#666;
+
+    text-align:left;
+
+    font-size:15px;
+    line-height:1.4;
+    font-weight:400;
+}
+
+.drawer-item .icon{
+    flex:0 0 28px;
+
+    width:28px;
+    height:28px;
+
+    color:#555;
+}
+
+.drawer-item span{
+    min-width:0;
+}
+
+.drawer-logout{
+    width:calc(100% - 28px);
+
+    min-height:55px;
+
+    margin:15px 14px 25px;
+
+    border:0;
+
+    border-radius:28px;
+
+    background:var(--gradient);
+
+    color:#222;
+
+    font-size:17px;
+    font-weight:400;
+
+    box-shadow:0 4px 9px rgba(0,0,0,.13);
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:15px;
+}
+
+/* =====================================================
+   PROFILE
+===================================================== */
+
+.profile-topbar{
+    width:100%;
+
+    height:64px;
+
+    background:#303030;
+
+    color:#fff;
+
+    display:grid;
+
+    grid-template-columns:50px minmax(0,1fr) 72px;
+
+    align-items:center;
+
+    padding:0 10px;
+
+    position:sticky;
+
+    top:0;
+
+    z-index:60;
+}
+
+.profile-topbar-title{
+    text-align:center;
+
+    font-size:22px;
+    font-weight:400;
+}
+
+.profile-topbar .back{
+    width:44px;
+    height:44px;
+
+    border:0;
+    background:transparent;
+
+    color:#fff;
+
+    display:grid;
+    place-items:center;
+}
+
+.qr-top{
+    width:68px;
+    height:50px;
+
+    border:0;
+
+    border-radius:8px;
+
+    background:#ff821c;
+
+    color:#fff;
+
+    font-size:19px;
+    font-weight:400;
+}
+
+.profile-wrapper{
+    width:100%;
+
+    padding:14px 24px 30px;
+}
+
+.profile-card{
+    width:100%;
+
+    background:#fff;
+
+    box-shadow:var(--shadow);
+
+    overflow:hidden;
+}
+
+.profile-hero{
+    width:100%;
+
+    background:var(--gradient);
+
+    padding:34px 20px 30px;
+
+    text-align:center;
+}
+
+.profile-photo{
+    width:min(225px,52vw);
+    height:min(225px,52vw);
+
+    object-fit:cover;
+
+    border-radius:18px;
+
+    background:#fff;
+}
+
+.profile-name{
+    margin-top:8px;
+
+    color:#222;
+
+    font-size:23px;
+    font-weight:500;
+}
+
+.profile-program{
+    margin-top:5px;
+
+    color:#222;
+
+    font-size:17px;
+    line-height:1.45;
+
+    font-weight:400;
+}
+
+.dark-heading{
+    width:100%;
+
+    padding:15px 12px;
+
+    background:#303030;
+
+    color:#fff;
+
+    text-align:center;
+
+    font-size:20px;
+    font-weight:400;
+}
+
+.profile-row{
+    padding:16px 36px 3px;
+}
+
+.profile-label{
+    color:#666;
+
+    font-size:17px;
+    line-height:1.3;
+
+    font-weight:500;
+}
+
+.profile-value{
+    margin-top:4px;
+
+    color:#777;
+
+    font-size:17px;
+    line-height:1.55;
+
+    font-weight:400;
+
+    overflow-wrap:anywhere;
+}
+
+/* =====================================================
+   MESS
+===================================================== */
+
+.mess-topbar{
+    height:64px;
+
+    background:#303030;
+
+    color:#fff;
+
+    display:grid;
+
+    grid-template-columns:50px minmax(0,1fr) auto;
+
+    align-items:center;
+
+    gap:5px;
+
+    padding:0 10px;
+
+    position:sticky;
+
+    top:0;
+
+    z-index:60;
+}
+
+.mess-topbar-title{
+    text-align:center;
+
+    font-size:20px;
+    font-weight:400;
+
+    white-space:nowrap;
+}
+
+.mess-history-btn{
+    border:0;
+
+    background:transparent;
+
+    color:#fff;
+
+    font-size:17px;
+    font-weight:400;
+
+    white-space:nowrap;
+}
+
+.mess-card{
+    width:100%;
+
+    background:var(--gradient);
+
+    border-radius:0 0 10px 10px;
+
+    padding:35px 36px 28px;
+}
+
+.mess-photo{
+    width:min(225px,55vw);
+    height:min(225px,55vw);
+
+    display:block;
+
+    margin:0 auto;
+
+    object-fit:cover;
+
+    border-radius:18px;
+}
+
+.mess-name{
+    margin:7px 0 31px;
+
+    text-align:center;
+
+    color:#222;
+
+    font-size:22px;
+    font-weight:500;
+}
+
+.mess-info{
+    margin-bottom:17px;
+
+    color:#222;
+
+    font-size:16px;
+    line-height:1.45;
+
+    overflow-wrap:anywhere;
+}
+
+.mess-info strong{
+    display:block;
+
+    margin-bottom:2px;
+
+    font-weight:500;
+}
+
+.mess-content{
+    background:#fff;
+
+    padding-bottom:40px;
+}
+
+.mess-instruction{
+    padding:57px 20px 18px;
+
+    text-align:center;
+
+    color:#111;
+
+    font-size:26px;
+    line-height:1.4;
+
+    font-weight:300;
+}
+
+.rate-btn{
+    display:block;
+
+    margin:0 auto 27px;
+
+    padding:3px 16px;
+
+    border:3px solid #8d1717;
+
+    border-radius:18px;
+
+    background:#fff;
+
+    color:#222;
+
+    font-size:16px;
+    font-weight:400;
+}
+
+.meal-grid{
+    width:100%;
+    max-width:560px;
+
+    margin:0 auto;
+
+    padding:0 20px;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
+
+    gap:18px;
+}
+
+.meal-btn{
+    min-width:0;
+
+    min-height:76px;
+
+    border:0;
+
+    border-radius:9px;
+
+    background:var(--gradient);
+
+    color:#333;
+
+    font-size:18px;
+    font-weight:400;
+
+    box-shadow:0 4px 9px rgba(0,0,0,.14);
+}
+
+/* =====================================================
+   DATA PAGES
+===================================================== */
+
+.data-content{
+    padding:25px 24px 30px;
+}
+
+.data-card{
+    width:100%;
+
+    background:#fff;
+
+    border-radius:13px;
+
+    padding:21px;
+
+    margin-bottom:17px;
+
+    box-shadow:var(--shadow);
+}
+
+.data-card h3{
+    color:#222;
+
+    font-size:18px;
+    font-weight:500;
+}
+
+.data-card p{
+    margin-top:5px;
+
+    color:#777;
+
+    font-size:14px;
+
+    line-height:1.5;
+}
+
+.progress{
+    width:100%;
+
+    height:11px;
+
+    margin-top:12px;
+
+    background:#eee;
+
+    border-radius:20px;
+
+    overflow:hidden;
+}
+
+.progress-bar{
+    height:100%;
+
+    background:var(--gradient);
+
+    border-radius:20px;
+}
+
+.stat-grid{
+    width:100%;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
+
+    gap:14px;
+}
+
+.stat-box{
+    min-width:0;
+
+    padding:18px 10px;
+
+    border-radius:12px;
+
+    background:var(--gradient);
+
+    text-align:center;
+}
+
+.stat-box strong{
+    display:block;
+
+    color:#222;
+
+    font-size:28px;
+    font-weight:500;
+}
+
+.stat-box span{
+    color:#444;
+
+    font-size:12px;
+}
+
+.history-card{
+    background:#fff;
+
+    border-radius:12px;
+
+    box-shadow:var(--shadow);
+
+    overflow:hidden;
+}
+
+.history-item{
+    min-width:0;
+
+    display:flex;
+
+    justify-content:space-between;
+    align-items:center;
+
+    gap:15px;
+
+    padding:16px 18px;
+
+    border-bottom:1px solid #eee;
+}
+
+.history-item:last-child{
+    border-bottom:0;
+}
+
+.history-item strong{
+    color:#333;
+
+    font-size:15px;
+    font-weight:500;
+}
+
+.history-item div{
+    font-size:13px;
+}
+
+.success{
+    flex:0 0 auto;
+
+    color:#4a985e;
+
+    font-size:13px;
+}
+
+/* =====================================================
+   MODALS
+===================================================== */
+
+.modal{
+    position:fixed;
+
+    inset:0;
+
+    z-index:200;
+
+    background:rgba(0,0,0,.48);
+
+    display:none;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:20px;
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-box{
+    width:min(450px,100%);
+
+    max-height:90vh;
+
+    overflow-y:auto;
+
+    background:#fff;
+
+    border-radius:17px;
+
+    padding:23px;
+
+    box-shadow:0 10px 35px rgba(0,0,0,.3);
+}
+
+.modal-title{
+    margin-bottom:15px;
+
+    color:#222;
+
+    font-size:21px;
+    font-weight:400;
+}
+
+.modal-actions{
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
+
+    gap:10px;
+
+    margin-top:18px;
+}
+
+.primary-btn,
+.secondary-btn{
+    min-height:49px;
+
+    border-radius:10px;
+
+    font-size:15px;
+    font-weight:400;
 }
 
 .primary-btn{
-  border:0;
-  background:var(--gradient);
-  color:#222;
-  border-radius:12px;
-  min-height:52px;
-  padding:0 25px;
-  font-size:17px;
-  font-weight:500;
-  box-shadow:0 5px 10px rgba(0,0,0,.16);
+    border:0;
+
+    background:var(--gradient);
+
+    color:#222;
+
+    box-shadow:0 4px 8px rgba(0,0,0,.13);
 }
 
-.primary-btn:active{
-  transform:scale(.98);
+.secondary-btn{
+    border:1px solid #ddd;
+
+    background:#fff;
+
+    color:#555;
 }
 
-.back-btn{
-  border:0;
-  background:transparent;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  width:45px;
-  height:45px;
+.scanner{
+    width:min(255px,70vw);
+    height:min(255px,70vw);
+
+    margin:20px auto;
+
+    border:4px solid var(--coral);
+
+    position:relative;
+
+    background:#fff;
 }
 
-.empty{
-  text-align:center;
-  color:#888;
-  padding:50px 20px;
+.scanner::before,
+.scanner::after{
+    content:"";
+
+    position:absolute;
+
+    width:42px;
+    height:42px;
+
+    border-color:#222;
 }
 
-/* =========================
+.scanner::before{
+    left:-4px;
+    top:-4px;
+
+    border-left:5px solid;
+    border-top:5px solid;
+}
+
+.scanner::after{
+    right:-4px;
+    bottom:-4px;
+
+    border-right:5px solid;
+    border-bottom:5px solid;
+}
+
+.qr-pattern{
+    width:185px;
+    height:185px;
+
+    margin:33px auto;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(15,minmax(0,1fr));
+
+    background:#fff;
+}
+
+.qr-cell{
+    border:.5px solid #222;
+}
+
+/* =====================================================
    SETUP
-========================= */
+===================================================== */
 
 .setup-page{
-  min-height:100vh;
-  background:#fafafa;
-  padding:30px 16px 50px;
+    min-height:100vh;
+
+    padding:30px 16px 45px;
+
+    background:#fafafa;
 }
 
 .setup-container{
-  width:min(720px,100%);
-  margin:auto;
+    width:min(700px,100%);
+
+    margin:auto;
 }
 
 .setup-brand{
-  text-align:center;
-  margin-bottom:25px;
+    text-align:center;
+
+    margin-bottom:24px;
 }
 
 .setup-brand h1{
-  margin:0;
-  font-size:34px;
-  font-weight:600;
-  color:#222;
+    color:#222;
+
+    font-size:30px;
+    font-weight:500;
 }
 
 .setup-brand p{
-  margin:5px 0 0;
-  color:#777;
+    margin-top:5px;
+
+    color:#777;
+
+    font-size:13px;
 }
 
 .setup-card{
-  background:#fff;
-  border-radius:20px;
-  box-shadow:var(--shadow);
-  overflow:hidden;
+    width:100%;
+
+    background:#fff;
+
+    border-radius:18px;
+
+    box-shadow:var(--shadow);
+
+    overflow:hidden;
 }
 
 .setup-header{
-  padding:30px 24px;
-  text-align:center;
-  background:var(--gradient);
+    padding:28px 20px;
+
+    text-align:center;
+
+    background:var(--gradient);
 }
 
 .setup-header h2{
-  margin:0;
-  font-size:25px;
-  color:#222;
+    color:#222;
+
+    font-size:23px;
+    font-weight:500;
 }
 
 .setup-header p{
-  margin:6px 0 0;
-  color:#444;
+    margin-top:4px;
+
+    color:#444;
+
+    font-size:13px;
 }
 
 .setup-body{
-  padding:25px;
+    padding:22px;
 }
 
 .photo-picker{
-  text-align:center;
-  margin-bottom:25px;
+    text-align:center;
+
+    margin-bottom:23px;
+}
+
+.photo-preview,
+.photo-placeholder{
+    width:120px;
+    height:120px;
+
+    margin:auto;
+
+    border-radius:50%;
 }
 
 .photo-preview{
-  width:125px;
-  height:125px;
-  border-radius:50%;
-  object-fit:cover;
-  background:#eee;
-  border:5px solid #fff;
-  box-shadow:0 3px 12px rgba(0,0,0,.2);
+    object-fit:cover;
+
+    border:4px solid #fff;
+
+    box-shadow:0 3px 12px rgba(0,0,0,.18);
 }
 
 .photo-placeholder{
-  width:125px;
-  height:125px;
-  border-radius:50%;
-  background:#eee;
-  margin:auto;
-  display:grid;
-  place-items:center;
-  color:#999;
-  font-size:13px;
-  border:4px solid white;
-  box-shadow:0 3px 12px rgba(0,0,0,.15);
+    display:grid;
+    place-items:center;
+
+    background:#eee;
+
+    color:#999;
+
+    font-size:12px;
 }
 
 .photo-btn{
-  margin-top:12px;
-  border:0;
-  background:var(--gradient);
-  padding:10px 18px;
-  border-radius:9px;
-  font-size:14px;
+    margin-top:11px;
+
+    border:0;
+
+    padding:9px 16px;
+
+    border-radius:9px;
+
+    background:var(--gradient);
+
+    color:#222;
+
+    font-size:13px;
 }
 
 .form-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
+    width:100%;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
+
+    gap:14px;
 }
 
 .form-group{
-  display:flex;
-  flex-direction:column;
-  gap:7px;
+    min-width:0;
+
+    display:flex;
+    flex-direction:column;
+
+    gap:6px;
 }
 
 .form-group.full{
-  grid-column:1/-1;
+    grid-column:1/-1;
 }
 
 .form-group label{
-  font-size:14px;
-  font-weight:500;
-  color:#555;
+    color:#555;
+
+    font-size:13px;
+
+    font-weight:400;
 }
 
 .form-group input,
 .form-group textarea,
 .form-group select{
-  width:100%;
-  border:1px solid #ddd;
-  background:#fafafa;
-  border-radius:10px;
-  padding:13px 14px;
-  font-size:15px;
-  outline:none;
-  color:#444;
+    width:100%;
+
+    min-width:0;
+
+    border:1px solid #ddd;
+
+    border-radius:9px;
+
+    background:#fafafa;
+
+    padding:11px 12px;
+
+    color:#444;
+
+    font-size:14px;
+
+    font-weight:400;
 }
 
 .form-group textarea{
-  min-height:85px;
-  resize:vertical;
-}
+    min-height:80px;
 
-.form-group input:focus,
-.form-group textarea:focus,
-.form-group select:focus{
-  border-color:var(--coral);
-  background:white;
+    resize:vertical;
 }
 
 .setup-submit{
-  width:100%;
-  margin-top:24px;
-}
-
-/* =========================
-   TIMETABLE
-========================= */
-
-.timetable-section{
-  margin-bottom:35px;
-}
-
-.timetable-scroll{
-  display:flex;
-  gap:18px;
-  overflow-x:auto;
-  padding:5px 4px 15px;
-  scrollbar-width:none;
-}
-
-.timetable-scroll::-webkit-scrollbar{
-  display:none;
-}
-
-.timetable-card{
-  min-width:310px;
-  height:236px;
-  border-radius:12px;
-  overflow:hidden;
-  background:var(--gradient);
-  box-shadow:var(--shadow);
-  position:relative;
-  flex-shrink:0;
-  padding:26px;
-}
-
-.timetable-card:after{
-  content:"";
-  position:absolute;
-  right:-25px;
-  bottom:45px;
-  width:150px;
-  height:100px;
-  border:4px solid rgba(255,255,255,.2);
-  border-radius:50%;
-  transform:rotate(-20deg);
-}
-
-.course-code{
-  font-size:27px;
-  font-weight:600;
-  color:#222;
-}
-
-.room{
-  font-size:16px;
-  margin-top:5px;
-  color:#333;
-}
-
-.status-pill{
-  display:inline-flex;
-  align-items:center;
-  gap:7px;
-  background:#ffcf78;
-  border-radius:20px;
-  padding:7px 13px;
-  margin-top:18px;
-  color:#333;
-  font-size:14px;
-}
-
-.status-dot{
-  width:8px;
-  height:8px;
-  border-radius:50%;
-  background:#ef7e24;
-}
-
-.time-strip{
-  position:absolute;
-  left:0;
-  right:0;
-  bottom:0;
-  height:49px;
-  background:#303030;
-  color:white;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:19px;
-  font-weight:500;
-}
-
-/* =========================
-   DASHBOARD TILES
-========================= */
-
-.tiles-heading{
-  margin-bottom:18px;
-}
-
-.tiles-heading h2{
-  font-size:26px;
-  margin:0;
-  color:#111;
-  font-weight:400;
-}
-
-.tiles-heading p{
-  margin:6px 0 0;
-  font-size:15px;
-  color:#222;
-}
-
-.tile-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:22px;
-}
-
-.tile{
-  min-height:250px;
-  background:var(--cream);
-  border:1px solid #e7e0d1;
-  border-radius:14px;
-  box-shadow:0 3px 8px rgba(0,0,0,.09);
-  position:relative;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  padding:28px 10px 14px;
-}
-
-.tile-icon{
-  width:82px;
-  height:82px;
-  margin-bottom:18px;
-  color:#303030;
-}
-
-.tile-icon svg{
-  width:100%;
-  height:100%;
-  stroke:currentColor;
-  fill:none;
-  stroke-width:1.8;
-  stroke-linecap:round;
-  stroke-linejoin:round;
-}
-
-.tile-label{
-  background:#ffbd7b;
-  border-radius:9px;
-  color:#222;
-  font-size:17px;
-  padding:8px 14px;
-  text-align:center;
-  min-width:80%;
-  line-height:1.3;
-}
-
-.tile-badge{
-  position:absolute;
-  right:-1px;
-  top:-16px;
-  min-width:45px;
-  height:45px;
-  padding:0 9px;
-  border-radius:10px;
-  background:var(--gradient);
-  display:grid;
-  place-items:center;
-  font-size:15px;
-  color:#222;
-  font-weight:500;
-}
-
-.tile-remove{
-  position:absolute;
-  right:-1px;
-  top:-16px;
-  min-width:45px;
-  height:45px;
-  border:0;
-  border-radius:10px;
-  background:var(--gradient);
-  font-size:20px;
-  color:#222;
-}
-
-.add-tiles{
-  margin:20px 0;
-}
-
-.add-tile-menu{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  margin-top:12px;
-}
-
-.add-chip{
-  border:1px solid #ddd;
-  background:white;
-  border-radius:20px;
-  padding:8px 14px;
-}
-
-/* =========================
-   BOTTOM NAV
-========================= */
-
-.bottom-nav{
-  position:fixed;
-  left:0;
-  right:0;
-  bottom:0;
-  height:78px;
-  background:#fff;
-  border-top:1px solid #eee;
-  box-shadow:0 -2px 8px rgba(0,0,0,.08);
-  display:flex;
-  justify-content:space-around;
-  align-items:center;
-  z-index:80;
-  padding-bottom:env(safe-area-inset-bottom);
-}
-
-.nav-item{
-  flex:1;
-  height:100%;
-  border:0;
-  background:transparent;
-  color:#777;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:3px;
-  font-size:12px;
-}
-
-.nav-item .icon{
-  width:28px;
-  height:28px;
-}
-
-.nav-item.active{
-  color:#df9849;
-}
-
-/* =========================
-   DRAWER
-========================= */
-
-.overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.35);
-  z-index:100;
-  opacity:0;
-  pointer-events:none;
-  transition:.25s;
-}
-
-.overlay.open{
-  opacity:1;
-  pointer-events:auto;
-}
-
-.drawer{
-  position:fixed;
-  left:0;
-  top:0;
-  bottom:0;
-  width:min(540px,82vw);
-  background:#fff;
-  z-index:110;
-  transform:translateX(-105%);
-  transition:.3s ease;
-  box-shadow:5px 0 20px rgba(0,0,0,.2);
-  overflow-y:auto;
-}
-
-.drawer.open{
-  transform:translateX(0);
-}
-
-.drawer-profile{
-  background:var(--gradient);
-  padding:38px 22px 30px;
-  text-align:center;
-}
-
-.drawer-photo{
-  width:142px;
-  height:142px;
-  border-radius:50%;
-  object-fit:cover;
-  border:4px solid white;
-  box-shadow:0 4px 15px rgba(0,0,0,.2);
-}
-
-.drawer-profile h2{
-  margin:12px 0 2px;
-  color:#111;
-  font-size:27px;
-  font-weight:500;
-}
-
-.drawer-profile .reg{
-  font-size:21px;
-  color:#222;
-}
-
-.drawer-profile .program{
-  margin-top:8px;
-  font-size:17px;
-  line-height:1.5;
-  color:#222;
-}
-
-.drawer-search{
-  padding:18px 22px 10px;
-}
-
-.search-box{
-  height:55px;
-  background:#eee;
-  border-radius:16px;
-  display:flex;
-  align-items:center;
-  padding:0 14px;
-  gap:10px;
-}
+    width:100%;
 
-.search-box input{
-  border:0;
-  outline:0;
-  background:transparent;
-  flex:1;
-  font-size:19px;
+    margin-top:22px;
 }
 
-.drawer-list{
-  padding-bottom:30px;
-}
-
-.drawer-item{
-  width:100%;
-  border:0;
-  border-bottom:1px solid #eee;
-  background:#fff;
-  min-height:70px;
-  display:flex;
-  align-items:center;
-  gap:25px;
-  padding:12px 20px;
-  text-align:left;
-  color:#666;
-  font-size:17px;
-}
-
-.drawer-item .icon{
-  width:28px;
-  height:28px;
-  color:#555;
-}
-
-.drawer-item:hover{
-  background:#fafafa;
-}
-
-.drawer-logout{
-  margin:12px 14px 24px;
-  width:calc(100% - 28px);
-  height:58px;
-  border:0;
-  background:var(--gradient);
-  border-radius:30px;
-  font-size:19px;
-  box-shadow:0 4px 10px rgba(0,0,0,.15);
-}
-
-/* =========================
-   PROFILE
-========================= */
-
-.dark-heading{
-  background:#303030;
-  color:white;
-  text-align:center;
-  padding:17px 15px;
-  font-size:22px;
-  font-weight:500;
-}
-
-.profile-card{
-  background:white;
-  box-shadow:var(--shadow);
-  overflow:hidden;
-}
-
-.profile-hero{
-  background:var(--gradient);
-  text-align:center;
-  padding:38px 20px;
-}
-
-.profile-photo{
-  width:225px;
-  height:225px;
-  object-fit:cover;
-  border-radius:18px;
-  background:#fff;
-}
-
-.profile-name{
-  font-size:25px;
-  color:#222;
-  margin:8px 0 4px;
-  font-weight:500;
-}
-
-.profile-program{
-  font-size:18px;
-  color:#222;
-}
-
-.profile-section{
-  background:white;
-}
-
-.profile-row{
-  padding:18px 36px 4px;
-}
-
-.profile-label{
-  font-size:18px;
-  font-weight:500;
-  color:#666;
-}
-
-.profile-value{
-  font-size:18px;
-  color:#777;
-  line-height:1.55;
-  margin-bottom:12px;
-}
-
-.qr-top{
-  width:90px;
-  height:68px;
-  background:#ff7d1b;
-  border:0;
-  border-radius:8px;
-  color:white;
-  font-size:22px;
-}
-
-/* =========================
-   MESS
-========================= */
-
-.mess-card{
-  background:var(--gradient);
-  padding:35px 36px;
-  border-radius:0 0 10px 10px;
-}
-
-.mess-photo{
-  width:225px;
-  height:225px;
-  object-fit:cover;
-  border-radius:18px;
-  display:block;
-  margin:auto;
-}
-
-.mess-name{
-  text-align:center;
-  font-size:25px;
-  margin:8px 0 35px;
-  color:#222;
-  font-weight:500;
-}
-
-.mess-info{
-  font-size:17px;
-  line-height:1.5;
-  color:#222;
-  margin-bottom:18px;
-}
+/* =====================================================
+   RESPONSIVE 430
+===================================================== */
 
-.mess-info strong{
-  display:block;
-  font-weight:600;
-}
-
-.mess-instruction{
-  text-align:center;
-  font-size:29px;
-  color:#111;
-  line-height:1.4;
-  padding:60px 20px 20px;
-}
-
-.rate-btn{
-  display:block;
-  margin:0 auto 28px;
-  border:3px solid #8d1515;
-  border-radius:20px;
-  background:white;
-  font-size:17px;
-  padding:3px 18px;
-}
-
-.meal-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:22px;
-  max-width:550px;
-  margin:0 auto 45px;
-  padding:0 20px;
-}
-
-.meal-btn{
-  border:0;
-  background:var(--gradient);
-  border-radius:9px;
-  min-height:85px;
-  font-size:21px;
-  color:#333;
-  box-shadow:0 5px 10px rgba(0,0,0,.15);
-}
-
-/* =========================
-   DATA PAGES
-========================= */
-
-.data-card{
-  background:white;
-  border-radius:15px;
-  padding:25px;
-  box-shadow:var(--shadow);
-  margin-bottom:20px;
-}
-
-.data-card h3{
-  margin:0 0 8px;
-  font-size:20px;
-  color:#222;
-}
-
-.data-card p{
-  margin:4px 0;
-  color:#666;
-}
+@media(max-width:430px){
 
-.progress{
-  height:14px;
-  background:#eee;
-  border-radius:20px;
-  overflow:hidden;
-  margin:10px 0 20px;
-}
-
-.progress-bar{
-  height:100%;
-  background:var(--gradient);
-  border-radius:20px;
-}
+    .page-content{
+        padding-left:22px;
+        padding-right:22px;
+    }
 
-.stat-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:18px;
-}
+    .section-title{
+        font-size:24px;
+    }
 
-.stat-box{
-  padding:20px;
-  border-radius:12px;
-  background:var(--gradient);
-  text-align:center;
-}
+    .tiles-heading h2{
+        font-size:23px;
+    }
 
-.stat-box strong{
-  display:block;
-  font-size:30px;
-}
+    .tile-grid{
+        gap:16px 11px;
+    }
 
-.stat-box span{
-  font-size:14px;
-}
+    .tile{
+        min-height:205px;
 
-.history-item{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:17px;
-  border-bottom:1px solid #eee;
-}
+        padding-left:6px;
+        padding-right:6px;
+    }
 
-.history-item:last-child{
-  border-bottom:0;
-}
+    .tile-icon{
+        width:54px;
+        height:54px;
 
-.success{
-  color:#2f9a54;
-  font-weight:600;
-}
+        margin-bottom:14px;
+    }
 
-/* =========================
-   MODALS
-========================= */
-
-.modal{
-  position:fixed;
-  inset:0;
-  z-index:200;
-  background:rgba(0,0,0,.55);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-}
+    .tile-label{
+        font-size:11px;
+        padding:7px 3px;
+    }
 
-.modal.show{
-  display:flex;
-}
+    .tile-badge,
+    .tile-remove{
+        min-width:37px;
+        height:37px;
 
-.modal-box{
-  width:min(480px,100%);
-  background:white;
-  border-radius:18px;
-  padding:25px;
-  box-shadow:0 10px 35px rgba(0,0,0,.3);
-}
+        top:-14px;
 
-.modal-title{
-  font-size:23px;
-  font-weight:500;
-  margin:0 0 18px;
-  color:#222;
-}
+        font-size:11px;
+    }
 
-.modal-actions{
-  display:flex;
-  gap:12px;
-  margin-top:20px;
-}
+    .drawer{
+        width:80vw;
+    }
 
-.modal-actions button{
-  flex:1;
-}
+    .drawer-profile{
+        min-height:320px;
+    }
 
-.secondary-btn{
-  border:1px solid #ddd;
-  background:white;
-  border-radius:10px;
-  min-height:50px;
-  font-size:15px;
-}
+    .drawer-photo{
+        width:123px;
+        height:123px;
+    }
 
-.scanner{
-  width:260px;
-  height:260px;
-  border:4px solid var(--coral);
-  margin:20px auto;
-  position:relative;
-  background:
-    linear-gradient(90deg,transparent 48%,rgba(255,127,115,.15) 50%,transparent 52%),
-    linear-gradient(0deg,transparent 48%,rgba(255,127,115,.15) 50%,transparent 52%);
-}
+    .drawer-profile h2{
+        font-size:23px;
+    }
 
-.scanner:before,
-.scanner:after{
-  content:"";
-  position:absolute;
-  width:45px;
-  height:45px;
-  border-color:#222;
-}
+    .drawer-profile .reg{
+        font-size:17px;
+    }
 
-.scanner:before{
-  left:-4px;
-  top:-4px;
-  border-left:5px solid;
-  border-top:5px solid;
-}
+    .drawer-profile .program{
+        font-size:14px;
+    }
 
-.scanner:after{
-  right:-4px;
-  bottom:-4px;
-  border-right:5px solid;
-  border-bottom:5px solid;
-}
+    .drawer-item{
+        min-height:67px;
 
-.qr-pattern{
-  width:190px;
-  height:190px;
-  margin:30px auto;
-  display:grid;
-  grid-template-columns:repeat(15,1fr);
-  background:white;
-}
+        gap:19px;
 
-.qr-cell{
-  border:1px solid #222;
-}
+        padding-left:18px;
+        padding-right:13px;
 
-/* =========================
-   DESKTOP
-========================= */
-
-@media(min-width:900px){
-  .page-content{
-    padding:30px 40px;
-  }
-
-  .bottom-nav{
-    left:50%;
-    right:auto;
-    transform:translateX(-50%);
-    width:min(700px,100%);
-    border-radius:18px 18px 0 0;
-  }
-
-  .drawer{
-    width:420px;
-  }
-}
+        font-size:14px;
+    }
 
-/* =========================
-   MOBILE
-========================= */
-
-@media(max-width:700px){
-
-  .topbar{
-    height:64px;
-    padding:0 17px;
-  }
-
-  .topbar-title{
-    font-size:24px;
-  }
-
-  .page-content{
-    padding:24px 28px 35px;
-  }
-
-  .section-title{
-    font-size:26px;
-  }
-
-  .tile-grid{
-    grid-template-columns:repeat(3,1fr);
-    gap:17px;
-  }
-
-  .tile{
-    min-height:210px;
-    padding:22px 6px 12px;
-  }
-
-  .tile-icon{
-    width:65px;
-    height:65px;
-  }
-
-  .tile-label{
-    font-size:15px;
-    min-width:92%;
-  }
-
-  .timetable-card{
-    min-width:380px;
-  }
-
-  .profile-row{
-    padding-left:36px;
-    padding-right:36px;
-  }
-
-  .mess-card{
-    padding:30px 36px;
-  }
-
-  .mess-photo{
-    width:225px;
-    height:225px;
-  }
-
-  .mess-instruction{
-    font-size:26px;
-  }
-
-  .form-grid{
-    grid-template-columns:1fr;
-  }
-
-  .form-group.full{
-    grid-column:auto;
-  }
-}
+    .profile-wrapper{
+        padding-left:22px;
+        padding-right:22px;
+    }
 
-@media(max-width:380px){
-
-  .page-content{
-    padding-left:18px;
-    padding-right:18px;
-  }
-
-  .tile-grid{
-    gap:12px;
-  }
-
-  .tile{
-    min-height:190px;
-  }
-
-  .tile-icon{
-    width:55px;
-    height:55px;
-  }
-
-  .tile-label{
-    font-size:13px;
-  }
-
-  .timetable-card{
-    min-width:310px;
-  }
-
-  .profile-row{
-    padding-left:25px;
-    padding-right:25px;
-  }
-
-  .profile-photo,
-  .mess-photo{
-    width:190px;
-    height:190px;
-  }
+    .profile-row{
+        padding-left:28px;
+        padding-right:28px;
+    }
+
+    .profile-label,
+    .profile-value{
+        font-size:16px;
+    }
+
+    .mess-card{
+        padding-left:28px;
+        padding-right:28px;
+    }
+
+    .mess-instruction{
+        font-size:24px;
+    }
+
+    .meal-grid{
+        gap:16px;
+        padding-left:17px;
+        padding-right:17px;
+    }
+
+    .meal-btn{
+        min-height:70px;
+        font-size:16px;
+    }
+}
+
+/* =====================================================
+   RESPONSIVE 390
+===================================================== */
+
+@media(max-width:390px){
+
+    .page-content{
+        padding-left:18px;
+        padding-right:18px;
+    }
+
+    .tile-grid{
+        gap:14px 9px;
+    }
+
+    .tile{
+        min-height:190px;
+    }
+
+    .tile-icon{
+        width:49px;
+        height:49px;
+        margin-bottom:12px;
+    }
+
+    .tile-label{
+        font-size:10.5px;
+    }
+
+    .tile-badge,
+    .tile-remove{
+        min-width:35px;
+        height:35px;
+    }
+
+    .timetable-card{
+        flex-basis:305px;
+    }
+
+    .profile-wrapper{
+        padding-left:18px;
+        padding-right:18px;
+    }
+
+    .profile-row{
+        padding-left:24px;
+        padding-right:24px;
+    }
+
+    .mess-card{
+        padding-left:24px;
+        padding-right:24px;
+    }
+
+    .mess-instruction{
+        font-size:22px;
+    }
+}
+
+/* =====================================================
+   RESPONSIVE 360
+===================================================== */
+
+@media(max-width:360px){
+
+    .topbar{
+        grid-template-columns:45px minmax(0,1fr) 45px;
+        padding:0 5px;
+    }
+
+    .topbar-title{
+        font-size:21px;
+    }
+
+    .page-content{
+        padding-left:15px;
+        padding-right:15px;
+    }
+
+    .tile-grid{
+        gap:13px 7px;
+    }
+
+    .tile{
+        min-height:175px;
+    }
+
+    .tile-icon{
+        width:43px;
+        height:43px;
+        margin-bottom:10px;
+    }
+
+    .tile-label{
+        font-size:9.5px;
+        padding:6px 2px;
+    }
+
+    .tile-badge,
+    .tile-remove{
+        min-width:32px;
+        height:32px;
+        top:-12px;
+        font-size:10px;
+    }
+
+    .drawer{
+        width:82vw;
+    }
+
+    .drawer-profile{
+        min-height:305px;
+    }
+
+    .drawer-photo{
+        width:112px;
+        height:112px;
+    }
+
+    .drawer-profile h2{
+        font-size:21px;
+    }
+
+    .drawer-profile .reg{
+        font-size:16px;
+    }
+
+    .drawer-profile .program{
+        font-size:13px;
+    }
+
+    .drawer-item{
+        min-height:62px;
+        font-size:13px;
+    }
+
+    .mess-card{
+        padding-left:20px;
+        padding-right:20px;
+    }
+
+    .mess-info{
+        font-size:14px;
+    }
+
+    .meal-grid{
+        gap:12px;
+        padding:0 10px;
+    }
+
+    .meal-btn{
+        min-height:65px;
+        font-size:14px;
+    }
+}
+
+/* =====================================================
+   LANDSCAPE / SMALL HEIGHT
+===================================================== */
+
+@media(max-height:600px){
+
+    .drawer-profile{
+        min-height:270px;
+        padding-top:22px;
+    }
+
+    .drawer-photo{
+        width:95px;
+        height:95px;
+    }
+
+    .drawer-profile h2{
+        margin-top:7px;
+    }
+
+    .drawer-item{
+        min-height:55px;
+    }
 }
 </style>
 </head>
@@ -1183,21 +1965,17 @@ button{
 
 <div id="app"></div>
 
-<!-- =========================
-     MODALS
-========================= -->
-
 <div class="modal" id="modal">
-  <div class="modal-box" id="modalContent"></div>
+    <div class="modal-box" id="modalContent"></div>
 </div>
 
 <script>
 
 /* =====================================================
-   ICONS
+   SVG ICONS
 ===================================================== */
 
-const icons = {
+const I={
 
 menu:`<svg class="icon" viewBox="0 0 24 24">
 <path d="M4 6h16M4 12h16M4 18h16"/>
@@ -1213,46 +1991,9 @@ search:`<svg class="icon" viewBox="0 0 24 24">
 <path d="m20 20-4-4"/>
 </svg>`,
 
-user:`<svg class="icon" viewBox="0 0 24 24">
-<circle cx="12" cy="8" r="4"/>
-<path d="M4 21c1-5 4-7 8-7s7 2 8 7"/>
-</svg>`,
-
-calendar:`<svg class="icon" viewBox="0 0 24 24">
-<rect x="3" y="4" width="18" height="17" rx="2"/>
-<path d="M16 2v4M8 2v4M3 10h18"/>
-</svg>`,
-
 check:`<svg class="icon" viewBox="0 0 24 24">
 <circle cx="12" cy="12" r="9"/>
 <path d="m8 12 3 3 5-6"/>
-</svg>`,
-
-book:`<svg class="icon" viewBox="0 0 24 24">
-<path d="M4 5a3 3 0 0 1 3-3h13v17H7a3 3 0 0 0-3 3z"/>
-<path d="M4 5v17M7 19h13"/>
-</svg>`,
-
-exam:`<svg class="icon" viewBox="0 0 24 24">
-<path d="M6 3h12v18H6z"/>
-<path d="M9 7h6M9 11h6M9 15h4"/>
-<path d="m16 2 1 2"/>
-</svg>`,
-
-chart:`<svg class="icon" viewBox="0 0 24 24">
-<path d="M4 19V5M4 19h17"/>
-<path d="m8 15 3-4 3 2 5-7"/>
-</svg>`,
-
-hostel:`<svg class="icon" viewBox="0 0 24 24">
-<path d="M4 20V8l8-5 8 5v12"/>
-<path d="M8 20v-6h8v6"/>
-<path d="M9 9h2M13 9h2"/>
-</svg>`,
-
-qr:`<svg class="icon" viewBox="0 0 24 24">
-<path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4z"/>
-<path d="M14 14h3v3h-3zM18 18h2M14 20h3"/>
 </svg>`,
 
 document:`<svg class="icon" viewBox="0 0 24 24">
@@ -1260,22 +2001,29 @@ document:`<svg class="icon" viewBox="0 0 24 24">
 <path d="M14 2v5h5M9 12h6M9 16h6"/>
 </svg>`,
 
-logout:`<svg class="icon" viewBox="0 0 24 24">
-<path d="M10 17l5-5-5-5"/>
-<path d="M15 12H3"/>
-<path d="M21 19V5a2 2 0 0 0-2-2h-5"/>
+book:`<svg class="icon" viewBox="0 0 24 24">
+<path d="M4 5a3 3 0 0 1 3-3h13v17H7a3 3 0 0 0-3 3z"/>
+<path d="M4 5v17M7 19h13"/>
 </svg>`,
 
-arrow:`<svg class="icon" viewBox="0 0 24 24">
-<path d="M5 12h14M13 6l6 6-6 6"/>
+chart:`<svg class="icon" viewBox="0 0 24 24">
+<path d="M4 19V5M4 19h17"/>
+<path d="m8 15 3-4 3 2 5-7"/>
 </svg>`,
 
-back:`<svg class="icon" viewBox="0 0 24 24">
-<path d="m15 18-6-6 6-6"/>
+calendar:`<svg class="icon" viewBox="0 0 24 24">
+<rect x="3" y="4" width="18" height="17" rx="2"/>
+<path d="M16 2v4M8 2v4M3 10h18"/>
 </svg>`,
 
-close:`<svg class="icon" viewBox="0 0 24 24">
-<path d="M6 6l12 12M18 6 6 18"/>
+qr:`<svg class="icon" viewBox="0 0 24 24">
+<path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4z"/>
+<path d="M14 14h3v3h-3zM18 18h2M14 20h3"/>
+</svg>`,
+
+hostel:`<svg class="icon" viewBox="0 0 24 24">
+<path d="M4 20V8l8-5 8 5v12"/>
+<path d="M8 20v-6h8v6M9 9h2M13 9h2"/>
 </svg>`,
 
 doctor:`<svg class="icon" viewBox="0 0 24 24">
@@ -1288,6 +2036,19 @@ truck:`<svg class="icon" viewBox="0 0 24 24">
 <path d="M3 6h11v11H3zM14 10h4l3 3v4h-7"/>
 <circle cx="7" cy="19" r="2"/>
 <circle cx="18" cy="19" r="2"/>
+</svg>`,
+
+logout:`<svg class="icon" viewBox="0 0 24 24">
+<path d="M10 17l5-5-5-5M15 12H3"/>
+<path d="M21 19V5a2 2 0 0 0-2-2h-5"/>
+</svg>`,
+
+back:`<svg class="icon" viewBox="0 0 24 24">
+<path d="m15 18-6-6 6-6"/>
+</svg>`,
+
+close:`<svg class="icon" viewBox="0 0 24 24">
+<path d="M6 6l12 12M18 6 6 18"/>
 </svg>`
 };
 
@@ -1296,38 +2057,38 @@ truck:`<svg class="icon" viewBox="0 0 24 24">
    DATA
 ===================================================== */
 
-const defaultTiles = [
- {id:"announce",name:"Announce",icon:"document",badge:"0"},
- {id:"edu",name:"Edu Revolution",icon:"book",badge:"0"},
- {id:"fee",name:"Fee Statement",icon:"document",badge:""},
- {id:"attendance",name:"Attendance",icon:"check",badge:"100 %"},
- {id:"assignment",name:"Assignment",icon:"document",badge:"0"},
- {id:"results",name:"Results",icon:"chart",badge:"8.69"},
- {id:"exams",name:"Exams",icon:"exam",badge:"0"},
- {id:"rms",name:"RMS Status",icon:"calendar",badge:""},
- {id:"events",name:"Events",icon:"calendar",badge:""},
- {id:"marks",name:"View Marks",icon:"qr",remove:true},
- {id:"leave",name:"Hostel Leave Slip",icon:"qr",remove:true},
- {id:"makeup",name:"Make Up Adjustment",icon:"qr",remove:true},
- {id:"mess",name:"Mess Food Scanner",icon:"qr",remove:true},
- {id:"laundry",name:"Laundry",icon:"qr",remove:true},
- {id:"report",name:"Report Card",icon:"qr",remove:true},
- {id:"timetable",name:"Time table",icon:"qr",remove:true},
- {id:"entry",name:"Entry Exit Logs",icon:"qr",remove:true}
+const DEFAULT_TILES=[
+    ["announce","Announce","document","0"],
+    ["edu","Edu Revolution","book","0"],
+    ["fee","Fee Statement","document",""],
+    ["attendance","Attendance","check","100 %"],
+    ["assignment","Assignment","document","0"],
+    ["results","Results","chart","8.69"],
+    ["exams","Exams","document","0"],
+    ["rms","RMS Status","calendar",""],
+    ["events","Events","calendar",""],
+    ["marks","View Marks","qr","X"],
+    ["leave","Hostel Leave Slip","qr","X"],
+    ["makeup","Make Up Adjustment","qr","X"],
+    ["mess","Mess Food Scanner","qr","X"],
+    ["laundry","Laundry","qr","X"],
+    ["report","Report Card","qr","X"],
+    ["timetable","Time table","qr","X"],
+    ["entry","Entry Exit Logs","qr","X"]
 ];
 
-const timetable = [
- {code:"CSE330",room:"36-804",time:"09:30-10:20 AM"},
- {code:"CSE330",room:"36-804",time:"10:20-11:10 AM"},
- {code:"MAT301",room:"36-802",time:"11:10-12:00 PM"},
- {code:"CSE302",room:"36-805",time:"12:00-12:50 PM"}
+const CLASSES=[
+    ["CSE330","36-804","09:30–10:20 AM"],
+    ["CSE330","36-804","10:20–11:10 AM"],
+    ["MAT301","36-802","11:10–12:00 PM"],
+    ["CSE302","36-805","12:00–12:50 PM"]
 ];
 
-const attendanceData = [
- {subject:"CSE330",value:92},
- {subject:"MAT301",value:85},
- {subject:"CSE302",value:88},
- {subject:"CSE304",value:86}
+const ATT=[
+    ["CSE330",92],
+    ["MAT301",85],
+    ["CSE302",88],
+    ["CSE304",86]
 ];
 
 
@@ -1335,66 +2096,76 @@ const attendanceData = [
    STATE
 ===================================================== */
 
-let profile = JSON.parse(localStorage.getItem("studentProfile") || "null");
-
-let tiles = JSON.parse(
-  localStorage.getItem("dashboardTiles") ||
-  JSON.stringify(defaultTiles.map(x=>x.id))
+let profile=JSON.parse(
+    localStorage.getItem("studentProfile")||"null"
 );
 
-let mealHistory = JSON.parse(
-  localStorage.getItem("mealHistory") || "[]"
+let visibleTiles=JSON.parse(
+    localStorage.getItem("visibleTiles")||
+    JSON.stringify(DEFAULT_TILES.map(x=>x[0]))
 );
 
-let currentPage = "dashboard";
+let history=JSON.parse(
+    localStorage.getItem("mealHistory")||"[]"
+);
+
+let currentPage="dashboard";
 
 
 /* =====================================================
    HELPERS
 ===================================================== */
 
+function esc(v){
+    return String(v??"")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;");
+}
+
 function saveProfile(){
-  localStorage.setItem("studentProfile",JSON.stringify(profile));
+    localStorage.setItem(
+        "studentProfile",
+        JSON.stringify(profile)
+    );
 }
 
 function saveTiles(){
-  localStorage.setItem("dashboardTiles",JSON.stringify(tiles));
+    localStorage.setItem(
+        "visibleTiles",
+        JSON.stringify(visibleTiles)
+    );
 }
 
 function saveHistory(){
-  localStorage.setItem("mealHistory",JSON.stringify(mealHistory));
-}
-
-function esc(value){
-  return String(value ?? "")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;");
-}
-
-function photo(){
-  return profile?.photo || "";
-}
-
-function displayPhoto(className="profile-photo"){
-  if(photo()){
-    return `<img class="${className}" src="${photo()}" alt="Profile">`;
-  }
-
-  return `
-    <div class="${className}" style="
-      background:#eee;
-      display:grid;
-      place-items:center;
-      color:#888;
-      font-size:14px;
-    ">PHOTO</div>
-  `;
+    localStorage.setItem(
+        "mealHistory",
+        JSON.stringify(history)
+    );
 }
 
 function getTile(id){
-  return defaultTiles.find(t=>t.id===id);
+    return DEFAULT_TILES.find(x=>x[0]===id);
+}
+
+function profileImage(cls){
+    if(profile?.photo){
+        return `<img class="${cls}" src="${profile.photo}">`;
+    }
+
+    return `
+        <div class="${cls}"
+        style="
+        background:#eee;
+        display:grid;
+        place-items:center;
+        color:#999;
+        font-size:12px;
+        ">
+        PHOTO
+        </div>
+    `;
 }
 
 
@@ -1402,259 +2173,249 @@ function getTile(id){
    SETUP
 ===================================================== */
 
-function setupPage(){
+function setup(){
 
-  document.getElementById("app").innerHTML = `
+    document.getElementById("app").innerHTML=`
 
-  <div class="setup-page">
+    <div class="setup-page">
 
-    <div class="setup-container">
+        <div class="setup-container">
 
-      <div class="setup-brand">
-        <h1>Student ERP</h1>
-        <p>Complete your profile to continue</p>
-      </div>
-
-      <div class="setup-card">
-
-        <div class="setup-header">
-          <h2>Student Profile</h2>
-          <p>Enter your details for the first-time setup</p>
-        </div>
-
-        <div class="setup-body">
-
-          <div class="photo-picker">
-
-            <div id="photoPreview">
-              <div class="photo-placeholder">
-                Choose Photo
-              </div>
+            <div class="setup-brand">
+                <h1>Student ERP</h1>
+                <p>Complete your student profile</p>
             </div>
 
+            <div class="setup-card">
+
+                <div class="setup-header">
+                    <h2>Student Details</h2>
+                    <p>These details will be saved locally on this device.</p>
+                </div>
+
+                <div class="setup-body">
+
+                    <div class="photo-picker">
+
+                        <div id="photoPreview">
+                            <div class="photo-placeholder">
+                                Choose Photo
+                            </div>
+                        </div>
+
+                        <input
+                            id="photoInput"
+                            type="file"
+                            accept="image/*"
+                            hidden
+                        >
+
+                        <button
+                            type="button"
+                            class="photo-btn"
+                            onclick="
+                            document.getElementById('photoInput').click()
+                            "
+                        >
+                            Choose Profile Photo
+                        </button>
+
+                    </div>
+
+                    <form id="setupForm">
+
+                        <div class="form-grid">
+
+                            ${field("Full Name","name","",true)}
+                            ${field("Registration Number","registration","",true)}
+
+                            ${field("Father's Name","father")}
+                            ${field("Mother's Name","mother")}
+
+                            ${field("Contact Number","contact")}
+                            ${field("Email","email","","","email")}
+
+                            ${field("Date Of Birth","dob","","","date")}
+
+                            <div class="form-group">
+                                <label>Gender</label>
+                                <select name="gender">
+                                    <option>Male</option>
+                                    <option>Female</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+
+                            ${area("Permanent Address","address")}
+                            ${area("Correspondence Address","correspondence")}
+
+                            ${field(
+                                "Program",
+                                "program",
+                                "P132:B.Tech. (Computer Science and Engineering) (2024)"
+                            )}
+
+                            ${field("Admission Session","session","2024-1")}
+                            ${field("Batch","batch","2024")}
+                            ${field("Section","section","K2P24OF")}
+                            ${field("Hostel","hostel","Boys Studios 13")}
+                            ${field("Room / Bed","room","B227 - Bed A")}
+
+                        </div>
+
+                        <button class="primary-btn setup-submit">
+                            Continue to Dashboard →
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    `;
+
+    let selectedPhoto="";
+
+    document.getElementById("photoInput").onchange=e=>{
+
+        const file=e.target.files[0];
+
+        if(!file)return;
+
+        const reader=new FileReader();
+
+        reader.onload=event=>{
+
+            selectedPhoto=event.target.result;
+
+            document.getElementById("photoPreview").innerHTML=
+            `<img
+                class="photo-preview"
+                src="${selectedPhoto}"
+            >`;
+
+        };
+
+        reader.readAsDataURL(file);
+    };
+
+
+    document.getElementById("setupForm").onsubmit=e=>{
+
+        e.preventDefault();
+
+        const f=new FormData(e.target);
+
+        profile={
+            name:f.get("name"),
+            registration:f.get("registration"),
+            father:f.get("father"),
+            mother:f.get("mother"),
+            contact:f.get("contact"),
+            email:f.get("email"),
+            dob:f.get("dob"),
+            gender:f.get("gender"),
+            address:f.get("address"),
+            correspondence:f.get("correspondence"),
+            program:f.get("program"),
+            session:f.get("session"),
+            batch:f.get("batch"),
+            section:f.get("section"),
+            hostel:f.get("hostel"),
+            room:f.get("room"),
+            photo:selectedPhoto
+        };
+
+        saveProfile();
+
+        dashboard();
+    };
+}
+
+function field(label,name,value="",required=false,type="text"){
+
+    return `
+        <div class="form-group">
+            <label>${label}</label>
             <input
-              id="profileImageInput"
-              type="file"
-              accept="image/*"
-              hidden
+                type="${type}"
+                name="${name}"
+                value="${esc(value)}"
+                ${required?"required":""}
             >
-
-            <button
-              class="photo-btn"
-              onclick="document.getElementById('profileImageInput').click()"
-            >
-              Choose Profile Photo
-            </button>
-
-          </div>
-
-          <form id="setupForm">
-
-            <div class="form-grid">
-
-              ${inputField("Full Name","name","",true)}
-              ${inputField("Registration Number","registration","",true)}
-
-              ${inputField("Father's Name","father","")}
-              ${inputField("Mother's Name","mother","")}
-
-              ${inputField("Contact Number","contact","")}
-              ${inputField("Email","email","",false,"email")}
-
-              ${inputField("Date Of Birth","dob","",false,"date")}
-
-              <div class="form-group">
-                <label>Gender</label>
-                <select name="gender">
-                  <option>Male</option>
-                  <option>Female</option>
-                  <option>Other</option>
-                </select>
-              </div>
-
-              ${textArea("Permanent Address","address")}
-              ${textArea("Correspondence Address","correspondence")}
-
-              ${inputField(
-                "Program",
-                "program",
-                "P132:B.Tech. (Computer Science and Engineering) (2024)"
-              )}
-
-              ${inputField("Admission Session","session","2024-1")}
-              ${inputField("Batch","batch","2024")}
-              ${inputField("Section","section","K2P24OF")}
-              ${inputField("Hostel","hostel","Boys Studios 13")}
-              ${inputField("Room / Bed","room","B227 - Bed A")}
-
-            </div>
-
-            <button class="primary-btn setup-submit">
-              Continue to Dashboard →
-            </button>
-
-          </form>
-
         </div>
-      </div>
-
-    </div>
-
-  </div>
-  `;
-
-  let selectedPhoto = "";
-
-  document.getElementById("profileImageInput").addEventListener(
-    "change",
-    function(e){
-
-      const file = e.target.files[0];
-
-      if(!file) return;
-
-      const reader = new FileReader();
-
-      reader.onload = function(event){
-
-        selectedPhoto = event.target.result;
-
-        document.getElementById("photoPreview").innerHTML =
-          `<img class="photo-preview"
-          src="${selectedPhoto}"
-          alt="Profile">`;
-
-      };
-
-      reader.readAsDataURL(file);
-
-    }
-  );
-
-  document.getElementById("setupForm").addEventListener(
-    "submit",
-    function(e){
-
-      e.preventDefault();
-
-      const fd = new FormData(e.target);
-
-      profile = {
-
-        name:fd.get("name"),
-        registration:fd.get("registration"),
-        father:fd.get("father"),
-        mother:fd.get("mother"),
-        contact:fd.get("contact"),
-        email:fd.get("email"),
-        dob:fd.get("dob"),
-        gender:fd.get("gender"),
-        address:fd.get("address"),
-        correspondence:fd.get("correspondence"),
-        program:fd.get("program"),
-        session:fd.get("session"),
-        batch:fd.get("batch"),
-        section:fd.get("section"),
-        hostel:fd.get("hostel"),
-        room:fd.get("room"),
-        photo:selectedPhoto
-
-      };
-
-      saveProfile();
-
-      dashboard();
-
-    }
-  );
+    `;
 }
 
-function inputField(label,name,value="",required=false,type="text"){
-  return `
-    <div class="form-group">
-      <label>${label}</label>
-      <input
-        type="${type}"
-        name="${name}"
-        value="${esc(value)}"
-        ${required ? "required":""}
-      >
-    </div>
-  `;
-}
+function area(label,name){
 
-function textArea(label,name,value=""){
-  return `
-    <div class="form-group full">
-      <label>${label}</label>
-      <textarea name="${name}">${esc(value)}</textarea>
-    </div>
-  `;
+    return `
+        <div class="form-group full">
+            <label>${label}</label>
+            <textarea name="${name}"></textarea>
+        </div>
+    `;
 }
 
 
 /* =====================================================
-   APP SHELL
+   SHELL
 ===================================================== */
 
 function shell(content,active="dashboard"){
 
-  return `
+    return `
 
-  <div class="page">
+    <div class="page">
 
-    <header class="topbar">
+        <header class="topbar">
 
-      <button
-        class="topbar-btn"
-        onclick="openDrawer()"
-      >
-        ${icons.menu}
-      </button>
+            <button
+                class="topbar-btn"
+                onclick="openDrawer()"
+            >
+                ${I.menu}
+            </button>
 
-      <div class="topbar-title">
-        ${pageTitle(currentPage)}
-      </div>
+            <div class="topbar-title">
+                ${title(currentPage)}
+            </div>
 
-      <button
-        class="topbar-btn"
-        onclick="showNotifications()"
-      >
-        ${icons.bell}
-        <span class="notification-badge">19</span>
-      </button>
+            <button
+                class="topbar-btn"
+                onclick="notifications()"
+            >
+                ${I.bell}
+                <span class="notification-badge">19</span>
+            </button>
 
-    </header>
+        </header>
 
-    ${content}
+        ${content}
 
-  </div>
+    </div>
 
-  ${bottomNav(active)}
+    ${bottom(active)}
 
-  ${drawerHTML()}
+    ${drawer()}
 
-  `;
+    `;
 }
 
-function pageTitle(page){
+function title(p){
 
-  const titles={
-    dashboard:"Dashboard",
-    happenings:"Happenings",
-    rms:"RMS",
-    guest:"Guest Room",
-    profile:"Profile",
-    mess:"Mess Coupon",
-    history:"Meal History",
-    attendance:"Attendance",
-    results:"Results",
-    exams:"Exams",
-    assignments:"Assignments",
-    timetable:"Time table"
-  };
-
-  return titles[page] || "Dashboard";
+    return {
+        dashboard:"Dashboard",
+        attendance:"Attendance",
+        results:"Results",
+        exams:"Exams",
+        assignments:"Assignments",
+        timetable:"Time table"
+    }[p]||"Dashboard";
 }
 
 
@@ -1664,199 +2425,215 @@ function pageTitle(page){
 
 function dashboard(){
 
-  currentPage="dashboard";
+    currentPage="dashboard";
 
-  const visibleTiles = tiles
-    .map(id=>getTile(id))
-    .filter(Boolean);
+    const cards=visibleTiles
+        .map(getTile)
+        .filter(Boolean);
 
-  const content = `
+    const content=`
 
     <main class="page-content">
 
-      <section class="timetable-section">
+        <section class="timetable-section">
 
-        <h2 class="section-title">
-          Today's Timetable
-        </h2>
+            <h2 class="section-title">
+                Today's Timetable
+            </h2>
 
-        <div class="timetable-scroll">
+            <div class="timetable-scroll">
 
-          ${timetable.map(t=>`
+                ${CLASSES.map(c=>`
 
-            <div class="timetable-card">
+                    <div class="timetable-card">
 
-              <div class="course-code">
-                ${t.code}
-              </div>
+                        <div class="course-code">
+                            ${c[0]}
+                        </div>
 
-              <div class="room">
-                ${t.room}
-              </div>
+                        <div class="room">
+                            ${c[1]}
+                        </div>
 
-              <div class="status-pill">
-                <span class="status-dot"></span>
-                Upcoming
-              </div>
+                        <div class="status-pill">
+                            <span class="status-dot"></span>
+                            Upcoming
+                        </div>
 
-              <div class="time-strip">
-                ${t.time}
-              </div>
+                        <div class="time-strip">
+                            ${c[2]}
+                        </div>
+
+                    </div>
+
+                `).join("")}
 
             </div>
 
-          `).join("")}
-
-        </div>
-
-      </section>
+        </section>
 
 
-      <section class="add-tiles">
+        <section class="add-tiles">
 
-        <div class="tiles-heading">
+            <div class="tiles-heading">
 
-          <h2>Add More Tiles</h2>
+                <h2>Add More Tiles</h2>
 
-          <p>
-            Click on the plus button to add menu grids.
-          </p>
+                <p>
+                    Click on the plus button to add menu grids.
+                </p>
 
-        </div>
+                <button
+                    class="add-chip"
+                    style="margin-top:9px"
+                    onclick="toggleAddTiles()"
+                >
+                    + Add Tiles
+                </button>
 
-        <div id="addTileMenu" class="add-tile-menu hidden"></div>
+                <div
+                    id="addTileMenu"
+                    class="add-tile-menu hidden"
+                ></div>
 
-      </section>
+            </div>
+
+        </section>
 
 
-      <section class="tile-grid">
+        <section class="tile-grid">
 
-        ${visibleTiles.map(tileHTML).join("")}
+            ${cards.map(tile).join("")}
 
-      </section>
+        </section>
 
     </main>
-  `;
+    `;
 
-  document.getElementById("app").innerHTML =
-    shell(content,"dashboard");
+    document.getElementById("app").innerHTML=
+        shell(content,"dashboard");
 }
 
-function tileHTML(tile){
+function tile(t){
 
-  const action = tileAction(tile.id);
+    const id=t[0];
+    const name=t[1];
+    const icon=t[2];
+    const badge=t[3];
 
-  return `
+    const removable=badge==="X";
+
+    return `
 
     <div class="tile">
 
-      ${
-        tile.remove
+        ${
+            removable
 
-        ?
+            ?
 
-        `<button
-          class="tile-remove"
-          onclick="removeTile('${tile.id}')"
-        >×</button>`
+            `<button
+                class="tile-remove"
+                onclick="removeTile('${id}')"
+            >×</button>`
 
-        :
+            :
 
-        tile.badge
-          ? `<div class="tile-badge">${tile.badge}</div>`
-          : ""
-      }
+            badge
 
-      <div class="tile-icon">
-        ${icons[tile.icon] || icons.document}
-      </div>
+            ?
 
-      <button
-        class="tile-label"
-        style="border:0;cursor:pointer"
-        onclick="${action}"
-      >
-        ${tile.name}
-      </button>
+            `<div class="tile-badge">
+                ${badge}
+            </div>`
+
+            :""
+        }
+
+        <div class="tile-icon">
+            ${I[icon]}
+        </div>
+
+        <button
+            class="tile-label"
+            onclick="tileClick('${id}')"
+        >
+            ${name}
+        </button>
 
     </div>
-  `;
+    `;
 }
 
-function tileAction(id){
+function tileClick(id){
 
-  const map={
-    attendance:"attendancePage()",
-    results:"resultsPage()",
-    exams:"examsPage()",
-    assignment:"assignmentsPage()",
-    timetable:"timetablePage()",
-    mess:"messPage()",
-    rms:"simplePage('RMS Status','RMS status and academic review information.')",
-    events:"simplePage('Events','Upcoming university events and activities.')",
-    hostel:"simplePage('Hostel','Your current hostel information.')",
-    laundry:"simplePage('Laundry','Laundry booking and collection status.')",
-    marks:"simplePage('View Marks','Semester-wise marks will appear here.')",
-    leave:"simplePage('Hostel Leave Slip','Create and view hostel leave requests.')",
-    makeup:"simplePage('Make Up Adjustment','Manage make-up class adjustments.')",
-    report:"simplePage('Report Card','Your academic report card.')",
-    entry:"simplePage('Entry Exit Logs','Recent hostel entry and exit activity.')",
-    announce:"simplePage('Announcements','University announcements and notices.')",
-    edu:"simplePage('Edu Revolution','Learning resources and academic tools.')",
-    fee:"simplePage('Fee Statement','Your fee statement and payment information.')"
-  };
+    if(id==="attendance")return attendancePage();
+    if(id==="results")return resultsPage();
+    if(id==="exams")return examsPage();
+    if(id==="assignment")return assignmentsPage();
+    if(id==="timetable")return timetablePage();
+    if(id==="mess")return messPage();
 
-  return map[id] || "dashboard()";
+    simplePage(
+        getTile(id)?.[1]||"Module",
+        "This module is available in the student ERP prototype."
+    );
 }
-
-
-/* =====================================================
-   TILE MANAGEMENT
-===================================================== */
 
 function removeTile(id){
 
-  tiles=tiles.filter(x=>x!==id);
-  saveTiles();
-  dashboard();
+    visibleTiles=visibleTiles.filter(x=>x!==id);
 
+    saveTiles();
+
+    dashboard();
+}
+
+function toggleAddTiles(){
+
+    const el=document.getElementById("addTileMenu");
+
+    if(!el)return;
+
+    if(!el.classList.contains("hidden")){
+        el.classList.add("hidden");
+        return;
+    }
+
+    const available=DEFAULT_TILES.filter(
+        x=>!visibleTiles.includes(x[0])
+    );
+
+    el.innerHTML=available.length
+
+    ?
+
+    available.map(x=>`
+        <button
+            class="add-chip"
+            onclick="addTile('${x[0]}')"
+        >
+            + ${x[1]}
+        </button>
+    `).join("")
+
+    :
+
+    `<span style="font-size:12px;color:#777">
+        All tiles are visible.
+    </span>`;
+
+    el.classList.remove("hidden");
 }
 
 function addTile(id){
 
-  if(!tiles.includes(id)){
-    tiles.push(id);
-    saveTiles();
-  }
+    if(!visibleTiles.includes(id)){
+        visibleTiles.push(id);
+        saveTiles();
+    }
 
-  dashboard();
-}
-
-function showAddTiles(){
-
-  const menu=document.getElementById("addTileMenu");
-
-  if(!menu) return;
-
-  if(!menu.classList.contains("hidden")){
-    menu.classList.add("hidden");
-    return;
-  }
-
-  const available=defaultTiles.filter(
-    x=>!tiles.includes(x.id)
-  );
-
-  menu.innerHTML=available.length
-    ? available.map(x=>`
-      <button
-        class="add-chip"
-        onclick="addTile('${x.id}')"
-      >+ ${x.name}</button>
-    `).join("")
-    : `<span style="color:#777">All tiles are visible.</span>`;
-
-  menu.classList.remove("hidden");
+    dashboard();
 }
 
 
@@ -1864,46 +2641,61 @@ function showAddTiles(){
    BOTTOM NAV
 ===================================================== */
 
-function bottomNav(active){
+function bottom(active){
 
-  return `
+    return `
 
     <nav class="bottom-nav">
 
-      <button
-        class="nav-item ${active==="dashboard"?"active":""}"
-        onclick="dashboard()"
-      >
-        ${icons.calendar}
-        <span>Dashboard</span>
-      </button>
+        <button
+            class="nav-item ${active==="dashboard"?"active":""}"
+            onclick="dashboard()"
+        >
+            ${I.calendar}
+            <span>Dashboard</span>
+        </button>
 
-      <button
-        class="nav-item ${active==="happenings"?"active":""}"
-        onclick="simplePage('Happenings','Latest campus happenings, announcements and activities.')"
-      >
-        ${icons.document}
-        <span>Happenings</span>
-      </button>
+        <button
+            class="nav-item"
+            onclick="
+            simplePage(
+                'Happenings',
+                'Latest campus announcements and activities.'
+            )
+            "
+        >
+            ${I.document}
+            <span>Happenings</span>
+        </button>
 
-      <button
-        class="nav-item ${active==="rms"?"active":""}"
-        onclick="simplePage('RMS','RMS information and status.')"
-      >
-        ${icons.book}
-        <span>RMS</span>
-      </button>
+        <button
+            class="nav-item"
+            onclick="
+            simplePage(
+                'RMS',
+                'RMS status and academic information.'
+            )
+            "
+        >
+            ${I.book}
+            <span>RMS</span>
+        </button>
 
-      <button
-        class="nav-item ${active==="guest"?"active":""}"
-        onclick="simplePage('Guest Room','Guest room booking and visitor information.')"
-      >
-        ${icons.hostel}
-        <span>Guest Room</span>
-      </button>
+        <button
+            class="nav-item"
+            onclick="
+            simplePage(
+                'Guest Room',
+                'Guest room and visitor information.'
+            )
+            "
+        >
+            ${I.hostel}
+            <span>Guest Room</span>
+        </button>
 
     </nav>
-  `;
+    `;
 }
 
 
@@ -1911,538 +2703,425 @@ function bottomNav(active){
    DRAWER
 ===================================================== */
 
-function drawerHTML(){
+function drawer(){
 
-  const menuItems=[
-    ["Attendance",icons.check,"attendancePage()"],
-    ["Placement Barcode Scanner",icons.qr,"simplePage('Placement Barcode Scanner','Scan your placement barcode here.')"],
-    ["Book Appointment",icons.calendar,"simplePage('Book Appointment','Choose an appointment slot.')"],
-    ["Transport Preference",icons.truck,"simplePage('Transport Preference','Manage transport preferences.')"],
-    ["Change UMS Password",icons.logout,"simplePage('Change UMS Password','Change your account password.')"],
-    ["View Marks",icons.document,"simplePage('View Marks','View your academic marks.')"],
-    ["Event Attendance",icons.calendar,"simplePage('Event Attendance','View event attendance.')"],
-    ["Doctor Appointment",icons.doctor,"simplePage('Doctor Appointment','Book a doctor appointment.')"],
-    ["Document Upload",icons.document,"simplePage('Document Upload','Upload academic documents.')"],
-    ["Mess Food Scanner",icons.qr,"messPage()"]
-  ];
+    const items=[
 
-  return `
+        ["Attendance",I.check,"attendancePage()"],
+        ["Placement Barcode Scanner",I.qr,"simplePage('Placement Barcode Scanner','Scan placement barcode here.')"],
+        ["Book Appointment",I.calendar,"simplePage('Book Appointment','Book an appointment.')"],
+        ["Transport Preference",I.truck,"simplePage('Transport Preference','Manage transport preferences.')"],
+        ["Change UMS Password",I.logout,"simplePage('Change UMS Password','Change your UMS password.')"],
+        ["View Marks",I.document,"simplePage('View Marks','View academic marks.')"],
+        ["Event Attendance",I.calendar,"simplePage('Event Attendance','View event attendance.')"],
+        ["Doctor Appointment",I.doctor,"simplePage('Doctor Appointment','Book a doctor appointment.')"],
+        ["Document Upload",I.document,"simplePage('Document Upload','Upload documents.')"],
+        ["Mess Food Scanner",I.qr,"messPage()"]
+
+    ];
+
+    return `
 
     <div
-      class="overlay"
-      id="drawerOverlay"
-      onclick="closeDrawer()"
+        id="overlay"
+        class="overlay"
+        onclick="closeDrawer()"
     ></div>
 
-    <aside class="drawer" id="drawer">
-
-      <button
-        style="position:absolute;right:8px;top:8px;z-index:3;border:0;background:transparent"
-        onclick="closeDrawer()"
-      >
-        ${icons.close}
-      </button>
-
-      <button
-        class="drawer-profile"
-        style="width:100%;border:0"
-        onclick="profilePage();closeDrawer()"
-      >
-
-        ${displayPhoto("drawer-photo")}
-
-        <h2>${esc(profile?.name)}</h2>
-
-        <div class="reg">
-          ${esc(profile?.registration)}
-        </div>
-
-        <div class="program">
-          ${esc(profile?.program)}
-        </div>
-
-      </button>
-
-      <div class="drawer-search">
-
-        <div class="search-box">
-
-          ${icons.search}
-
-          <input
-            id="drawerSearch"
-            placeholder="Search"
-            oninput="filterDrawer(this.value)"
-          >
-
-        </div>
-
-      </div>
-
-      <div class="drawer-list" id="drawerList">
-
-        ${menuItems.map((item,index)=>`
-
-          <button
-            class="drawer-item drawer-search-item"
-            data-search="${item[0].toLowerCase()}"
-            onclick="${item[2]}"
-          >
-            ${item[1]}
-            <span>${item[0]}</span>
-          </button>
-
-        `).join("")}
+    <aside
+        id="drawer"
+        class="drawer"
+    >
 
         <button
-          class="drawer-logout"
-          onclick="logoutConfirm()"
+            style="
+            position:absolute;
+            top:8px;
+            right:8px;
+            z-index:5;
+            border:0;
+            background:transparent;
+            "
+            onclick="closeDrawer()"
         >
-          LOGOUT ${icons.logout}
+            ${I.close}
         </button>
 
-      </div>
+
+        <button
+            class="drawer-profile"
+            onclick="
+            closeDrawer();
+            profilePage();
+            "
+        >
+
+            ${profileImage("drawer-photo")}
+
+            <h2>
+                ${esc(profile?.name)}
+            </h2>
+
+            <div class="reg">
+                ${esc(profile?.registration)}
+            </div>
+
+            <div class="program">
+                ${esc(profile?.program)}
+            </div>
+
+        </button>
+
+
+        <div class="drawer-search">
+
+            <div class="search-box">
+
+                ${I.search}
+
+                <input
+                    id="drawerSearch"
+                    placeholder="Search"
+                    oninput="drawerSearch(this.value)"
+                >
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="drawer-list"
+            id="drawerList"
+        >
+
+            ${items.map((x,i)=>`
+
+                <button
+                    class="drawer-item drawer-search-item"
+                    data-name="${x[0].toLowerCase()}"
+                    onclick="${x[2]}"
+                >
+                    ${x[1]}
+                    <span>${x[0]}</span>
+                </button>
+
+            `).join("")}
+
+
+            <button
+                class="drawer-logout"
+                onclick="logoutConfirm()"
+            >
+                LOGOUT
+                ${I.logout}
+            </button>
+
+        </div>
 
     </aside>
-  `;
+    `;
 }
 
 function openDrawer(){
 
-  document.getElementById("drawer")?.classList.add("open");
-  document.getElementById("drawerOverlay")?.classList.add("open");
+    document.getElementById("drawer")
+        ?.classList.add("open");
 
+    document.getElementById("overlay")
+        ?.classList.add("open");
 }
 
 function closeDrawer(){
 
-  document.getElementById("drawer")?.classList.remove("open");
-  document.getElementById("drawerOverlay")?.classList.remove("open");
+    document.getElementById("drawer")
+        ?.classList.remove("open");
 
+    document.getElementById("overlay")
+        ?.classList.remove("open");
 }
 
-function filterDrawer(value){
+function drawerSearch(q){
 
-  const q=value.toLowerCase().trim();
+    q=q.toLowerCase().trim();
 
-  document.querySelectorAll(".drawer-search-item")
-    .forEach(item=>{
+    document
+        .querySelectorAll(".drawer-search-item")
+        .forEach(el=>{
 
-      item.style.display =
-        !q || item.dataset.search.includes(q)
-          ? "flex"
-          : "none";
+            el.style.display=
+                !q ||
+                el.dataset.name.includes(q)
+                ? "flex"
+                : "none";
 
-    });
-
+        });
 }
 
 
 /* =====================================================
-   PROFILE PAGE
+   PROFILE
 ===================================================== */
 
 function profilePage(){
 
-  currentPage="profile";
+    currentPage="profile";
 
-  const content=`
+    document.getElementById("app").innerHTML=`
 
-    <main>
+    <div class="page">
 
-      <div style="
-        background:#303030;
-        color:white;
-        height:68px;
-        display:flex;
-        align-items:center;
-        justify-content:space-between;
-        padding:0 18px;
-      ">
-
-        <button
-          class="back-btn"
-          style="color:white"
-          onclick="dashboard()"
-        >
-          ${icons.back}
-        </button>
-
-        <span style="font-size:22px">
-          Profile
-        </span>
-
-        <button
-          class="qr-top"
-          onclick="qrModal()"
-        >
-          (QR)
-        </button>
-
-      </div>
-
-      <div class="page-content">
-
-        <div class="profile-card">
-
-          <div class="profile-hero">
-
-            ${displayPhoto("profile-photo")}
-
-            <div class="profile-name">
-              ${esc(profile.name)}
-            </div>
-
-            <div class="profile-program">
-              ${esc(profile.program)}
-            </div>
-
-          </div>
-
-
-          <div class="dark-heading">
-            Basic
-          </div>
-
-          <div class="profile-section">
-
-            ${profileRow("Father's Name",profile.father)}
-            ${profileRow("Mother's Name",profile.mother)}
-            ${profileRow("Permanent Address",profile.address)}
-            ${profileRow("Correspondence Address",profile.correspondence)}
-            ${profileRow("Contact No.",profile.contact)}
-            ${profileRow("Email",profile.email)}
-            ${profileRow("Date Of Birth",profile.dob)}
-            ${profileRow("Student Gender",profile.gender)}
-
-          </div>
-
-
-          <div class="dark-heading">
-            Academic Details
-          </div>
-
-          <div class="profile-section">
-
-            ${profileRow("Program",profile.program)}
-            ${profileRow("Admission Session",profile.session)}
-            ${profileRow("Batch",profile.batch)}
-            ${profileRow("Section",profile.section)}
-            ${profileRow("TPC","20339::Dr. Usha Mittal (01824520140)")}
-
-          </div>
-
-
-          <div class="dark-heading">
-            Hostel Details
-          </div>
-
-          <div class="profile-section">
-
-            ${profileRow(
-              "Hostel",
-              `${profile.hostel} - ${profile.room} (Studio Apartment Air Conditioned 4 Seater)`
-            )}
-
-            ${profileRow(
-              "Warden",
-              "Gurpreet Singh Talwar"
-            )}
-
-            ${profileRow(
-              "Allocated Mess",
-              "BS13SHM : Mess BS-13"
-            )}
-
-          </div>
-
-          <div style="padding:25px">
+        <div class="profile-topbar">
 
             <button
-              class="primary-btn"
-              style="width:100%"
-              onclick="editProfile()"
+                class="back"
+                onclick="dashboard()"
             >
-              Edit Profile
+                ${I.back}
             </button>
 
-          </div>
+            <div class="profile-topbar-title">
+                Profile
+            </div>
+
+            <button
+                class="qr-top"
+                onclick="showQR()"
+            >
+                (QR)
+            </button>
 
         </div>
 
-      </div>
 
-    </main>
-  `;
+        <div class="profile-wrapper">
 
-  document.getElementById("app").innerHTML =
-    shell(content);
+            <div class="profile-card">
 
-}
+                <div class="profile-hero">
 
-function profileRow(label,value){
+                    ${profileImage("profile-photo")}
 
-  return `
-    <div class="profile-row">
-      <div class="profile-label">${label}</div>
-      <div class="profile-value">${esc(value)}</div>
+                    <div class="profile-name">
+                        ${esc(profile.name)}
+                    </div>
+
+                    <div class="profile-program">
+                        ${esc(profile.program)}
+                    </div>
+
+                </div>
+
+
+                <div class="dark-heading">
+                    Basic
+                </div>
+
+                ${row("Father's Name",profile.father)}
+                ${row("Mother's Name",profile.mother)}
+                ${row("Permanent Address",profile.address)}
+                ${row("Correspondence Address",profile.correspondence)}
+                ${row("Contact No.",profile.contact)}
+                ${row("Email",profile.email)}
+                ${row("Date Of Birth",profile.dob)}
+                ${row("Student Gender",profile.gender)}
+
+
+                <div class="dark-heading">
+                    Academic Details
+                </div>
+
+                ${row("Program",profile.program)}
+                ${row("Admission Session",profile.session)}
+                ${row("Batch",profile.batch)}
+                ${row("Section",profile.section)}
+                ${row("TPC","20339::Dr. Usha Mittal (01824520140)")}
+
+
+                <div class="dark-heading">
+                    Hostel Details
+                </div>
+
+                ${row(
+                    "Hostel",
+                    `${profile.hostel} - ${profile.room} (Studio Apartment Air Conditioned 4 Seater)`
+                )}
+
+                ${row(
+                    "Warden",
+                    "Gurpreet Singh Talwar"
+                )}
+
+                ${row(
+                    "Allocated Mess",
+                    "BS13SHM : Mess BS-13"
+                )}
+
+
+                <div style="padding:25px">
+
+                    <button
+                        class="primary-btn"
+                        style="width:100%"
+                        onclick="editProfile()"
+                    >
+                        Edit Profile
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
-  `;
+    `;
+}
 
+function row(label,value){
+
+    return `
+        <div class="profile-row">
+            <div class="profile-label">
+                ${label}
+            </div>
+
+            <div class="profile-value">
+                ${esc(value)}
+            </div>
+        </div>
+    `;
 }
 
 
 /* =====================================================
-   EDIT PROFILE
-===================================================== */
-
-function editProfile(){
-
-  openModal(`
-
-    <h2 class="modal-title">
-      Edit Profile
-    </h2>
-
-    <form id="editForm">
-
-      <div class="form-group">
-        <label>Name</label>
-        <input name="name" value="${esc(profile.name)}" required>
-      </div>
-
-      <div class="form-group">
-        <label>Registration Number</label>
-        <input name="registration" value="${esc(profile.registration)}">
-      </div>
-
-      <div class="form-group">
-        <label>Father's Name</label>
-        <input name="father" value="${esc(profile.father)}">
-      </div>
-
-      <div class="form-group">
-        <label>Mother's Name</label>
-        <input name="mother" value="${esc(profile.mother)}">
-      </div>
-
-      <div class="form-group">
-        <label>Contact</label>
-        <input name="contact" value="${esc(profile.contact)}">
-      </div>
-
-      <div class="form-group">
-        <label>Email</label>
-        <input name="email" value="${esc(profile.email)}">
-      </div>
-
-      <div class="form-group">
-        <label>Permanent Address</label>
-        <textarea name="address">${esc(profile.address)}</textarea>
-      </div>
-
-      <div class="form-group">
-        <label>Correspondence Address</label>
-        <textarea name="correspondence">${esc(profile.correspondence)}</textarea>
-      </div>
-
-      <div class="form-group">
-        <label>Program</label>
-        <input name="program" value="${esc(profile.program)}">
-      </div>
-
-      <div class="form-group">
-        <label>Hostel</label>
-        <input name="hostel" value="${esc(profile.hostel)}">
-      </div>
-
-      <div class="form-group">
-        <label>Room / Bed</label>
-        <input name="room" value="${esc(profile.room)}">
-      </div>
-
-      <div class="modal-actions">
-
-        <button
-          type="button"
-          class="secondary-btn"
-          onclick="closeModal()"
-        >
-          Cancel
-        </button>
-
-        <button
-          class="primary-btn"
-          type="submit"
-        >
-          Save
-        </button>
-
-      </div>
-
-    </form>
-  `);
-
-  document.getElementById("editForm").onsubmit=function(e){
-
-    e.preventDefault();
-
-    const fd=new FormData(e.target);
-
-    Object.keys(profile).forEach(key=>{
-      if(fd.has(key)){
-        profile[key]=fd.get(key);
-      }
-    });
-
-    saveProfile();
-    closeModal();
-    profilePage();
-
-  };
-
-}
-
-
-/* =====================================================
-   MESS PAGE
+   MESS
 ===================================================== */
 
 function messPage(){
 
-  currentPage="mess";
+    currentPage="mess";
 
-  const content=`
+    document.getElementById("app").innerHTML=`
 
-    <main>
+    <div class="page">
 
-      <div style="
-        background:#303030;
-        color:white;
-        height:68px;
-        display:flex;
-        align-items:center;
-        justify-content:space-between;
-        padding:0 18px;
-      ">
+        <div class="mess-topbar">
 
-        <button
-          class="back-btn"
-          style="color:white"
-          onclick="dashboard()"
-        >
-          ${icons.back}
-        </button>
+            <button
+                class="back"
+                style="
+                border:0;
+                background:transparent;
+                color:white;
+                width:44px;
+                height:44px;
+                "
+                onclick="dashboard()"
+            >
+                ${I.back}
+            </button>
 
-        <span style="font-size:21px">
-          Mess Coupon
-        </span>
+            <div class="mess-topbar-title">
+                Mess Coupon
+            </div>
 
-        <button
-          style="
-            background:transparent;
-            color:white;
-            border:0;
-            font-size:20px;
-          "
-          onclick="mealHistoryPage()"
-        >
-          Meal History
-        </button>
-
-      </div>
-
-
-      <div class="page-content" style="padding-top:10px">
-
-        <div class="mess-card">
-
-          ${displayPhoto("mess-photo")}
-
-          <div class="mess-name">
-            ${esc(profile.name)}
-            ${esc(profile.registration)}
-          </div>
-
-          <div class="mess-info">
-            <strong>Father's Name</strong>
-            ${esc(profile.father)}
-          </div>
-
-          <div class="mess-info">
-            <strong>Mother's Name</strong>
-            ${esc(profile.mother)}
-          </div>
-
-          <div class="mess-info">
-            <strong>Program Name</strong>
-            ${esc(profile.program)}
-          </div>
-
-          <div class="mess-info">
-            <strong>Hostel</strong>
-            ${esc(profile.hostel)} - ${esc(profile.room)}
-          </div>
+            <button
+                class="mess-history-btn"
+                onclick="historyPage()"
+            >
+                Meal History
+            </button>
 
         </div>
 
 
-        <div class="card">
+        <div class="page-content" style="padding-top:10px">
 
-          <div class="mess-instruction">
-            Tap on the meal name to<br>
-            scan and avail food.
-          </div>
+            <div class="mess-card">
 
-          <button
-            class="rate-btn"
-            onclick="showRate()"
-          >
-            ⭐ RATE US
-          </button>
+                ${profileImage("mess-photo")}
 
-          <div class="meal-grid">
+                <div class="mess-name">
+                    ${esc(profile.name)}
+                    ${esc(profile.registration)}
+                </div>
 
-            <button
-              class="meal-btn"
-              onclick="scanMeal('Breakfast')"
-            >
-              Breakfast →
-            </button>
+                <div class="mess-info">
+                    <strong>Father's Name</strong>
+                    ${esc(profile.father)}
+                </div>
 
-            <button
-              class="meal-btn"
-              onclick="scanMeal('Lunch')"
-            >
-              Lunch →
-            </button>
+                <div class="mess-info">
+                    <strong>Mother's Name</strong>
+                    ${esc(profile.mother)}
+                </div>
 
-            <button
-              class="meal-btn"
-              onclick="scanMeal('Dinner')"
-            >
-              Dinner →
-            </button>
+                <div class="mess-info">
+                    <strong>Program Name</strong>
+                    ${esc(profile.program)}
+                </div>
 
-            <button
-              class="meal-btn"
-              onclick="scanMeal('Tea')"
-            >
-              Tea →
-            </button>
+                <div class="mess-info">
+                    <strong>Hostel</strong>
+                    ${esc(profile.hostel)} - ${esc(profile.room)}
+                </div>
 
-          </div>
+            </div>
+
+
+            <div class="mess-content">
+
+                <div class="mess-instruction">
+                    Tap on the meal name to<br>
+                    scan and avail food.
+                </div>
+
+                <button
+                    class="rate-btn"
+                    onclick="rate()"
+                >
+                    ⭐ RATE US
+                </button>
+
+                <div class="meal-grid">
+
+                    <button
+                        class="meal-btn"
+                        onclick="scanMeal('Breakfast')"
+                    >
+                        Breakfast →
+                    </button>
+
+                    <button
+                        class="meal-btn"
+                        onclick="scanMeal('Lunch')"
+                    >
+                        Lunch →
+                    </button>
+
+                    <button
+                        class="meal-btn"
+                        onclick="scanMeal('Dinner')"
+                    >
+                        Dinner →
+                    </button>
+
+                    <button
+                        class="meal-btn"
+                        onclick="scanMeal('Tea')"
+                    >
+                        Tea →
+                    </button>
+
+                </div>
+
+            </div>
 
         </div>
 
-      </div>
-
-    </main>
-  `;
-
-  document.getElementById("app").innerHTML =
-    shell(content);
-
+    </div>
+    `;
 }
 
 
@@ -2450,235 +3129,261 @@ function messPage(){
    MEAL HISTORY
 ===================================================== */
 
-function mealHistoryPage(){
+function historyPage(){
 
-  currentPage="history";
+    currentPage="history";
 
-  const content=`
+    document.getElementById("app").innerHTML=`
 
-    <main>
+    <div class="page">
 
-      <div style="
-        background:#303030;
-        color:white;
-        height:68px;
-        display:flex;
-        align-items:center;
-        padding:0 18px;
-        gap:20px;
-      ">
+        <div class="mess-topbar">
 
-        <button
-          class="back-btn"
-          style="color:white"
-          onclick="messPage()"
-        >
-          ${icons.back}
-        </button>
+            <button
+                class="back"
+                style="
+                border:0;
+                background:transparent;
+                color:white;
+                width:44px;
+                height:44px;
+                "
+                onclick="messPage()"
+            >
+                ${I.back}
+            </button>
 
-        <span style="font-size:22px">
-          Meal History
-        </span>
+            <div class="mess-topbar-title">
+                Meal History
+            </div>
 
-      </div>
-
-      <div class="page-content">
-
-        <div class="card">
-
-          ${
-            mealHistory.length
-
-            ?
-
-            mealHistory.slice().reverse().map(item=>`
-
-              <div class="history-item">
-
-                <div>
-                  <strong>${esc(item.meal)}</strong>
-                  <div>${esc(item.date)}</div>
-                  <small>${esc(item.time)}</small>
-                </div>
-
-                <div class="success">
-                  ✓ Availed
-                </div>
-
-              </div>
-
-            `).join("")
-
-            :
-
-            `<div class="empty">
-              No meal history yet
-            </div>`
-          }
+            <div></div>
 
         </div>
 
-      </div>
 
-    </main>
-  `;
+        <div class="data-content">
 
-  document.getElementById("app").innerHTML =
-    shell(content);
+            <div class="history-card">
 
+                ${
+                    history.length
+
+                    ?
+
+                    history
+                    .slice()
+                    .reverse()
+                    .map(x=>`
+
+                        <div class="history-item">
+
+                            <div>
+
+                                <strong>
+                                    ${esc(x.meal)}
+                                </strong>
+
+                                <div>
+                                    ${esc(x.date)}
+                                </div>
+
+                                <div>
+                                    ${esc(x.time)}
+                                </div>
+
+                            </div>
+
+                            <div class="success">
+                                ✓ Availed
+                            </div>
+
+                        </div>
+
+                    `).join("")
+
+                    :
+
+                    `<div
+                        style="
+                        text-align:center;
+                        padding:45px 20px;
+                        color:#888;
+                        font-size:14px;
+                        "
+                    >
+                        No meal history yet
+                    </div>`
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+    `;
 }
 
 
 /* =====================================================
-   MEAL SCANNER
+   SCANNER
 ===================================================== */
 
 function scanMeal(meal){
 
-  openModal(`
+    modal(`
 
-    <h2 class="modal-title">
-      ${meal} Scanner
-    </h2>
+        <h2 class="modal-title">
+            ${meal} Scanner
+        </h2>
 
-    <p style="text-align:center">
-      Scan the mess QR code to avail your meal.
-    </p>
+        <p style="
+        text-align:center;
+        font-size:14px;
+        color:#777;
+        ">
+            Scan the mess QR code to avail your meal.
+        </p>
 
-    <div class="scanner">
+        <div class="scanner">
+            <div
+                class="qr-pattern"
+                id="mealQR"
+            ></div>
+        </div>
 
-      <div class="qr-pattern" id="qrPattern"></div>
+        <p style="
+        text-align:center;
+        font-size:13px;
+        ">
+            ${esc(profile.name)}<br>
+            ${esc(profile.registration)}
+        </p>
 
-    </div>
+        <div class="modal-actions">
 
-    <p style="text-align:center">
-      ${esc(profile.name)}<br>
-      ${esc(profile.registration)}
-    </p>
+            <button
+                class="secondary-btn"
+                onclick="closeModal()"
+            >
+                Cancel
+            </button>
 
-    <div class="modal-actions">
+            <button
+                class="primary-btn"
+                onclick="mealSuccess('${meal}')"
+            >
+                Simulate Scan
+            </button>
 
-      <button
-        class="secondary-btn"
-        onclick="closeModal()"
-      >
-        Cancel
-      </button>
+        </div>
+    `);
 
-      <button
-        class="primary-btn"
-        onclick="simulateMeal('${meal}')"
-      >
-        Simulate Scan
-      </button>
-
-    </div>
-
-  `);
-
-  generateQR();
-
+    generateQR("mealQR");
 }
 
-function generateQR(){
+function generateQR(id){
 
-  const box=document.getElementById("qrPattern");
+    const box=document.getElementById(id);
 
-  if(!box) return;
+    if(!box)return;
 
-  box.innerHTML="";
+    box.innerHTML="";
 
-  for(let i=0;i<225;i++){
+    for(let i=0;i<225;i++){
 
-    const cell=document.createElement("div");
+        const c=document.createElement("div");
 
-    if(
-      Math.random()>.58 ||
-      i<45 ||
-      (i%15<3) ||
-      (i%15>11)
-    ){
-      cell.style.background="#222";
+        if(
+            Math.random()>.55 ||
+            i<45 ||
+            i%15<3
+        ){
+            c.style.background="#222";
+        }
+
+        c.className="qr-cell";
+
+        box.appendChild(c);
     }
-
-    cell.className="qr-cell";
-
-    box.appendChild(cell);
-  }
-
 }
 
-function simulateMeal(meal){
+function mealSuccess(meal){
 
-  const now=new Date();
+    const d=new Date();
 
-  mealHistory.push({
+    history.push({
 
-    meal,
+        meal,
 
-    date:now.toLocaleDateString(
-      "en-IN",
-      {
-        day:"2-digit",
-        month:"short",
-        year:"numeric"
-      }
-    ),
+        date:d.toLocaleDateString(
+            "en-IN",
+            {
+                day:"2-digit",
+                month:"short",
+                year:"numeric"
+            }
+        ),
 
-    time:now.toLocaleTimeString(
-      "en-IN",
-      {
-        hour:"2-digit",
-        minute:"2-digit"
-      }
-    ),
+        time:d.toLocaleTimeString(
+            "en-IN",
+            {
+                hour:"2-digit",
+                minute:"2-digit"
+            }
+        )
 
-    status:"Availed"
+    });
 
-  });
+    saveHistory();
 
-  saveHistory();
+    modal(`
 
-  openModal(`
+        <div style="text-align:center;padding:15px 5px">
 
-    <div style="
-      text-align:center;
-      padding:20px;
-    ">
+            <div style="
+            width:70px;
+            height:70px;
+            margin:auto;
+            border-radius:50%;
+            background:var(--gradient);
+            display:grid;
+            place-items:center;
+            font-size:36px;
+            color:#222;
+            ">
+                ✓
+            </div>
 
-      <div style="
-        width:75px;
-        height:75px;
-        border-radius:50%;
-        background:var(--gradient);
-        display:grid;
-        place-items:center;
-        margin:auto;
-        font-size:38px;
-      ">
-        ✓
-      </div>
+            <h2 style="
+            margin-top:15px;
+            font-size:20px;
+            font-weight:500;
+            ">
+                Meal Availed Successfully
+            </h2>
 
-      <h2>
-        Meal Availed Successfully
-      </h2>
+            <p style="
+            margin-top:7px;
+            color:#777;
+            font-size:13px;
+            ">
+                ${meal} has been added to meal history.
+            </p>
 
-      <p>
-        ${meal} has been added to your meal history.
-      </p>
+            <button
+                class="primary-btn"
+                style="
+                width:100%;
+                margin-top:20px;
+                "
+                onclick="closeModal()"
+            >
+                Done
+            </button>
 
-      <button
-        class="primary-btn"
-        style="width:100%"
-        onclick="closeModal()"
-      >
-        Done
-      </button>
-
-    </div>
-
-  `);
-
+        </div>
+    `);
 }
 
 
@@ -2688,61 +3393,67 @@ function simulateMeal(meal){
 
 function attendancePage(){
 
-  currentPage="attendance";
+    currentPage="attendance";
 
-  const total=
-    attendanceData.reduce((a,b)=>a+b.value,0)
-    / attendanceData.length;
+    const overall=
+        ATT.reduce((a,b)=>a+b[1],0)/ATT.length;
 
-  const content=`
+    const content=`
 
-    <main class="page-content">
+    <main class="data-content">
 
-      <h2 class="section-title">
-        Attendance
-      </h2>
+        <h2 class="section-title">
+            Attendance
+        </h2>
 
-      <div class="stat-grid">
+        <div class="stat-grid">
 
-        <div class="stat-box">
-          <strong>${total.toFixed(1)}%</strong>
-          <span>Overall Attendance</span>
-        </div>
+            <div class="stat-box">
+                <strong>
+                    ${overall.toFixed(1)}%
+                </strong>
+                <span>
+                    Overall Attendance
+                </span>
+            </div>
 
-        <div class="stat-box">
-          <strong>100%</strong>
-          <span>Attendance Status</span>
-        </div>
-
-      </div>
-
-      <br>
-
-      ${attendanceData.map(a=>`
-
-        <div class="data-card">
-
-          <h3>${a.subject}</h3>
-
-          <p>${a.value}% attendance</p>
-
-          <div class="progress">
-            <div
-              class="progress-bar"
-              style="width:${a.value}%"
-            ></div>
-          </div>
+            <div class="stat-box">
+                <strong>100%</strong>
+                <span>Status</span>
+            </div>
 
         </div>
 
-      `).join("")}
+        <br>
+
+        ${ATT.map(x=>`
+
+            <div class="data-card">
+
+                <h3>
+                    ${x[0]}
+                </h3>
+
+                <p>
+                    ${x[1]}% attendance
+                </p>
+
+                <div class="progress">
+                    <div
+                        class="progress-bar"
+                        style="width:${x[1]}%"
+                    ></div>
+                </div>
+
+            </div>
+
+        `).join("")}
 
     </main>
-  `;
+    `;
 
-  document.getElementById("app").innerHTML =
-    shell(content);
-
+    document.getElementById("app").innerHTML=
+        shell(content);
 }
 
 
@@ -2752,55 +3463,70 @@ function attendancePage(){
 
 function resultsPage(){
 
-  currentPage="results";
+    currentPage="results";
 
-  const content=`
+    const content=`
 
-    <main class="page-content">
+    <main class="data-content">
 
-      <h2 class="section-title">
-        Results
-      </h2>
+        <h2 class="section-title">
+            Results
+        </h2>
 
-      <div class="data-card">
+        <div class="data-card">
 
-        <h3>Semester 1</h3>
-        <p>SGPA</p>
-        <div style="font-size:40px;font-weight:600">
-          8.69
+            <h3>Semester 1</h3>
+
+            <p>SGPA</p>
+
+            <div style="
+            margin-top:4px;
+            font-size:38px;
+            color:#222;
+            font-weight:500;
+            ">
+                8.69
+            </div>
+
         </div>
 
-      </div>
+        <div class="data-card">
 
-      <div class="data-card">
+            <h3>Semester 2</h3>
 
-        <h3>Semester 2</h3>
-        <p>SGPA</p>
-        <div style="font-size:40px;font-weight:600">
-          8.72
+            <p>SGPA</p>
+
+            <div style="
+            margin-top:4px;
+            font-size:38px;
+            color:#222;
+            font-weight:500;
+            ">
+                8.72
+            </div>
+
         </div>
 
-      </div>
+        <div class="data-card">
 
-      <div class="data-card">
+            <h3>Current CGPA</h3>
 
-        <h3>Current CGPA</h3>
+            <div style="
+            margin-top:4px;
+            font-size:42px;
+            color:#222;
+            font-weight:500;
+            ">
+                8.70
+            </div>
 
-        <div style="
-          font-size:45px;
-          font-weight:600;
-        ">
-          8.70
         </div>
-
-      </div>
 
     </main>
-  `;
+    `;
 
-  document.getElementById("app").innerHTML =
-    shell(content);
-
+    document.getElementById("app").innerHTML=
+        shell(content);
 }
 
 
@@ -2810,50 +3536,41 @@ function resultsPage(){
 
 function examsPage(){
 
-  currentPage="exams";
+    currentPage="exams";
 
-  const exams=[
-    ["CSE330","25 Aug 2026","09:30 AM","36-804"],
-    ["MAT301","27 Aug 2026","10:20 AM","36-802"],
-    ["CSE302","30 Aug 2026","09:30 AM","36-805"]
-  ];
+    const exams=[
+        ["CSE330","25 Aug 2026","09:30 AM","36-804"],
+        ["MAT301","27 Aug 2026","10:20 AM","36-802"],
+        ["CSE302","30 Aug 2026","09:30 AM","36-805"]
+    ];
 
-  const content=`
+    const content=`
 
-    <main class="page-content">
+    <main class="data-content">
 
-      <h2 class="section-title">
-        Exams
-      </h2>
+        <h2 class="section-title">
+            Exams
+        </h2>
 
-      ${exams.map(e=>`
+        ${exams.map(x=>`
 
-        <div class="data-card">
+            <div class="data-card">
 
-          <h3>${e[0]}</h3>
+                <h3>${x[0]}</h3>
 
-          <p>
-            ${e[1]}
-          </p>
+                <p>${x[1]}</p>
+                <p>${x[2]}</p>
+                <p>Room ${x[3]}</p>
 
-          <p>
-            ${e[2]}
-          </p>
+            </div>
 
-          <p>
-            Room ${e[3]}
-          </p>
-
-        </div>
-
-      `).join("")}
+        `).join("")}
 
     </main>
-  `;
+    `;
 
-  document.getElementById("app").innerHTML =
-    shell(content);
-
+    document.getElementById("app").innerHTML=
+        shell(content);
 }
 
 
@@ -2863,327 +3580,389 @@ function examsPage(){
 
 function assignmentsPage(){
 
-  currentPage="assignments";
+    currentPage="assignments";
 
-  const assignments=[
-    ["CSE330","Operating Systems Assignment","28 Aug 2026","Pending"],
-    ["MAT301","Calculus Worksheet","29 Aug 2026","Submitted"],
-    ["CSE302","Database Project","02 Sep 2026","Pending"]
-  ];
+    const data=[
+        ["CSE330","Operating Systems Assignment","28 Aug 2026"],
+        ["MAT301","Calculus Worksheet","29 Aug 2026"],
+        ["CSE302","Database Project","02 Sep 2026"]
+    ];
 
-  const content=`
+    const content=`
 
-    <main class="page-content">
+    <main class="data-content">
 
-      <h2 class="section-title">
-        Assignments
-      </h2>
+        <h2 class="section-title">
+            Assignments
+        </h2>
 
-      ${assignments.map(a=>`
+        ${data.map(x=>`
 
-        <div class="data-card">
+            <div class="data-card">
 
-          <h3>${a[1]}</h3>
+                <h3>${x[1]}</h3>
 
-          <p>
-            Subject: ${a[0]}
-          </p>
+                <p>
+                    Subject: ${x[0]}
+                </p>
 
-          <p>
-            Due: ${a[2]}
-          </p>
+                <p>
+                    Due: ${x[2]}
+                </p>
 
-          <p>
-            Status:
-            <strong>${a[3]}</strong>
-          </p>
+                <p>
+                    Status: Pending
+                </p>
 
-        </div>
+            </div>
 
-      `).join("")}
+        `).join("")}
 
     </main>
-  `;
+    `;
 
-  document.getElementById("app").innerHTML =
-    shell(content);
-
+    document.getElementById("app").innerHTML=
+        shell(content);
 }
 
 
 /* =====================================================
-   TIMETABLE PAGE
+   TIMETABLE
 ===================================================== */
 
 function timetablePage(){
 
-  currentPage="timetable";
+    currentPage="timetable";
 
-  const content=`
+    const content=`
 
-    <main class="page-content">
+    <main class="data-content">
 
-      <h2 class="section-title">
-        Weekly Time Table
-      </h2>
+        <h2 class="section-title">
+            Time Table
+        </h2>
 
-      ${["Monday","Tuesday","Wednesday","Thursday","Friday"].map(
-        (day,i)=>`
+        ${[
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday"
+        ].map(day=>`
 
-          <div class="data-card">
+            <div class="data-card">
 
-            <h3>${day}</h3>
+                <h3>${day}</h3>
 
-            <p>
-              09:30 AM — CSE330 — Room 36-804
-            </p>
+                <p>
+                    09:30 AM — CSE330 — 36-804
+                </p>
 
-            <p>
-              10:20 AM — MAT301 — Room 36-802
-            </p>
+                <p>
+                    10:20 AM — MAT301 — 36-802
+                </p>
 
-            <p>
-              11:10 AM — CSE302 — Room 36-805
-            </p>
+                <p>
+                    11:10 AM — CSE302 — 36-805
+                </p>
 
-          </div>
+            </div>
 
-      `).join("")}
+        `).join("")}
 
     </main>
-  `;
+    `;
 
-  document.getElementById("app").innerHTML =
-    shell(content);
-
+    document.getElementById("app").innerHTML=
+        shell(content);
 }
 
 
 /* =====================================================
-   SIMPLE PAGES
+   SIMPLE PAGE
 ===================================================== */
 
-function simplePage(title,description){
+function simplePage(t,d){
 
-  currentPage="simple";
+    const content=`
 
-  const content=`
+    <main class="data-content">
 
-    <main class="page-content">
+        <h2 class="section-title">
+            ${t}
+        </h2>
 
-      <h2 class="section-title">
-        ${title}
-      </h2>
+        <div class="data-card">
 
-      <div class="data-card">
+            <h3>${t}</h3>
 
-        <div style="
-          width:75px;
-          height:75px;
-          border-radius:20px;
-          background:var(--gradient);
-          display:grid;
-          place-items:center;
-          margin-bottom:20px;
-        ">
-          ${icons.document}
+            <p>
+                ${d}
+            </p>
+
+            <button
+                class="primary-btn"
+                style="margin-top:20px;width:100%"
+                onclick="dashboard()"
+            >
+                Back to Dashboard
+            </button>
+
         </div>
 
-        <h3>${title}</h3>
-
-        <p>
-          ${description}
-        </p>
-
-        <br>
-
-        <button
-          class="primary-btn"
-          onclick="dashboard()"
-        >
-          Back to Dashboard
-        </button>
-
-      </div>
-
     </main>
-  `;
+    `;
 
-  document.getElementById("app").innerHTML =
-    shell(content);
-
+    document.getElementById("app").innerHTML=
+        shell(content);
 }
 
 
 /* =====================================================
-   MODAL FUNCTIONS
+   PROFILE EDIT
 ===================================================== */
 
-function openModal(html){
+function editProfile(){
 
-  document.getElementById("modalContent").innerHTML=html;
+    modal(`
 
-  document.getElementById("modal")
-    .classList.add("show");
+        <h2 class="modal-title">
+            Edit Profile
+        </h2>
 
+        <form id="editForm">
+
+            ${field("Full Name","name",profile.name)}
+            ${field("Registration Number","registration",profile.registration)}
+            ${field("Father's Name","father",profile.father)}
+            ${field("Mother's Name","mother",profile.mother)}
+            ${field("Contact Number","contact",profile.contact)}
+            ${field("Email","email",profile.email)}
+            ${areaValue("Permanent Address","address",profile.address)}
+            ${areaValue("Correspondence Address","correspondence",profile.correspondence)}
+            ${field("Program","program",profile.program)}
+            ${field("Hostel","hostel",profile.hostel)}
+            ${field("Room / Bed","room",profile.room)}
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    onclick="closeModal()"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                >
+                    Save
+                </button>
+
+            </div>
+
+        </form>
+    `);
+
+    document.getElementById("editForm").onsubmit=e=>{
+
+        e.preventDefault();
+
+        const f=new FormData(e.target);
+
+        [
+            "name",
+            "registration",
+            "father",
+            "mother",
+            "contact",
+            "email",
+            "address",
+            "correspondence",
+            "program",
+            "hostel",
+            "room"
+        ].forEach(k=>{
+            profile[k]=f.get(k);
+        });
+
+        saveProfile();
+
+        closeModal();
+
+        profilePage();
+    };
+}
+
+function areaValue(label,name,value){
+
+    return `
+        <div
+            class="form-group"
+            style="margin-top:12px"
+        >
+            <label>${label}</label>
+
+            <textarea
+                name="${name}"
+            >${esc(value)}</textarea>
+        </div>
+    `;
+}
+
+
+/* =====================================================
+   QR
+===================================================== */
+
+function showQR(){
+
+    modal(`
+
+        <h2 class="modal-title">
+            Student QR
+        </h2>
+
+        <div
+            class="qr-pattern"
+            id="profileQR"
+        ></div>
+
+        <p style="
+        text-align:center;
+        font-size:13px;
+        line-height:1.6;
+        ">
+            <strong>${esc(profile.name)}</strong><br>
+            ${esc(profile.registration)}<br>
+            ${esc(profile.program)}
+        </p>
+
+        <button
+            class="primary-btn"
+            style="width:100%;margin-top:18px"
+            onclick="closeModal()"
+        >
+            Close
+        </button>
+    `);
+
+    generateQR("profileQR");
+}
+
+
+/* =====================================================
+   MODAL
+===================================================== */
+
+function modal(html){
+
+    document.getElementById("modalContent").innerHTML=html;
+
+    document.getElementById("modal")
+        .classList.add("show");
 }
 
 function closeModal(){
 
-  document.getElementById("modal")
-    .classList.remove("show");
-
+    document.getElementById("modal")
+        .classList.remove("show");
 }
 
-document.getElementById("modal").addEventListener(
-  "click",
-  function(e){
+document.getElementById("modal").onclick=e=>{
 
-    if(e.target===this){
-      closeModal();
+    if(e.target.id==="modal"){
+        closeModal();
     }
-
-  }
-);
-
-
-/* =====================================================
-   QR MODAL
-===================================================== */
-
-function qrModal(){
-
-  openModal(`
-
-    <h2 class="modal-title">
-      Student QR
-    </h2>
-
-    <div class="qr-pattern" id="profileQR"></div>
-
-    <p style="text-align:center">
-      <strong>${esc(profile.name)}</strong><br>
-      ${esc(profile.registration)}<br>
-      ${esc(profile.program)}
-    </p>
-
-    <button
-      class="primary-btn"
-      style="width:100%"
-      onclick="closeModal()"
-    >
-      Close
-    </button>
-
-  `);
-
-  generateProfileQR();
-
-}
-
-function generateProfileQR(){
-
-  const box=document.getElementById("profileQR");
-
-  if(!box)return;
-
-  box.innerHTML="";
-
-  let seed=
-    profile.name+
-    profile.registration+
-    profile.program;
-
-  let n=0;
-
-  for(const c of seed){
-    n+=c.charCodeAt(0);
-  }
-
-  for(let i=0;i<225;i++){
-
-    const cell=document.createElement("div");
-
-    const val=(i*n+i*i+n)%11;
-
-    if(val<5){
-      cell.style.background="#222";
-    }
-
-    cell.className="qr-cell";
-
-    box.appendChild(cell);
-  }
-
-}
+};
 
 
 /* =====================================================
    NOTIFICATIONS
 ===================================================== */
 
-function showNotifications(){
+function notifications(){
 
-  openModal(`
+    modal(`
 
-    <h2 class="modal-title">
-      Notifications
-    </h2>
+        <h2 class="modal-title">
+            Notifications
+        </h2>
 
-    <div class="data-card">
-      <strong>19 new notifications</strong>
-      <p>Check your latest academic updates.</p>
-    </div>
+        <div class="data-card">
 
-    <div class="data-card">
-      <strong>Timetable updated</strong>
-      <p>Today's timetable has been refreshed.</p>
-    </div>
+            <h3>
+                Timetable Updated
+            </h3>
 
-    <button
-      class="primary-btn"
-      style="width:100%"
-      onclick="closeModal()"
-    >
-      Done
-    </button>
+            <p>
+                Today's timetable has been updated.
+            </p>
 
-  `);
+        </div>
 
+        <div class="data-card">
+
+            <h3>
+                New Announcement
+            </h3>
+
+            <p>
+                Check the latest campus announcement.
+            </p>
+
+        </div>
+
+        <button
+            class="primary-btn"
+            style="width:100%"
+            onclick="closeModal()"
+        >
+            Done
+        </button>
+    `);
 }
 
-function showRate(){
 
-  openModal(`
+/* =====================================================
+   RATE
+===================================================== */
 
-    <h2 class="modal-title">
-      Rate Us
-    </h2>
+function rate(){
 
-    <p>
-      How was your mess experience?
-    </p>
+    modal(`
 
-    <div style="
-      display:flex;
-      justify-content:center;
-      gap:10px;
-      font-size:35px;
-      margin:25px 0;
-    ">
-      ★ ★ ★ ★ ★
-    </div>
+        <h2 class="modal-title">
+            Rate Us
+        </h2>
 
-    <button
-      class="primary-btn"
-      style="width:100%"
-      onclick="closeModal()"
-    >
-      Submit Rating
-    </button>
+        <p style="
+        text-align:center;
+        color:#777;
+        font-size:14px;
+        ">
+            How was your mess experience?
+        </p>
 
-  `);
+        <div style="
+        text-align:center;
+        font-size:32px;
+        margin:25px 0;
+        color:#e6a943;
+        ">
+            ★ ★ ★ ★ ★
+        </div>
 
+        <button
+            class="primary-btn"
+            style="width:100%"
+            onclick="closeModal()"
+        >
+            Submit Rating
+        </button>
+    `);
 }
 
 
@@ -3193,108 +3972,110 @@ function showRate(){
 
 function logoutConfirm(){
 
-  closeDrawer();
+    closeDrawer();
 
-  openModal(`
+    modal(`
 
-    <h2 class="modal-title">
-      Logout
-    </h2>
+        <h2 class="modal-title">
+            Logout
+        </h2>
 
-    <p>
-      Are you sure you want to logout?
-    </p>
+        <p style="font-size:14px;color:#777">
+            Are you sure you want to logout?
+        </p>
 
-    <div class="modal-actions">
+        <div class="modal-actions">
 
-      <button
-        class="secondary-btn"
-        onclick="closeModal()"
-      >
-        Cancel
-      </button>
+            <button
+                class="secondary-btn"
+                onclick="closeModal()"
+            >
+                Cancel
+            </button>
 
-      <button
-        class="primary-btn"
-        onclick="logout()"
-      >
-        Logout
-      </button>
+            <button
+                class="primary-btn"
+                onclick="logout()"
+            >
+                Logout
+            </button>
 
-    </div>
+        </div>
 
-    <button
-      style="
-        margin-top:20px;
-        width:100%;
-        border:0;
-        background:transparent;
-        color:#d44;
-      "
-      onclick="resetApplication()"
-    >
-      Reset Application Data
-    </button>
-
-  `);
-
+        <button
+            style="
+            width:100%;
+            margin-top:18px;
+            border:0;
+            background:transparent;
+            color:#d65b5b;
+            font-size:13px;
+            "
+            onclick="resetApp()"
+        >
+            Reset Application Data
+        </button>
+    `);
 }
 
 function logout(){
 
-  closeModal();
+    closeModal();
 
-  currentPage="dashboard";
-
-  setupPage();
-
+    /*
+       Keep profile locally saved.
+       Just return to dashboard/setup-like state.
+    */
+    dashboard();
 }
 
-function resetApplication(){
+function resetApp(){
 
-  localStorage.clear();
+    localStorage.clear();
 
-  profile=null;
-  tiles=defaultTiles.map(x=>x.id);
-  mealHistory=[];
+    profile=null;
 
-  closeModal();
+    visibleTiles=
+        DEFAULT_TILES.map(x=>x[0]);
 
-  setupPage();
+    history=[];
 
+    closeModal();
+
+    setup();
 }
 
 
 /* =====================================================
-   KEYBOARD / ESC
+   ESCAPE KEY
 ===================================================== */
 
 document.addEventListener(
-  "keydown",
-  function(e){
+    "keydown",
+    e=>{
 
-    if(e.key==="Escape"){
+        if(e.key==="Escape"){
 
-      closeModal();
-      closeDrawer();
+            closeModal();
+            closeDrawer();
+
+        }
 
     }
-
-  }
 );
 
 
 /* =====================================================
-   START APPLICATION
+   START
 ===================================================== */
 
 if(profile){
 
-  dashboard();
+    dashboard();
 
 }else{
 
-  setupPage();
+    setup();
 
 }
 

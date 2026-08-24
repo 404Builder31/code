@@ -216,6 +216,40 @@ img{
     margin-bottom:35px;
 }
 
+.timetable-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+
+    margin-bottom:17px;
+}
+
+.timetable-header .section-title{
+    margin-bottom:0;
+}
+
+.dost-btn{
+    flex:0 0 auto;
+
+    border:0;
+
+    padding:9px 18px;
+
+    border-radius:20px;
+
+    background:var(--gradient);
+
+    color:#222;
+
+    font-size:14px;
+    font-weight:500;
+
+    white-space:nowrap;
+
+    box-shadow:0 3px 7px rgba(0,0,0,.13);
+}
+
 .timetable-scroll{
     width:100%;
 
@@ -407,6 +441,11 @@ img{
     justify-content:center;
 
     overflow:visible;
+}
+
+.tile.selected{
+    border-color:var(--coral);
+    box-shadow:0 0 0 1px var(--coral),0 3px 7px rgba(0,0,0,.08);
 }
 
 .tile-icon{
@@ -1776,6 +1815,15 @@ img{
         min-height:70px;
         font-size:16px;
     }
+
+    .timetable-header{
+        margin-bottom:15px;
+    }
+
+    .dost-btn{
+        padding:8px 14px;
+        font-size:13px;
+    }
 }
 
 /* =====================================================
@@ -1834,6 +1882,11 @@ img{
 
     .mess-instruction{
         font-size:22px;
+    }
+
+    .dost-btn{
+        padding:7px 12px;
+        font-size:12px;
     }
 }
 
@@ -1931,6 +1984,15 @@ img{
     .meal-btn{
         min-height:65px;
         font-size:14px;
+    }
+
+    .timetable-header{
+        margin-bottom:13px;
+    }
+
+    .dost-btn{
+        padding:6px 11px;
+        font-size:11.5px;
     }
 }
 
@@ -2049,7 +2111,74 @@ back:`<svg class="icon" viewBox="0 0 24 24">
 
 close:`<svg class="icon" viewBox="0 0 24 24">
 <path d="M6 6l12 12M18 6 6 18"/>
+</svg>`,
+
+megaphone:`<svg class="icon" viewBox="0 0 24 24">
+<path d="M3 10v4a1 1 0 0 0 1 1h2.2l3.6 4.6V4.4L6.2 9H4a1 1 0 0 0-1 1z"/>
+<path d="M13.5 8.2a4 4 0 0 1 0 7.6"/>
+<path d="M16.5 5.3a8 8 0 0 1 0 13.4"/>
+</svg>`,
+
+edu:`<svg class="icon" viewBox="0 0 24 24">
+<path d="M12 3 2 8l10 5 10-5-10-5z"/>
+<path d="M6 10.3V16c0 1.7 2.7 3 6 3s6-1.3 6-3v-5.7"/>
+<path d="M22 8v6"/>
+</svg>`,
+
+fee:`<svg class="icon" viewBox="0 0 24 24">
+<circle cx="16" cy="7.5" r="3.7"/>
+<path d="M14.2 7.5h3.6M16 5.6v3.8"/>
+<path d="M2 13.5h6.3l3 1h3.7a1.8 1.8 0 0 1 0 3.6H8"/>
+<path d="M2 12.7h3v7.6H2z"/>
+</svg>`,
+
+attendance:`<svg class="icon" viewBox="0 0 24 24">
+<rect x="5" y="4" width="14" height="17" rx="2"/>
+<path d="M9 3h6v3H9z"/>
+<path d="m8.2 13 2.3 2.3L15.8 10"/>
+</svg>`,
+
+assignment:`<svg class="icon" viewBox="0 0 24 24">
+<path d="M4 4h11v16H4z"/>
+<path d="M7 8h5M7 12h5M7 16h3"/>
+<path d="m16 15.3 4.3-4.3 1.7 1.7-4.3 4.3H16z"/>
+</svg>`,
+
+results:`<svg class="icon" viewBox="0 0 24 24">
+<path d="M6 2h9l4 4v16H6z"/>
+<path d="M14 2v5h5"/>
+<circle cx="11" cy="14.3" r="3.2"/>
+<path d="M11 11.1v3.2l2.8 1.6"/>
+</svg>`,
+
+exam:`<svg class="icon" viewBox="0 0 24 24">
+<path d="M6 2h9l4 4v16H6z"/>
+<path d="M14 2v5h5"/>
+<path d="M9 12.3h2.5M9 15.3h2.5M9 18.3h2"/>
+<path d="m15.3 11.3 3 3-4.6 4.6h-3v-3z"/>
+</svg>`,
+
+rmscal:`<svg class="icon" viewBox="0 0 24 24">
+<rect x="3" y="4" width="18" height="17" rx="2"/>
+<path d="M16 2v4M8 2v4M3 10h18"/>
+<path d="m8.3 15.3 2 2 4.4-4.4"/>
+</svg>`,
+
+eventscal:`<svg class="icon" viewBox="0 0 24 24">
+<rect x="3" y="4" width="18" height="17" rx="2"/>
+<path d="M16 2v4M8 2v4M3 10h18"/>
+<path d="m12 12.6 1 2 2.2.3-1.6 1.5.4 2.2-2-1.1-2 1.1.4-2.2-1.6-1.5 2.2-.3z"/>
+</svg>`,
+
+badge:`<svg class="icon" viewBox="0 0 24 24">
+<rect x="2.5" y="4.5" width="13" height="9" rx="1.6"/>
+<circle cx="6.8" cy="8.7" r="1.35"/>
+<path d="M10.3 7.6h3.2M10.3 10h2.2"/>
+<rect x="8.5" y="12.5" width="13" height="9" rx="1.6"/>
+<circle cx="12.8" cy="16.7" r="1.35"/>
+<path d="M16.3 15.6h3.2M16.3 18h2.2"/>
 </svg>`
+
 };
 
 
@@ -2058,23 +2187,23 @@ close:`<svg class="icon" viewBox="0 0 24 24">
 ===================================================== */
 
 const DEFAULT_TILES=[
-    ["announce","Announce","document","0"],
-    ["edu","Edu Revolution","book","0"],
-    ["fee","Fee Statement","document",""],
-    ["attendance","Attendance","check","100 %"],
-    ["assignment","Assignment","document","0"],
-    ["results","Results","chart","8.69"],
-    ["exams","Exams","document","0"],
-    ["rms","RMS Status","calendar",""],
-    ["events","Events","calendar",""],
-    ["marks","View Marks","qr","X"],
-    ["leave","Hostel Leave Slip","qr","X"],
-    ["makeup","Make Up Adjustment","qr","X"],
-    ["mess","Mess Food Scanner","qr","X"],
-    ["laundry","Laundry","qr","X"],
-    ["report","Report Card","qr","X"],
-    ["timetable","Time table","qr","X"],
-    ["entry","Entry Exit Logs","qr","X"]
+    ["announce","Announce","megaphone","0"],
+    ["edu","Edu Revolution","edu","0"],
+    ["fee","Fee Statement","fee",""],
+    ["attendance","Attendance","attendance","100 %"],
+    ["assignment","Assignment","assignment","0"],
+    ["results","Results","results","8.69"],
+    ["exams","Exams","exam","0"],
+    ["rms","RMS Status","rmscal",""],
+    ["events","Events","eventscal",""],
+    ["marks","View Marks","badge","X"],
+    ["leave","Hostel Leave Slip","badge","X"],
+    ["makeup","Make Up Adjustment","badge","X"],
+    ["mess","Mess Food Scanner","badge","X"],
+    ["laundry","Laundry","badge","X"],
+    ["report","Report Card","badge","X"],
+    ["timetable","Time table","badge","X"],
+    ["entry","Entry Exit Logs","badge","X"]
 ];
 
 const CLASSES=[
@@ -2437,9 +2566,25 @@ function dashboard(){
 
         <section class="timetable-section">
 
-            <h2 class="section-title">
-                Today's Timetable
-            </h2>
+            <div class="timetable-header">
+
+                <h2 class="section-title">
+                    Today's Timetable
+                </h2>
+
+                <button
+                    class="dost-btn"
+                    onclick="
+                    simplePage(
+                        'Your Dost',
+                        'Chat with Your Dost, your campus assistant.'
+                    )
+                    "
+                >
+                    Your Dost
+                </button>
+
+            </div>
 
             <div class="timetable-scroll">
 

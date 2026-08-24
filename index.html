@@ -3892,6 +3892,63 @@ button,input,textarea,select{font-family:inherit !important;font-weight:300 !imp
 }
 </style>
 
+<style id="final-timetable-gap-and-drawer-scroll-fix">
+/* =========================================================
+   FINAL FIX — TIMETABLE HEADER SPACING + MOBILE DRAWER SCROLL
+   ========================================================= */
+@media (max-width: 600px){
+  .timetable-header{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    width:100% !important;
+    gap:38px !important;
+    margin-bottom:17px !important;
+  }
+
+  .timetable-header .section-title{
+    flex:1 1 auto !important;
+    min-width:0 !important;
+    margin:0 !important;
+    white-space:nowrap !important;
+  }
+
+  .timetable-header .dost-btn{
+    flex:0 0 auto !important;
+    margin-left:auto !important;
+  }
+
+  /* Make the opened sidebar a real independently scrollable mobile panel. */
+  .drawer{
+    height:100dvh !important;
+    max-height:100dvh !important;
+    top:0 !important;
+    bottom:auto !important;
+    overflow-x:hidden !important;
+    overflow-y:auto !important;
+    -webkit-overflow-scrolling:touch !important;
+    overscroll-behavior-y:contain !important;
+    scrollbar-width:none !important;
+  }
+
+  .drawer::-webkit-scrollbar{
+    width:0 !important;
+    height:0 !important;
+    display:none !important;
+  }
+
+  .drawer-profile,
+  .drawer-search,
+  .drawer-list,
+  .drawer-logout{
+    flex-shrink:0 !important;
+  }
+}
+
+@media (max-width:360px){
+  .timetable-header{gap:24px !important;}
+}
+</style>
 </head>
 
 <body>
@@ -6321,3 +6378,39 @@ if(profile){
 
 </body>
 </html>
+
+<style id="v9-mobile-timetable-reference-gap">
+/* Match the reference: title and Your Dost sit at opposite sides of the
+   available mobile header width, creating the natural responsive gap. */
+@media (max-width:600px){
+  .timetable-header{
+    width:100% !important;
+    display:grid !important;
+    grid-template-columns:minmax(0,auto) auto !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    column-gap:0 !important;
+    row-gap:0 !important;
+    margin-bottom:17px !important;
+  }
+  .timetable-header .section-title{
+    min-width:0 !important;
+    width:auto !important;
+    flex:none !important;
+    margin:0 !important;
+    white-space:nowrap !important;
+  }
+  .timetable-header .dost-btn{
+    width:auto !important;
+    flex:none !important;
+    margin:0 !important;
+    justify-self:end !important;
+    white-space:nowrap !important;
+  }
+}
+@media (max-width:360px){
+  .timetable-header{grid-template-columns:minmax(0,1fr) auto !important;column-gap:12px !important;}
+  .timetable-header .section-title{font-size:23px !important;}
+  .timetable-header .dost-btn{padding-left:13px !important;padding-right:13px !important;}
+}
+</style>
